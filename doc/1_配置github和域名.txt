@@ -10,7 +10,9 @@
     2.1 My Account -> Products -> DOMAINS -> Launch
     2.2 选择要编辑的域名，如erikge.com
     2.3 选择DNS Zone File -> Edit
-    2.4 A Host添加: @ -> 204.232.175.78（通用）或103.245.222.133（快）
+    2.4 A Host添加: @ -> 204.232.175.78或207.97.227.245
+        204.232.175.78或207.97.227.245：通用DNS，可以做自定义CNAME跳转
+        103.245.222.133：貌似快一些
         可以通过ping或dig username.github.com获得，只需使域名对应的ip和username.github.com的ip一样即可。
     2.5 CName(Alias)配置: 
         都配置到erikge.github.com（貌似快些），以前是erikge.github.io。
@@ -25,6 +27,8 @@
         master分支库目录（.git文件夹所在目录）下创建CNAME文件，文件内容为需要的网址（erikge.com）
     3.2 项目主页：
         项目gh-pages分支库目录（.git文件夹所在目录）下创建CNAME文件，文件内容为需要的网址（blog.erikge.com）
+    note:
+        不用删除master分支，也不用在设置中把gh-pages设置为默认分支，remotes/origin/HEAD的指向也不用管
         
         
         
