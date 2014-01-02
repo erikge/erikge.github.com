@@ -12,7 +12,7 @@
     2.3 选择DNS Zone File -> Edit
     2.4 A Host添加: @ -> 204.232.175.78或207.97.227.245
         204.232.175.78或207.97.227.245：通用DNS，可以做自定义CNAME跳转
-        103.245.222.133：貌似快一些
+        103.245.222.133：貌似快一些，也是可以工作的
         可以通过ping或dig username.github.com获得，只需使域名对应的ip和username.github.com的ip一样即可。
     2.5 CName(Alias)配置: 
         都配置到erikge.github.com（貌似快些），以前是erikge.github.io。
