@@ -19,6 +19,7 @@
         个人主页：www -> erikge.github.com
         项目主页：blog -> erikge.github.com
     github相关文档：
+        https://help.github.com/articles/setting-up-a-custom-domain-with-pages
         https://help.github.com/articles/my-custom-domain-isn-t-working
         https://help.github.com/categories/20/articles
 
