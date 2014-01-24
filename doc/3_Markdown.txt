@@ -2,6 +2,8 @@
     简单说明：http://daringfireball.net/projects/markdown/basics
     详细手册：http://daringfireball.net/projects/markdown/syntax
     在线编辑器：http://daringfireball.net/projects/markdown/dingus
+
+	http://www.mceiba.com/develop/markdown-syntax.html
     
 Syntax Cheatsheet:
     Phrase Emphasis

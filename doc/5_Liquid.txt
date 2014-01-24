@@ -1,96 +1,56 @@
 常用链接：
-    简单说明：http://daringfireball.net/projects/markdown/basics
-    详细手册：http://daringfireball.net/projects/markdown/syntax
-    在线编辑器：http://daringfireball.net/projects/markdown/dingus
+    简单说明：http://docs.shopify.com/themes/liquid-basics
+    详细手册：
+    在线编辑器：
     
 Syntax Cheatsheet:
-    Phrase Emphasis
-        *italic*   **bold**
-        _italic_   __bold__
-    Links
-        Inline:
-        An [example](http://url.com/ "Title")
-        Reference-style labels (titles are optional):
-        An [example][id]. Then, anywhere
-        else in the doc, define the link:
-
-          [id]: http://example.com/  "Title"
-    Images
-        Inline (titles are optional):
-        ![alt text](/path/img.jpg "Title")
-        Reference-style:
-        ![alt text][id]
-
-        [id]: /url/to/img.jpg "Title"
-    Headers
-        Setext-style:
-        Header 1
-        ========
-
-        Header 2
-        --------
-        atx-style (closing #'s are optional):
-        # Header 1 #
-
-        ## Header 2 ##
-
-        ###### Header 6
-    Lists
-        Ordered, without paragraphs:
-        1.  Foo
-        2.  Bar
-        Unordered, with paragraphs:
-        *   A list item.
-
-            With multiple paragraphs.
-
-        *   Bar
-        You can nest them:
-        *   Abacus
-            * answer
-        *   Bubbles
-            1.  bunk
-            2.  bupkis
-                * BELITTLER
-            3. burper
-        *   Cunning
-    Blockquotes
-        > Email-style angle brackets
-        > are used for blockquotes.
-
-        > > And, they can be nested.
-
-        > #### Headers in blockquotes
-        > 
-        > * You can quote a list.
-        > * Etc.
-    Code Spans
-        `<code>` spans are delimited
-        by backticks.
-
-        You can include literal backticks
-        like `` `this` ``.
-    Preformatted Code Blocks
-        Indent every line of a code block by at least 4 spaces or 1 tab.
-        This is a normal paragraph.
-
-            This is a preformatted
-            code block.
-    Horizontal Rules
-        Three or more dashes or asterisks:
-        ---
-
-        * * *
-
-        - - - - 
-    Manual Line Breaks
-        End a line with two or more spaces:
-        Roses are red,   
-        Violets are blue.
+    https://github.com/Shopify/liquid/wiki/Liquid-for-Designers
     
-    
-    
-    
-    
-    
-    
+    Output markup (which may resolve to text) is surrounded by
+    {{ matched pairs of curly brackets (ie, braces) }}
+    Tag markup (which cannot resolve to text) is surrounded by
+    {% matched pairs of curly brackets and percent signs %}
+
+    Output
+
+        Here is a simple example of Output:
+
+        Hello {{name}}
+        Hello {{user.name}}
+        Hello {{ 'tobi' }}
+
+        Advanced output: Filters
+
+        Output markup takes filters. Filters are simple methods. The first parameter is always the output of the left side of the filter. The return value of the filter will be the new left value when the next filter is run. When there are no more filters, the template will receive the resulting string.
+
+        Hello {{ 'tobi' | upcase }}
+        Hello tobi has {{ 'tobi' | size }} letters!
+        Hello {{ '*tobi*' | textilize | upcase }}
+        Hello {{ 'now' | date: "%Y %h" }}
+
+    Tags
+
+        {% raw %}
+
+        {% if user %}
+          Hello {{ user.name }}
+        {% endif %}
+        {% if user.name == 'tobi' %}
+          Hello tobi
+        {% elsif user.name == 'bob' %}
+          Hello bob
+        {% endif %}
+
+
+
+        {% case condition %}
+        {% when 1 %}
+        hit 1
+        {% when 2 or 3 %}
+        hit 2 or 3
+        {% else %}
+        ... else ...
+        {% endcase %}
+        
+        {% cycle 'one', 'two', 'three' %}
+        

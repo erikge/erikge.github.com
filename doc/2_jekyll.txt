@@ -1,5 +1,26 @@
+官方网站：
+    http://jekyllrb.com/
+    
+安装准备：
+    更改ruby安装源
+        $ gem sources --remove https://rubygems.org/
+        $ gem sources -a http://ruby.taobao.org/
+        $ gem sources -l
+        *** CURRENT SOURCES ***
+
+        http://ruby.taobao.org
+        # 请确保只有 ruby.taobao.org
+        $ gem install rails
+
 快速安装使用：
     ~ $ gem install jekyll
+        可能遇到的错误：
+            ERROR:  While executing gem ... (NoMethodError)
+                undefined method `size' for nil:NilClass
+            解决方案：
+                sudo gem update --system
+                然后删除安装失败打gem继续安装。gem安装路径（仅供参考）：/Library/Ruby/Gems/2.0.0
+
     ~ $ jekyll new myblog
     ~ $ cd myblog
     ~/myblog $ jekyll serve
@@ -9,6 +30,9 @@
     jekyll build [--watch]
     jekyll serve [--detach] [--watch]
     
+示例网站：
+    https://github.com/jekyll/jekyll/wiki/Sites
+
 依赖技术：
     需要掌握的技术：
     YAML        http://yaml.org/
