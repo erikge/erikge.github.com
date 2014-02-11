@@ -1,6 +1,10 @@
 2系列 建站实用技巧
 
 添加评论
+https://github.com/john-griffin/johng.co.uk/tree/gh-pages
+http://www.johng.co.uk/
+可以实现多账号登录，和当时随便起个名字评论
+
 访问统计
 添加广告
 

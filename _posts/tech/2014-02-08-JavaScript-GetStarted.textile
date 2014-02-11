@@ -1,0 +1,285 @@
+---
+layout: article_outline/post
+title: JavaScript初始化
+description: JavaScript的用途太广泛，避是避不开了，试着了解一下
+category: blog
+---
+
+h2. 背景
+
+JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。
+解释型语言，动态语言，脚本语言。
+JavaScript真正的官方名称是ECMAScript，它是由 "ECMA组织":http://www.ecma-international.org 开发和维护的。
+
+h2. 如何使用
+
+h3. 直接嵌入在HTML中
+
+通过标记符 < script /> 在HTML页面中插入JS(JavaScript)脚本.
+
+bc.. <html>
+<body>
+<script type="text/javascript">
+document.write("Hello World")
+</script>
+</body>
+</html>
+
+p. 以上例子脚步是放在body标签中，放在body标签中的脚本会在页面加载时执行，放在head标签中的脚本会在被调用时执行
+
+h3. 单独的js文件
+
+为避免重复代码，脚本可以保存在单独的.js文件中，文件中不要再包含 < script > 标签。
+
+bc.. <html>
+<head>
+<script src=”xxx.js”></script>
+</head>
+<body>
+</body>
+</html>
+
+h2. 基本语法
+
+* 语句结束不必需以分号结束，但多条语句写在同一行里需要以分号分隔。
+* 区分大小写
+* 忽略多余的空格
+* 使用 // 或者 /* */ 来注释
+
+h3. 变量
+
+* 变量是一个容器，值和类型都可以动态的改变。
+* 变量名区分大小写，必须以字母或下划线开头。
+* 通过关键字var声明，也可以不声名直接使用（这样的缺点是会被自动声明定义为全局变量，在需要定义局部变量时将不是我们需要的）。
+
+bc. var myUrl = “http://www.erikge.com”
+myUrl = “http://www.erikge.com”
+
+* 变量可被重复声明，而且不会丢失原来的值。
+* 函数中定义的变量只在函数中可见，函数外定义的变量在整个页面可见。
+
+h3. 操作符
+
+**算数操作符：** <notextile>+, -, *, /, %, ++, --,</notextile>
+**赋值操作符：** <notextile>=, +=, -=, *=, /=, %=,</notextile>
+**比较操作符：** <notextile>==, ===（值和类型都比较）, !=, >, <, >=, <=,</notextile>
+**逻辑运算符：** <notextile>&&, ||, !</notextile>
+**字符串连接符：** <notextile>+</notextile>
+**条件操作符：** variablename=(condition)?value1:value2
+
+h3. 条件语句
+
+bc.. <script type=”text/javascript”>
+if (x<10) {
+} else if (x == 10 && y > 10) {
+}else{
+}
+</script>
+
+bc.. <script type=”text/javascript”>
+switch(n) {
+case 1:
+break
+case 2:
+break
+default:
+}
+</script>
+
+h3. 函数
+
+函数是可以重复执行的代码块。函数一般定义在head部分或者单独.js文件中。
+定义方法：
+
+bc.. <script type=”text/javascript”>
+function functionname(var1,var2,…,varX) {
+some code
+return value
+}</script>
+
+h3. 循环
+
+bc.. for (var=初始值;var<=结束值;var=var+增量) {
+要执行的代码
+}
+
+bc.. while (var<=endvalue) {
+code to be executed
+}
+
+bc.. do {
+code to be executed
+} while (var<=endvalue)
+
+bc.. for (variable in object) {
+要执行的代码
+}
+
+p. JavaScript也有和Cpp/Java类似功能的 break 和 continue。
+
+h3. 事件
+
+事件在HTML的tag中定义。JavaScript的事件列表如下：
+
+|_. 事件属性 |_. 发生条件 |
+|onabort|一个图片的加载被终止 (只用于< img>)|
+|onblur|当一个元素失去焦点（光标移开）|
+|onchange|用户改变了一个域的值（用于 < input type=”text”>, < select>, < textarea>）|
+|onclick|鼠标点击对象|
+|ondblclick|鼠标双击对象|
+|onerror|文件或图片加载出错（ < img>, < object>, < style>）|
+|onfocus|一个元素得到焦点|
+|onkeydown|键盘上任一键被按下|
+|onkeypress|键盘上任一键被按下或保持按下|
+|onkeyup|当被按下的键被释放时|
+|onload|当页面或图片完成加载|
+|onmousedown|当一个鼠标键被按下|
+|onmousemove|鼠标移动|
+|onmouseout|鼠标被从一个元素上移开|
+|onmouseover|鼠标移至某元素上|
+|onmouseup|鼠标键被释放|
+|onreset|重置按钮被点击|
+|onresize|窗口或框架大小被改变|
+|onselect|文本被选择|
+|onsubmit|提交按钮被点击|
+|onunload|用户关闭页面|
+
+p. 用法举例：
+
+bc.. <input type=”text” size=”30″ id=”email” onchange=”checkEmail()”>;
+<form method=”post” action=”xxx.htm” onsubmit=”return checkForm()”>
+<a href=”http://erikge.com”
+onmouseover=”alert(‘An onMouseOver event’);”> erikge </a>
+
+h3. 异常处理
+
+如果不处理异常，当网页出错时，会弹出一个JavaScript的警告窗口，告诉我们发生运行出错， 并询问是否要“debug?”。这种出错信息也许对开发者有用，但是对用户没有用处。
+有两种异常处理的方式：
+* 使用 try…catch 语句 (适用于IE5以上, Mozilla 1.0, 和 Netscape 6)
+* 使用onerror 事件。 这是捕捉错误的旧的传统做法(自从Netscape 3以后就开始使用)
+
+
+bc.. try
+{
+//Run some code here
+}
+catch(err)
+{
+//Handle errors here
+}
+
+p. 例如：
+
+bc.. 
+function message()
+{
+try
+{
+adddlert(“Welcome guest!”)
+}
+catch(err)
+{
+txt=”本页面出错.\n”
+txt+=”Error description: ” + err.description + “\n\n”
+txt+=”点击OK继续浏览本页,\n”
+txt+=”或点击 Cancel 返回主页\n\n”
+if(!confirm(txt))
+{
+document.location.href=”http://www.shorelinesolution.com/”
+}
+}
+}
+
+p. throw语句可以生成一个例外(exception)。try…catch和throw语句可以结合使用。
+
+bc.. try
+{
+if(x>10)
+throw “Err1″
+else if(x<0)
+throw “Err2″
+}
+catch(er)
+{
+if(er==”Err1″)
+alert(“错误! 值太大了”)
+if(er == “Err2″)
+alert(“错误! 值太小了”)
+}
+
+h3. 特殊字符
+
+反斜杠 backslash (\) 用来表示特殊字符。
+
+bq.. \’ 单引号(single quote)
+\” 双引号(double quote)
+\& 与符号(ampersand)
+\\ 反斜杠(backslash)
+\n 换行(new line)
+\r 回车键(carriage return)
+\t 制表符(tab)
+\b 退格符(backspace)
+\f 换页(form feed)
+
+h2. 常用API
+
+h3. 弹出窗口
+
+bc.. <html>
+<head>
+<script type=”text/javascript”>
+function disp_alert()
+{
+alert(“警示窗口 （Alert Box）: 你好! ” + ‘\n’ + “第二行内容.”)
+}
+</script>
+</head>
+<body><input type=”button” onclick=”disp_alert()” value=”显示提示窗口” /></body>
+</html>
+
+bc.. <html>
+<head>
+<script type=”text/javascript”>
+function disp_confirm()
+{
+var r=confirm(“确认窗口（Confirm Box）: Press a button”)
+if (r==true)
+{
+document.write(“You pressed OK!”)
+}
+else
+{
+document.write(“You pressed Cancel!”)
+}
+}
+</script>
+</head>
+<body><input type=”button” onclick=”disp_confirm()” value=”显示确认窗口” /></body>
+</html>
+
+bc.. <html>
+<head>
+<script type=”text/javascript”>
+function disp_prompt()
+{
+var name=prompt(“提问窗口（Prompt Box）: Please enter your name”,”Aqua”)
+if (name!=null && name!=”")
+{
+document.write(“Hello ” + name + “! How are you today?”)
+}
+}
+</script>
+</head>
+<body><input type=”button” onclick=”disp_prompt()” value=”显示提问窗口” /></body>
+</html>
+
+
+h2. to be continued
+
+需要继续阅读的链接
+
+"JavaScript对象":http://www.prglab.com/blog/js-tutorial
+"$":http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html
+"$":http://jsperf.com/
+
+

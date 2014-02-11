@@ -1,14 +1,24 @@
-auto: true
-
-#markdown: rdiscount
-pygments: true
-paginate: 8
-permalink: /:title
-
 title: erikge.com
 url: http://erikge.com
 feed: /web/article_outline/atom.xml
 author_info: <a href="http://erikge.com/">erik ge</a>
+description: the road erikge travalled
+disqus_shortname: erikge
+
+owner:
+  name: erikge
+  email: erikge@qq.com
+
+
+auto: true
+
+#markdown: rdiscount
+#markdown: redcarpet
+permalink: /:title
+pygments: true
+
+paginate_path: "blog/page:num"
+paginate: 10
 
 
 exclude: doc_,
