@@ -1,8 +1,8 @@
 ---
-layout: article_outline/post
+layout: post
 title: JavaScript初始化
 description: JavaScript的用途太广泛，避是避不开了，试着了解一下
-category: blog
+category: technology
 ---
 
 h2. 背景
@@ -17,27 +17,30 @@ h3. 直接嵌入在HTML中
 
 通过标记符 < script /> 在HTML页面中插入JS(JavaScript)脚本.
 
-bc.. <html>
+{% highlight html %}
+<html>
 <body>
 <script type="text/javascript">
 document.write("Hello World")
 </script>
 </body>
 </html>
+{% endhighlight %}
 
 p. 以上例子脚步是放在body标签中，放在body标签中的脚本会在页面加载时执行，放在head标签中的脚本会在被调用时执行
 
 h3. 单独的js文件
 
 为避免重复代码，脚本可以保存在单独的.js文件中，文件中不要再包含 < script > 标签。
-
-bc.. <html>
+{% highlight html %}
+<html>
 <head>
 <script src=”xxx.js”></script>
 </head>
 <body>
 </body>
 </html>
+{% endhighlight %}
 
 h2. 基本语法
 
@@ -52,8 +55,10 @@ h3. 变量
 * 变量名区分大小写，必须以字母或下划线开头。
 * 通过关键字var声明，也可以不声名直接使用（这样的缺点是会被自动声明定义为全局变量，在需要定义局部变量时将不是我们需要的）。
 
-bc. var myUrl = “http://www.erikge.com”
+{% highlight javascript %}
+var myUrl = “http://www.erikge.com”
 myUrl = “http://www.erikge.com”
+{% endhighlight %}
 
 * 变量可被重复声明，而且不会丢失原来的值。
 * 函数中定义的变量只在函数中可见，函数外定义的变量在整个页面可见。
@@ -69,14 +74,16 @@ h3. 操作符
 
 h3. 条件语句
 
-bc.. <script type=”text/javascript”>
+{% highlight html %} <script type=”text/javascript”>
 if (x<10) {
 } else if (x == 10 && y > 10) {
 }else{
 }
 </script>
+{% endhighlight %}
 
-bc.. <script type=”text/javascript”>
+{% highlight html %}
+<script type=”text/javascript”>
 switch(n) {
 case 1:
 break
@@ -85,35 +92,43 @@ break
 default:
 }
 </script>
+{% endhighlight %}
 
 h3. 函数
 
 函数是可以重复执行的代码块。函数一般定义在head部分或者单独.js文件中。
 定义方法：
 
-bc.. <script type=”text/javascript”>
+{% highlight html %}
+<script type=”text/javascript”>
 function functionname(var1,var2,…,varX) {
 some code
 return value
 }</script>
+{% endhighlight %}
 
 h3. 循环
 
-bc.. for (var=初始值;var<=结束值;var=var+增量) {
+{% highlight html %}
+for (var=初始值;var<=结束值;var=var+增量) {
 要执行的代码
 }
+{% endhighlight %}
 
-bc.. while (var<=endvalue) {
+{% highlight html %} while (var<=endvalue) {
 code to be executed
 }
+{% endhighlight %}
 
-bc.. do {
+{% highlight html %} do {
 code to be executed
 } while (var<=endvalue)
+{% endhighlight %}
 
-bc.. for (variable in object) {
+{% highlight html %} for (variable in object) {
 要执行的代码
 }
+{% endhighlight %}
 
 p. JavaScript也有和Cpp/Java类似功能的 break 和 continue。
 
@@ -146,10 +161,12 @@ h3. 事件
 
 p. 用法举例：
 
-bc.. <input type=”text” size=”30″ id=”email” onchange=”checkEmail()”>;
+{% highlight html %}
+<input type=”text” size=”30″ id=”email” onchange=”checkEmail()”>;
 <form method=”post” action=”xxx.htm” onsubmit=”return checkForm()”>
 <a href=”http://erikge.com”
 onmouseover=”alert(‘An onMouseOver event’);”> erikge </a>
+{% endhighlight %}
 
 h3. 异常处理
 
@@ -159,7 +176,8 @@ h3. 异常处理
 * 使用onerror 事件。 这是捕捉错误的旧的传统做法(自从Netscape 3以后就开始使用)
 
 
-bc.. try
+{% highlight js %}
+try
 {
 //Run some code here
 }
@@ -167,10 +185,11 @@ catch(err)
 {
 //Handle errors here
 }
+{% endhighlight %}
 
 p. 例如：
 
-bc.. 
+{% highlight js %}
 function message()
 {
 try
@@ -189,10 +208,12 @@ document.location.href=”http://www.shorelinesolution.com/”
 }
 }
 }
+{% endhighlight %}
 
 p. throw语句可以生成一个例外(exception)。try…catch和throw语句可以结合使用。
 
-bc.. try
+{% highlight js %}
+try
 {
 if(x>10)
 throw “Err1″
@@ -206,6 +227,7 @@ alert(“错误! 值太大了”)
 if(er == “Err2″)
 alert(“错误! 值太小了”)
 }
+{% endhighlight %}
 
 h3. 特殊字符
 
@@ -225,7 +247,7 @@ h2. 常用API
 
 h3. 弹出窗口
 
-bc.. <html>
+{% highlight html %} <html>
 <head>
 <script type=”text/javascript”>
 function disp_alert()
@@ -236,8 +258,9 @@ alert(“警示窗口 （Alert Box）: 你好! ” + ‘\n’ + “第二行内�
 </head>
 <body><input type=”button” onclick=”disp_alert()” value=”显示提示窗口” /></body>
 </html>
+{% endhighlight %}
 
-bc.. <html>
+{% highlight html %} <html>
 <head>
 <script type=”text/javascript”>
 function disp_confirm()
@@ -256,8 +279,9 @@ document.write(“You pressed Cancel!”)
 </head>
 <body><input type=”button” onclick=”disp_confirm()” value=”显示确认窗口” /></body>
 </html>
+{% endhighlight %}
 
-bc.. <html>
+{% highlight html %} <html>
 <head>
 <script type=”text/javascript”>
 function disp_prompt()
@@ -272,6 +296,7 @@ document.write(“Hello ” + name + “! How are you today?”)
 </head>
 <body><input type=”button” onclick=”disp_prompt()” value=”显示提问窗口” /></body>
 </html>
+{% endhighlight %}
 
 
 h2. to be continued

@@ -1,6 +1,6 @@
 title: erikge.com
 url: http://erikge.com
-feed: /web/article_outline/atom.xml
+feed: /assets/atom.xml
 author_info: <a href="http://erikge.com/">erik ge</a>
 description: the road erikge travalled
 disqus_shortname: erikge
@@ -10,17 +10,18 @@ owner:
   email: erikge@qq.com
 
 
-auto: true
-
 #markdown: rdiscount
-#markdown: redcarpet
-permalink: /:title
+markdown: redcarpet
+redcarpet:
+  extensions:
+    - smart
+permalink: articles/:title
 pygments: true
 
-paginate_path: "blog/page:num"
+paginate_path: "page/:num"
 paginate: 10
 
 
-exclude: doc_,
+exclude: [doc_,]
 
 ＃port: 80
