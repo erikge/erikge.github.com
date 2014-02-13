@@ -9,6 +9,9 @@ h2. 背景
 
 JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。
 解释型语言，动态语言，脚本语言。
+
+<!--more-->
+
 JavaScript真正的官方名称是ECMAScript，它是由 "ECMA组织":http://www.ecma-international.org 开发和维护的。
 
 h2. 如何使用

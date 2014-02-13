@@ -30,7 +30,7 @@ title: Latest Posts
     </div>
   </header>
   <div class="entry-summary">
-    {{ post.excerpt }}
+    {{ post.content | split:'<!--more-->' |first }}
     <a href="{{ post.url }}" rel="bookmark" title="{{ post.title }}">Read More &raquo;</a>
   </div>
 </article>
