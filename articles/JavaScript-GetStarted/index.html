@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>JavaScript初始化 | erikge.com</title>
+    <meta name="author" content="erikge" />
+    <meta name="description" content="erikge's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    
+    <link rel="stylesheet" href="/assets/css/foundation.min.css" />
+    <link rel="stylesheet" href="/assets/foundation-icons.css" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/overrides.css" />
+    <script src="/assets/js/modernizr.js"></script>
+    
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/assets/atom.xml" />
+    
+    <!-- article outline -->
+    <link rel="stylesheet" href="/assets/css/article_outline.css" type="text/css" />
+    <script src="/assets/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+    
+  </head>
+    <body>
+      <!-- Header and Nav -->
+  
+      <div class="row">
+          <div class="home-menu">
+              <div class="home-icon-con">
+                  <a class="home-menu-icon" href="/">erikge</a>
+              </div>
+          </div>
+        <div class="large-9 columns">
+          <nav role="navigation">
+            <ul class="inline-list right">
+              <li><a href="/index.html">Home</a></li>
+              <li><a href="/index.html">Category</a></li>
+              <li><a href="/index.html">About</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+  <div class="row">
+      
+    <!-- Main Content Section -->
+<!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
+<div class="large-8 medium-8 push-1 columns entry">
+    
+<article class="hentry post" role="main">
+  <header>
+    <h1 class="entry-title">JavaScript初始化</h1>
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2014-02-08T00:00:00+08:00">2014 February 08 at 00:00  </time></span>
+      
+      <span rel="tag">
+        
+          
+            <a href="/categories/technology/index.html">technology</a>
+          
+        
+      </span>
+      
+    </div>
+  </header>
+  <div class="entry-content">
+    <h2>背景</h2>
+<p>JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。<br />
+解释型语言，动态语言，脚本语言。</p>
+<p><!--more--></p>
+<p>JavaScript真正的官方名称是ECMAScript，它是由 <a href="http://www.ecma-international.org">ECMA组织</a> 开发和维护的。</p>
+<h2>如何使用</h2>
+<h3>直接嵌入在HTML中</h3>
+<p>通过标记符 &lt; script /&gt; 在HTML页面中插入JS(JavaScript)脚本.</p>
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div><p>以上例子脚步是放在body标签中，放在body标签中的脚本会在页面加载时执行，放在head标签中的脚本会在被调用时执行</p>
+<h3>单独的js文件</h3>
+<p>为避免重复代码，脚本可以保存在单独的.js文件中，文件中不要再包含 &lt; script &gt; 标签。<br />
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">”xxx.js”</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></p>
+<h2>基本语法</h2>
+<ul>
+	<li>语句结束不必需以分号结束，但多条语句写在同一行里需要以分号分隔。</li>
+	<li>区分大小写</li>
+	<li>忽略多余的空格</li>
+	<li>使用 // 或者 /* */ 来注释</li>
+</ul>
+<h3>变量</h3>
+<ul>
+	<li>变量是一个容器，值和类型都可以动态的改变。</li>
+	<li>变量名区分大小写，必须以字母或下划线开头。</li>
+	<li>通过关键字var声明，也可以不声名直接使用（这样的缺点是会被自动声明定义为全局变量，在需要定义局部变量时将不是我们需要的）。</li>
+</ul>
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">myUrl</span> <span class="o">=</span> <span class="err">“</span><span class="nx">http</span><span class="o">:</span><span class="c1">//www.erikge.com”</span>
+<span class="nx">myUrl</span> <span class="o">=</span> <span class="err">“</span><span class="nx">http</span><span class="o">:</span><span class="c1">//www.erikge.com”</span>
+</code></pre></div><ul>
+	<li>变量可被重复声明，而且不会丢失原来的值。</li>
+	<li>函数中定义的变量只在函数中可见，函数外定义的变量在整个页面可见。</li>
+</ul>
+<h3>操作符</h3>
+<p><b>算数操作符：</b> +, -, *, /, %, ++, --,<br />
+<b>赋值操作符：</b> =, +=, -=, *=, /=, %=,<br />
+<b>比较操作符：</b> ==, ===（值和类型都比较）, !=, >, <, >=, <=,<br />
+<b>逻辑运算符：</b> &&, ||, !<br />
+<b>字符串连接符：</b> +<br />
+<b>条件操作符：</b> variablename=(condition)?value1:value2</p>
+<h3>条件语句</h3>
+<div class="highlight"><pre><code class="html"> <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">”text/javascript”</span><span class="nt">&gt;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">==</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="nx">y</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div><div class="highlight"><pre><code class="html"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">”text/javascript”</span><span class="nt">&gt;</span>
+<span class="k">switch</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+<span class="k">break</span>
+<span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+<span class="k">break</span>
+<span class="k">default</span><span class="o">:</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div><h3>函数</h3>
+<p>函数是可以重复执行的代码块。函数一般定义在head部分或者单独.js文件中。<br />
+定义方法：</p>
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">”text/javascript”</span><span class="nt">&gt;</span>
+<span class="kd">function</span> <span class="nx">functionname</span><span class="p">(</span><span class="nx">var1</span><span class="p">,</span><span class="nx">var2</span><span class="p">,</span><span class="err">…</span><span class="p">,</span><span class="nx">varX</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">some</span> <span class="nx">code</span>
+<span class="k">return</span> <span class="nx">value</span>
+<span class="p">}</span><span class="nt">&lt;/script&gt;</span>
+</code></pre></div><h3>循环</h3>
+<div class="highlight"><pre><code class="html">for (var=初始值;var<span class="err">&lt;</span>=结束值;var=var+增量) {
+要执行的代码
+}
+</code></pre></div><div class="highlight"><pre><code class="html"> while (var<span class="err">&lt;</span>=endvalue) {
+code to be executed
+}
+</code></pre></div><div class="highlight"><pre><code class="html"> do {
+code to be executed
+} while (var<span class="err">&lt;</span>=endvalue)
+</code></pre></div><div class="highlight"><pre><code class="html"> for (variable in object) {
+要执行的代码
+}
+</code></pre></div><p>JavaScript也有和Cpp/Java类似功能的 break 和 continue。</p>
+<h3>事件</h3>
+<p>事件在HTML的tag中定义。JavaScript的事件列表如下：</p>
+<table>
+	<tr>
+		<th>事件属性 </th>
+		<th>发生条件 </th>
+	</tr>
+	<tr>
+		<td>onabort</td>
+		<td>一个图片的加载被终止 (只用于&lt; img&gt;)</td>
+	</tr>
+	<tr>
+		<td>onblur</td>
+		<td>当一个元素失去焦点（光标移开）</td>
+	</tr>
+	<tr>
+		<td>onchange</td>
+		<td>用户改变了一个域的值（用于 &lt; input type=”text”&gt;, &lt; select&gt;, &lt; textarea&gt;）</td>
+	</tr>
+	<tr>
+		<td>onclick</td>
+		<td>鼠标点击对象</td>
+	</tr>
+	<tr>
+		<td>ondblclick</td>
+		<td>鼠标双击对象</td>
+	</tr>
+	<tr>
+		<td>onerror</td>
+		<td>文件或图片加载出错（ &lt; img&gt;, &lt; object&gt;, &lt; style&gt;）</td>
+	</tr>
+	<tr>
+		<td>onfocus</td>
+		<td>一个元素得到焦点</td>
+	</tr>
+	<tr>
+		<td>onkeydown</td>
+		<td>键盘上任一键被按下</td>
+	</tr>
+	<tr>
+		<td>onkeypress</td>
+		<td>键盘上任一键被按下或保持按下</td>
+	</tr>
+	<tr>
+		<td>onkeyup</td>
+		<td>当被按下的键被释放时</td>
+	</tr>
+	<tr>
+		<td>onload</td>
+		<td>当页面或图片完成加载</td>
+	</tr>
+	<tr>
+		<td>onmousedown</td>
+		<td>当一个鼠标键被按下</td>
+	</tr>
+	<tr>
+		<td>onmousemove</td>
+		<td>鼠标移动</td>
+	</tr>
+	<tr>
+		<td>onmouseout</td>
+		<td>鼠标被从一个元素上移开</td>
+	</tr>
+	<tr>
+		<td>onmouseover</td>
+		<td>鼠标移至某元素上</td>
+	</tr>
+	<tr>
+		<td>onmouseup</td>
+		<td>鼠标键被释放</td>
+	</tr>
+	<tr>
+		<td>onreset</td>
+		<td>重置按钮被点击</td>
+	</tr>
+	<tr>
+		<td>onresize</td>
+		<td>窗口或框架大小被改变</td>
+	</tr>
+	<tr>
+		<td>onselect</td>
+		<td>文本被选择</td>
+	</tr>
+	<tr>
+		<td>onsubmit</td>
+		<td>提交按钮被点击</td>
+	</tr>
+	<tr>
+		<td>onunload</td>
+		<td>用户关闭页面</td>
+	</tr>
+</table>
+<p>用法举例：</p>
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">”text”</span> <span class="na">size=</span><span class="s">”30″</span> <span class="na">id=</span><span class="s">”email”</span> <span class="na">onchange=</span><span class="s">”checkEmail()”</span><span class="nt">&gt;</span>;
+<span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">”post”</span> <span class="na">action=</span><span class="s">”xxx.htm”</span> <span class="na">onsubmit=</span><span class="s">”return</span> <span class="na">checkForm</span><span class="err">()”</span><span class="nt">&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">”http://erikge.com”</span>
+<span class="na">onmouseover=</span><span class="s">”alert(‘An</span> <span class="na">onMouseOver</span> <span class="na">event</span><span class="err">’);”</span><span class="nt">&gt;</span> erikge <span class="nt">&lt;/a&gt;</span>
+</code></pre></div><h3>异常处理</h3>
+<p>如果不处理异常，当网页出错时，会弹出一个JavaScript的警告窗口，告诉我们发生运行出错， 并询问是否要“debug?”。这种出错信息也许对开发者有用，但是对用户没有用处。<br />
+有两种异常处理的方式：</p>
+<ul>
+	<li>使用 try…catch 语句 (适用于IE5以上, Mozilla 1.0, 和 Netscape 6)</li>
+	<li>使用onerror 事件。 这是捕捉错误的旧的传统做法(自从Netscape 3以后就开始使用)</li>
+</ul>
+<div class="highlight"><pre><code class="js"><span class="k">try</span>
+<span class="p">{</span>
+<span class="c1">//Run some code here</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="c1">//Handle errors here</span>
+<span class="p">}</span>
+</code></pre></div><p>例如：</p>
+<div class="highlight"><pre><code class="js"><span class="kd">function</span> <span class="nx">message</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="k">try</span>
+<span class="p">{</span>
+<span class="nx">adddlert</span><span class="p">(</span><span class="err">“</span><span class="nx">Welcome</span> <span class="nx">guest</span><span class="o">!</span><span class="err">”</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="nx">txt</span><span class="o">=</span><span class="err">”本页面出错</span><span class="p">.</span><span class="err">\</span><span class="nx">n</span><span class="err">”</span>
+<span class="nx">txt</span><span class="o">+=</span><span class="err">”</span><span class="nb">Error</span> <span class="nx">description</span><span class="o">:</span> <span class="err">”</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nx">description</span> <span class="o">+</span> <span class="err">“\</span><span class="nx">n</span><span class="err">\</span><span class="nx">n</span><span class="err">”</span>
+<span class="nx">txt</span><span class="o">+=</span><span class="err">”点击</span><span class="nx">OK</span><span class="err">继续浏览本页</span><span class="p">,</span><span class="err">\</span><span class="nx">n</span><span class="err">”</span>
+<span class="nx">txt</span><span class="o">+=</span><span class="err">”或点击</span> <span class="nx">Cancel</span> <span class="err">返回主页\</span><span class="nx">n</span><span class="err">\</span><span class="nx">n</span><span class="err">”</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">confirm</span><span class="p">(</span><span class="nx">txt</span><span class="p">))</span>
+<span class="p">{</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="o">=</span><span class="err">”</span><span class="nx">http</span><span class="o">:</span><span class="c1">//www.shorelinesolution.com/”</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>throw语句可以生成一个例外(exception)。try…catch和throw语句可以结合使用。</p>
+<div class="highlight"><pre><code class="js"><span class="k">try</span>
+<span class="p">{</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">throw</span> <span class="err">“</span><span class="nx">Err1</span><span class="err">″</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">throw</span> <span class="err">“</span><span class="nx">Err2</span><span class="err">″</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="nx">er</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">er</span><span class="o">==</span><span class="err">”</span><span class="nx">Err1</span><span class="err">″</span><span class="p">)</span>
+<span class="nx">alert</span><span class="p">(</span><span class="err">“错误</span><span class="o">!</span> <span class="err">值太大了”</span><span class="p">)</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">er</span> <span class="o">==</span> <span class="err">“</span><span class="nx">Err2</span><span class="err">″</span><span class="p">)</span>
+<span class="nx">alert</span><span class="p">(</span><span class="err">“错误</span><span class="o">!</span> <span class="err">值太小了”</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><h3>特殊字符</h3>
+<p>反斜杠 backslash (\) 用来表示特殊字符。</p>
+<blockquote>
+<p>\’ 单引号(single quote)<br />
+\” 双引号(double quote)<br />
+\&amp; 与符号(ampersand)<br />
+\\ 反斜杠(backslash)<br />
+\n 换行(new line)<br />
+\r 回车键(carriage return)<br />
+\t 制表符(tab)<br />
+\b 退格符(backspace)<br />
+\f 换页(form feed)</p>
+</blockquote>
+<h2>常用API</h2>
+<h3>弹出窗口</h3>
+<div class="highlight"><pre><code class="html"> <span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">”text/javascript”</span><span class="nt">&gt;</span>
+<span class="kd">function</span> <span class="nx">disp_alert</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="nx">alert</span><span class="p">(</span><span class="err">“警示窗口</span> <span class="err">（</span><span class="nx">Alert</span> <span class="nx">Box</span><span class="err">）</span><span class="o">:</span> <span class="err">你好</span><span class="o">!</span> <span class="err">”</span> <span class="o">+</span> <span class="err">‘\</span><span class="nx">n</span><span class="err">’</span> <span class="o">+</span> <span class="err">“第二行内容</span><span class="p">.</span><span class="err">”</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;&lt;input</span> <span class="na">type=</span><span class="s">”button”</span> <span class="na">onclick=</span><span class="s">”disp_alert()”</span> <span class="na">value=</span><span class="s">”显示提示窗口”</span> <span class="nt">/&gt;&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div><div class="highlight"><pre><code class="html"> <span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">”text/javascript”</span><span class="nt">&gt;</span>
+<span class="kd">function</span> <span class="nx">disp_confirm</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="nx">confirm</span><span class="p">(</span><span class="err">“确认窗口（</span><span class="nx">Confirm</span> <span class="nx">Box</span><span class="err">）</span><span class="o">:</span> <span class="nx">Press</span> <span class="nx">a</span> <span class="nx">button</span><span class="err">”</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">r</span><span class="o">==</span><span class="kc">true</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="err">“</span><span class="nx">You</span> <span class="nx">pressed</span> <span class="nx">OK</span><span class="o">!</span><span class="err">”</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="err">“</span><span class="nx">You</span> <span class="nx">pressed</span> <span class="nx">Cancel</span><span class="o">!</span><span class="err">”</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;&lt;input</span> <span class="na">type=</span><span class="s">”button”</span> <span class="na">onclick=</span><span class="s">”disp_confirm()”</span> <span class="na">value=</span><span class="s">”显示确认窗口”</span> <span class="nt">/&gt;&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div><div class="highlight"><pre><code class="html"> <span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">”text/javascript”</span><span class="nt">&gt;</span>
+<span class="kd">function</span> <span class="nx">disp_prompt</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="kd">var</span> <span class="nx">name</span><span class="o">=</span><span class="nx">prompt</span><span class="p">(</span><span class="err">“提问窗口（</span><span class="nx">Prompt</span> <span class="nx">Box</span><span class="err">）</span><span class="o">:</span> <span class="nx">Please</span> <span class="nx">enter</span> <span class="nx">your</span> <span class="nx">name</span><span class="err">”</span><span class="p">,</span><span class="err">”</span><span class="nx">Aqua</span><span class="err">”</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">name</span><span class="o">!=</span><span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">name</span><span class="o">!=</span><span class="err">”&quot;</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="err">“</span><span class="nx">Hello</span> <span class="err">”</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="err">“</span><span class="o">!</span> <span class="nx">How</span> <span class="nx">are</span> <span class="nx">you</span> <span class="nx">today</span><span class="o">?</span><span class="err">”</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;&lt;input</span> <span class="na">type=</span><span class="s">”button”</span> <span class="na">onclick=</span><span class="s">”disp_prompt()”</span> <span class="na">value=</span><span class="s">”显示提问窗口”</span> <span class="nt">/&gt;&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div><h2>to be continued</h2>
+<p>需要继续阅读的链接</p>
+<p><a href="http://www.prglab.com/blog/js-tutorial">JavaScript对象</a><br />
+<a href="http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html">$</a><br />
+<a href="http://jsperf.com/">$</a></p>
+  </div>
+  <i class="fi-price-tag"></i><span class="entry-meta" rel="tag"> </span>
+
+  
+
+  
+</article>
+
+</div>
+
+<div class="large-6 medium-6 push-3 columns" id="content">
+    
+<script src="/assets/js/article_outline.js" type="text/javascript"></script>
+
+</div>
+
+    
+    <!-- Nav Sidebar -->
+    <!-- This is source ordered to be pulled to the left on larger screens -->
+    <!--
+    <div class="large-3 medium-3 pull-9 columns">
+        
+      <blockquote>Art is never finished, only abandoned.<cite>Leonardo Da Vinci</cite></blockquote>
+      
+      <p><img src="/images/amymac.jpg" alt="Amy MacKinnon" title="Photo by Michael O'Donnell"/></p>
+
+      <h3>Everywhere Else</h3>
+      <a href="http://www.behance.net/amy_mac" class="webicon behance">Behance</a>
+      <a href="http://www.flickr.com/photos/amy_sloan/" class="webicon flickr">Flickr</a>
+      <a href="https://github.com/amy-mac" class="webicon github" rel="me">Github</a>
+      <a href="http://www.linkedin.com/in/amymsloan" class="webicon linkedin">Linked In</a>
+      <a href="http://www.rdio.com/people/amy_mackinnon/" class="webicon rdio">Rdio</a>
+      <a href="http://amysloan.tumblr.com/" class="webicon tumblr">Tumblr</a>
+      <a href="https://twitter.com/thatamymac" class="webicon twitter" rel="me">Twitter</a>
+      <a href="http://www.youtube.com/user/morriganjett" class="webicon youtube">Youtube</a>
+    </div>
+     -->
+    
+  </div>
+
+  <!-- Footer -->
+  
+  <footer class="row">
+    <div class="large-12 columns">
+      <hr />
+      <div class="row">
+        <div class="large-6 columns">
+          <p>Copyright © 2013&ndash;2014 Erik Ge</p>
+        </div>
+        <div class="large-6 columns">
+          <nav role="navigation">
+            <ul class="inline-list right">
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/index.html">Category</a></li>
+                <li><a href="/index.html">About</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div> 
+  </footer>
+
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    
+    <!-- TODO 代码统计 -->
+<script type="text/javascript">
+    
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'TODO-UA-18603607-1']);
+    _gaq.push(['_setDomainName', 'erikge.com']);
+    _gaq.push(['_trackPageview']);
+    
+    (function() {
+     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+     
+    </script>
+
+    
+    
+    </body>
+</html>
