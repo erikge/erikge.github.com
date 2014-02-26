@@ -4,13 +4,116 @@
    <title>erikge.com</title>
    <link href="http://erikge.com/assets/atom.xml" rel="self" type="application/atom+xml"/>
    <link href="http://erikge.com" rel="alternate" type="text/html" />
-   <updated>2014-02-13T17:28:15+08:00</updated>
+   <updated>2014-02-26T10:46:39+08:00</updated>
    <id>http://erikge.com</id>
    <author>
      <name></name>
      <email></email>
    </author>
 
+   
+   <entry>
+     <title>如何打开Disqus Discovery功能</title>
+     <link href="http://erikge.com/articles/DisqusDiscovery"/>
+     <updated>2014-02-18T00:00:00+08:00</updated>
+     <id>http://erikge.com/articles/DisqusDiscovery</id>
+     <content type="html">&lt;p&gt;自己搭建博客用到Disqus，但是经常看到别人的Disqus和自己的不一样。别人的评论下面有一些类似推广的文章和广告的东西，直觉告诉我这个估计有收入。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;果然，通过&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#earn-money&quot;&gt;官方介绍&lt;/a&gt;发现果然可以。&lt;/p&gt;
+
+&lt;h2&gt;赚钱方式&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CPC(cost-per-click)，按点击付费，详情参考&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/1388608-advertiser-faq&quot;&gt;官方说明&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;达到100美金以上付款，详情参考&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/1208081-receiving-payments-from-disqus&quot;&gt;官方说明&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;如可开启&lt;/h2&gt;
+
+&lt;p&gt;如何打开这么好的功能呢？搜索了半天，很沮丧的没有找到，&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#discovery-settings&quot;&gt;官方&lt;/a&gt;也只是简单的说要通过邀请激活，可是没说清楚谁邀请谁啊。后来在&lt;a href=&quot;http://blog.acgtyrant.com/how-to-use-disqus-masterly.html&quot;&gt;这篇文章&lt;/a&gt;中得到启发。原来这个功能的开启不是个人来设置的，而是官方根据你账号的情况决定是否开启这个功能的。。。。。。也就是说，由disqus来决定你的网站上是否有Promoted Discovery。&lt;/p&gt;
+
+&lt;p&gt;我简单的把博客上自己的disqus shortname改为别人的（如jekyllbootstrap），就出现了Promoted Discovery内容。瀑布汗啊～～～＃@＃¥&amp;amp;＊&amp;amp;……！@&amp;amp;……＊不过说实在的，老外这样的规则确实有利于维护良好的生态系统，膜拜下吧。&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>Octopress Jekyll-Bootstrap 比较</title>
+     <link href="http://erikge.com/articles/OctopressVsJekyllBootstrap"/>
+     <updated>2014-02-17T00:00:00+08:00</updated>
+     <id>http://erikge.com/articles/OctopressVsJekyllBootstrap</id>
+     <content type="html">&lt;p&gt;想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;找到了octopress和jekyll-bootstrap两个工具，拿来试用了下，顺手写个对比。&lt;/p&gt;
+
+&lt;h2&gt;jekyll-bootstrap&lt;/h2&gt;
+
+&lt;h3&gt;快速开始&lt;/h3&gt;
+
+&lt;p&gt;通过以下命令就可以开始使用了，用法和jekyll一样&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;git clone https://github.com/plusjade/jekyll-bootstrap.git
+$ cd jekyll-bootstrap
+$ jekyll serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;http://jekyllbootstrap.com/usage/jekyll-quick-start.html&quot;&gt;详细文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;优缺点&lt;/h3&gt;
+
+&lt;p&gt;优点：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;文档详尽（都不需要我再整理什么了）&lt;/li&gt;
+&lt;li&gt;用法、语法等和jekyll一致，没有自建一套系统&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;缺点：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;主题比较少，只有官方的几款主题用起来最省事&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;octopress&lt;/h2&gt;
+
+&lt;h3&gt;octopress安装&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+gem install bundler
+rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+bundle install
+rake install    # Install the default Octopress theme
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;octopress切换主题&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;$ cd octopress
+$ git clone GIT_URL .themes/THEME_NAME
+$ rake install[&amp;#39;THEME_NAME&amp;#39;]
+$ rake generate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;主题选择&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes&quot;&gt;3rd-Party-Octopress-Themes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://opthemes.com/&quot;&gt;opthemes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;优缺点&lt;/h3&gt;
+
+&lt;p&gt;优点：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;主题丰富&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;缺点：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装麻烦，安装了一些不想加入到系统中的依赖&lt;/li&gt;
+&lt;li&gt;自建了一套语法系统，需要再学&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+   </entry>
    
    <entry>
      <title>尝试了下RAID</title>
