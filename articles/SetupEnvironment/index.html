@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>如何打开Disqus Discovery功能 | erikge.com</title>
+    <title>开始iOS开发 | erikge.com</title>
     <meta name="author" content="erikge" />
     <meta name="description" content="erikge's Blog" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,14 +51,14 @@
     
 <article class="hentry post" role="main">
   <header>
-    <h1 class="entry-title">如何打开Disqus Discovery功能</h1>
+    <h1 class="entry-title">开始iOS开发</h1>
     <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2014-02-18T00:00:00+08:00">2014 February 18 at 00:00  </time></span>
+      <span class="entry-date date published updated"><time datetime="2014-03-12T00:00:00+08:00">2014 March 12 at 00:00  </time></span>
       
       <span rel="tag">
         
           
-            <a href="/categories/web/index.html">web</a>
+            <a href="/categories/ios/index.html">ios</a>
           
         
       </span>
@@ -66,24 +66,73 @@
     </div>
   </header>
   <div class="entry-content">
-    <p>自己搭建博客用到Disqus，但是经常看到别人的Disqus和自己的不一样。别人的评论下面有一些类似推广的文章和广告的东西，直觉告诉我这个估计有收入。</p>
+    <p>简要列出快速上手开发iOS程序需要做得事项，以便于在心中有一个整体估计。本文尽量作为一个避免细节的梗概。</p>
 
 <!--more-->
 
-<p>果然，通过<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#earn-money">官方介绍</a>发现果然可以。</p>
+<h2 id="toc_0">开发环境</h2>
 
-<h2 id="toc_0">赚钱方式</h2>
+<p>搭建开发环境，基本上就是安装各种工具软件。</p>
+
+<ol>
+<li>xcode安装
 
 <ul>
-<li>CPC(cost-per-click)，按点击付费，详情参考<a href="http://help.disqus.com/customer/portal/articles/1388608-advertiser-faq">官方说明</a>.</li>
-<li>达到100美金以上付款，详情参考<a href="http://help.disqus.com/customer/portal/articles/1208081-receiving-payments-from-disqus">官方说明</a></li>
-</ul>
+<li>AppStore中下载安装xcode程序</li>
+<li>安装command line tools。xcode5中不再提供下载，需要从<a href="https://developer.apple.com/downloads/index.action">Apple Developer Tools site</a>下载，或者通过命令行运行<code>xcode-select --install</code>下载安装</li>
+<li>第一次在xcode运行程序时，enable developer mode，输入本机密码</li>
+<li>在xcode中下载开发文档</li>
+</ul></li>
+<li>真机调试（如果加入苹果开发者计划，并且是Agent、Admin，如下自动化操作最省事）
 
-<h2 id="toc_1">如可开启</h2>
+<ul>
+<li><code>Xcode-&gt;Preferences-&gt;Account</code>添加自己的账号，<code>View Details</code>刷新Provisioning Profiles</li>
+<li>插入iphone设备，选择信任</li>
+<li>运行程序，出现签名错误，选择自动Fix Issue；出现证书问题，选择自动Fix Issue</li>
+<li>（可选）可以导出account备份，下次换机器就不用再重复上述第1、3步</li>
+</ul></li>
+<li>JDK安装</li>
+<li>source tree安装，便于git做代码管理</li>
+<li>Homebrew安装，便于安装各种命令行工具
 
-<p>如何打开这么好的功能呢？搜索了半天，很沮丧的没有找到，<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#discovery-settings">官方</a>也只是简单的说要通过邀请激活，可是没说清楚谁邀请谁啊。后来在<a href="http://blog.acgtyrant.com/how-to-use-disqus-masterly.html">这篇文章</a>中得到启发。原来这个功能的开启不是个人来设置的，而是官方根据你账号的情况决定是否开启这个功能的。。。。。。也就是说，由disqus来决定你的网站上是否有Promoted Discovery。</p>
+<ul>
+<li><code>ruby -e &quot;$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”</code></li>
+<li>You should run <code>brew doctor</code> <em>before</em> you install anything.</li>
+</ul></li>
+<li>SlickEdit安装，非常好用的IDE，需要写c、cpp代码必备</li>
+</ol>
 
-<p>我简单的把博客上自己的disqus shortname改为别人的（如jekyllbootstrap），就出现了Promoted Discovery内容。瀑布汗啊～～～＃@＃¥&amp;＊&amp;……！@&amp;……＊不过说实在的，老外这样的规则确实有利于维护良好的生态系统，膜拜下吧。</p>
+<h2 id="toc_1">处理器架构</h2>
+
+<p>到目前为止，iOS设备采用的都是arm架构的处理器，使用arm指令集；模拟器运行在intel芯片的mac机上，采用的是x86架构，使用x86指令集，对应的编译选项是i386。armv6, armv7等实质上是arm指令集的不同版本，原则上是向下兼容的，例如支持armv7的cpu可以运行armv7选项编译出的程序，也可以运行armv6选项编译出的程序。</p>
+
+<p>已有的iOS设备和arm指令集版本对应关系如下：</p>
+
+<table><thead>
+<tr>
+<th>指令集版本</th>
+<th>iOS设备</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>armv6</td>
+<td>iPhone，iPhone2，iPhone 3G，第一代、第二代iPod Touch</td>
+</tr>
+<tr>
+<td>armv7</td>
+<td>iPhone 3GS,iPhone 4,iPhone 4S，iPad，iPad 2，the new iPad，iPod Touch 3G，iPod Touch 4</td>
+</tr>
+<tr>
+<td>armv7s</td>
+<td>iPhone 5</td>
+</tr>
+<tr>
+<td>arm64</td>
+<td>iphone 5s，iPad mini 2，iPad Air</td>
+</tr>
+</tbody></table>
+
+<p>xcode可以把不同指令集编译的版本都打包到同一程序中，这样在不同的设备上就可以自动选择最佳的指令集编译版本，缺点就是体积大点儿。可以根据想支持的iOS设备的多少设置工程Build Setting的Architectures中的<code>Build Active Architecture Only</code>和<code>Architectures</code>，<code>Valid Architectures</code>。</p>
 
   </div>
   <i class="fi-price-tag"></i><span class="entry-meta" rel="tag"> </span>
@@ -100,7 +149,7 @@
       <div class="g-plus" data-action="share" data-annotation="bubble"></div>
     </div>
     <div class="share-icon">
-      <a href="http://www.tumblr.com/share/link?url=/articles/DisqusDiscovery&name=如何打开Disqus Discovery功能" title="Share on Tumblr" style="display:inline-block; text-indent:-9999px; overflow:hidden; padding: 0 10px; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent;">Share on Tumblr</a>
+      <a href="http://www.tumblr.com/share/link?url=/articles/SetupEnvironment&name=开始iOS开发" title="Share on Tumblr" style="display:inline-block; text-indent:-9999px; overflow:hidden; padding: 0 10px; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent;">Share on Tumblr</a>
     </div>
     <div class="share-icon">
       <script type="IN/Share" data-counter="right"></script>

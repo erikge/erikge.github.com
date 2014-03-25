@@ -4,13 +4,88 @@
    <title>erikge.com</title>
    <link href="http://erikge.com/assets/atom.xml" rel="self" type="application/atom+xml"/>
    <link href="http://erikge.com" rel="alternate" type="text/html" />
-   <updated>2014-02-26T10:46:39+08:00</updated>
+   <updated>2014-03-25T17:59:01+08:00</updated>
    <id>http://erikge.com</id>
    <author>
      <name></name>
      <email></email>
    </author>
 
+   
+   <entry>
+     <title>开始iOS开发</title>
+     <link href="http://erikge.com/articles/SetupEnvironment"/>
+     <updated>2014-03-12T00:00:00+08:00</updated>
+     <id>http://erikge.com/articles/SetupEnvironment</id>
+     <content type="html">&lt;p&gt;简要列出快速上手开发iOS程序需要做得事项，以便于在心中有一个整体估计。本文尽量作为一个避免细节的梗概。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;toc_0&quot;&gt;开发环境&lt;/h2&gt;
+
+&lt;p&gt;搭建开发环境，基本上就是安装各种工具软件。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;xcode安装
+
+&lt;ul&gt;
+&lt;li&gt;AppStore中下载安装xcode程序&lt;/li&gt;
+&lt;li&gt;安装command line tools。xcode5中不再提供下载，需要从&lt;a href=&quot;https://developer.apple.com/downloads/index.action&quot;&gt;Apple Developer Tools site&lt;/a&gt;下载，或者通过命令行运行&lt;code&gt;xcode-select --install&lt;/code&gt;下载安装&lt;/li&gt;
+&lt;li&gt;第一次在xcode运行程序时，enable developer mode，输入本机密码&lt;/li&gt;
+&lt;li&gt;在xcode中下载开发文档&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;真机调试（如果加入苹果开发者计划，并且是Agent、Admin，如下自动化操作最省事）
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Xcode-&amp;gt;Preferences-&amp;gt;Account&lt;/code&gt;添加自己的账号，&lt;code&gt;View Details&lt;/code&gt;刷新Provisioning Profiles&lt;/li&gt;
+&lt;li&gt;插入iphone设备，选择信任&lt;/li&gt;
+&lt;li&gt;运行程序，出现签名错误，选择自动Fix Issue；出现证书问题，选择自动Fix Issue&lt;/li&gt;
+&lt;li&gt;（可选）可以导出account备份，下次换机器就不用再重复上述第1、3步&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;JDK安装&lt;/li&gt;
+&lt;li&gt;source tree安装，便于git做代码管理&lt;/li&gt;
+&lt;li&gt;Homebrew安装，便于安装各种命令行工具
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ruby -e &amp;quot;$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;You should run &lt;code&gt;brew doctor&lt;/code&gt; &lt;em&gt;before&lt;/em&gt; you install anything.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;SlickEdit安装，非常好用的IDE，需要写c、cpp代码必备&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;toc_1&quot;&gt;处理器架构&lt;/h2&gt;
+
+&lt;p&gt;到目前为止，iOS设备采用的都是arm架构的处理器，使用arm指令集；模拟器运行在intel芯片的mac机上，采用的是x86架构，使用x86指令集，对应的编译选项是i386。armv6, armv7等实质上是arm指令集的不同版本，原则上是向下兼容的，例如支持armv7的cpu可以运行armv7选项编译出的程序，也可以运行armv6选项编译出的程序。&lt;/p&gt;
+
+&lt;p&gt;已有的iOS设备和arm指令集版本对应关系如下：&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;指令集版本&lt;/th&gt;
+&lt;th&gt;iOS设备&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;armv6&lt;/td&gt;
+&lt;td&gt;iPhone，iPhone2，iPhone 3G，第一代、第二代iPod Touch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;armv7&lt;/td&gt;
+&lt;td&gt;iPhone 3GS,iPhone 4,iPhone 4S，iPad，iPad 2，the new iPad，iPod Touch 3G，iPod Touch 4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;armv7s&lt;/td&gt;
+&lt;td&gt;iPhone 5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;arm64&lt;/td&gt;
+&lt;td&gt;iphone 5s，iPad mini 2，iPad Air&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;xcode可以把不同指令集编译的版本都打包到同一程序中，这样在不同的设备上就可以自动选择最佳的指令集编译版本，缺点就是体积大点儿。可以根据想支持的iOS设备的多少设置工程Build Setting的Architectures中的&lt;code&gt;Build Active Architecture Only&lt;/code&gt;和&lt;code&gt;Architectures&lt;/code&gt;，&lt;code&gt;Valid Architectures&lt;/code&gt;。&lt;/p&gt;
+</content>
+   </entry>
    
    <entry>
      <title>如何打开Disqus Discovery功能</title>
@@ -23,14 +98,14 @@
 
 &lt;p&gt;果然，通过&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#earn-money&quot;&gt;官方介绍&lt;/a&gt;发现果然可以。&lt;/p&gt;
 
-&lt;h2&gt;赚钱方式&lt;/h2&gt;
+&lt;h2 id=&quot;toc_0&quot;&gt;赚钱方式&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;CPC(cost-per-click)，按点击付费，详情参考&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/1388608-advertiser-faq&quot;&gt;官方说明&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;达到100美金以上付款，详情参考&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/1208081-receiving-payments-from-disqus&quot;&gt;官方说明&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2&gt;如可开启&lt;/h2&gt;
+&lt;h2 id=&quot;toc_1&quot;&gt;如可开启&lt;/h2&gt;
 
 &lt;p&gt;如何打开这么好的功能呢？搜索了半天，很沮丧的没有找到，&lt;a href=&quot;http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#discovery-settings&quot;&gt;官方&lt;/a&gt;也只是简单的说要通过邀请激活，可是没说清楚谁邀请谁啊。后来在&lt;a href=&quot;http://blog.acgtyrant.com/how-to-use-disqus-masterly.html&quot;&gt;这篇文章&lt;/a&gt;中得到启发。原来这个功能的开启不是个人来设置的，而是官方根据你账号的情况决定是否开启这个功能的。。。。。。也就是说，由disqus来决定你的网站上是否有Promoted Discovery。&lt;/p&gt;
 
@@ -49,9 +124,9 @@
 
 &lt;p&gt;找到了octopress和jekyll-bootstrap两个工具，拿来试用了下，顺手写个对比。&lt;/p&gt;
 
-&lt;h2&gt;jekyll-bootstrap&lt;/h2&gt;
+&lt;h2 id=&quot;toc_0&quot;&gt;jekyll-bootstrap&lt;/h2&gt;
 
-&lt;h3&gt;快速开始&lt;/h3&gt;
+&lt;h3 id=&quot;toc_1&quot;&gt;快速开始&lt;/h3&gt;
 
 &lt;p&gt;通过以下命令就可以开始使用了，用法和jekyll一样&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;git clone https://github.com/plusjade/jekyll-bootstrap.git
@@ -60,7 +135,7 @@ $ jekyll serve
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;a href=&quot;http://jekyllbootstrap.com/usage/jekyll-quick-start.html&quot;&gt;详细文档&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3&gt;优缺点&lt;/h3&gt;
+&lt;h3 id=&quot;toc_2&quot;&gt;优缺点&lt;/h3&gt;
 
 &lt;p&gt;优点：&lt;/p&gt;
 
@@ -75,9 +150,9 @@ $ jekyll serve
 &lt;li&gt;主题比较少，只有官方的几款主题用起来最省事&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2&gt;octopress&lt;/h2&gt;
+&lt;h2 id=&quot;toc_3&quot;&gt;octopress&lt;/h2&gt;
 
-&lt;h3&gt;octopress安装&lt;/h3&gt;
+&lt;h3 id=&quot;toc_4&quot;&gt;octopress安装&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;git clone git://github.com/imathis/octopress.git octopress
 cd octopress
 gem install bundler
@@ -85,20 +160,20 @@ rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
 bundle install
 rake install    # Install the default Octopress theme
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;octopress切换主题&lt;/h3&gt;
+&lt;h3 id=&quot;toc_5&quot;&gt;octopress切换主题&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;$ cd octopress
 $ git clone GIT_URL .themes/THEME_NAME
 $ rake install[&amp;#39;THEME_NAME&amp;#39;]
 $ rake generate
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;主题选择&lt;/h3&gt;
+&lt;h3 id=&quot;toc_6&quot;&gt;主题选择&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes&quot;&gt;3rd-Party-Octopress-Themes&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://opthemes.com/&quot;&gt;opthemes&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;优缺点&lt;/h3&gt;
+&lt;h3 id=&quot;toc_7&quot;&gt;优缺点&lt;/h3&gt;
 
 &lt;p&gt;优点：&lt;/p&gt;
 
