@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | 直觉的印记]]></title>
   <link href="http://erikge.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-04-30T16:10:00+08:00</updated>
+  <updated>2014-04-30T21:55:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何打开Disqus Discovery功能]]></title>
-    <link href="http://erikge.comarticles/DisqusDiscovery"/>
+    <link href="http://erikge.com/articles/DisqusDiscovery"/>
     <updated>2014-02-18T22:16:18+08:00</updated>
-    <id>http://erikge.comarticles/DisqusDiscovery</id>
+    <id>http://erikge.com/articles/DisqusDiscovery</id>
     <content type="html"><![CDATA[<p>自己搭建博客用到Disqus，但是经常看到别人的Disqus和自己的不一样。别人的评论下面有一些类似推广的文章和广告的东西，直觉告诉我这个估计有收入。</p>
 
 <!--more-->
@@ -41,9 +41,9 @@
   
   <entry>
     <title type="html"><![CDATA[Octopress Jekyll-Bootstrap 比较]]></title>
-    <link href="http://erikge.comarticles/OctopressVsJekyllBootstrap"/>
+    <link href="http://erikge.com/articles/OctopressVsJekyllBootstrap"/>
     <updated>2014-02-17T21:17:33+08:00</updated>
-    <id>http://erikge.comarticles/OctopressVsJekyllBootstrap</id>
+    <id>http://erikge.com/articles/OctopressVsJekyllBootstrap</id>
     <content type="html"><![CDATA[<p>想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。</p>
 
 <!-- more -->
@@ -128,9 +128,9 @@ rake preview // 实时监视，并且启动本地webserver，通过http://localh
   
   <entry>
     <title type="html"><![CDATA[JavaScript初始化]]></title>
-    <link href="http://erikge.comarticles/JavaScript-GetStarted"/>
+    <link href="http://erikge.com/articles/JavaScript-GetStarted"/>
     <updated>2014-02-08T15:01:53+08:00</updated>
-    <id>http://erikge.comarticles/JavaScript-GetStarted</id>
+    <id>http://erikge.com/articles/JavaScript-GetStarted</id>
     <content type="html"><![CDATA[<p>h2. 背景</p>
 
 <p>JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。

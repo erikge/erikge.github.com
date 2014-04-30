@@ -4,7 +4,7 @@
   <title><![CDATA[Category: life | 直觉的印记]]></title>
   <link href="http://erikge.com/blog/categories/life/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-04-30T16:10:00+08:00</updated>
+  <updated>2014-04-30T21:55:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[尝试了下RAID]]></title>
-    <link href="http://erikge.comarticles/TryRaidOnMac"/>
+    <link href="http://erikge.com/articles/TryRaidOnMac"/>
     <updated>2014-02-11T19:00:53+08:00</updated>
-    <id>http://erikge.comarticles/TryRaidOnMac</id>
+    <id>http://erikge.com/articles/TryRaidOnMac</id>
     <content type="html"><![CDATA[<p>随着各种电子产品的使用，要存储的东西越来越多。开始就是存在电脑里，后来电脑旧了坏了，换电脑，也不止一台电脑了，数据就存移动硬盘里。再后来，电脑似乎也不那么常用了，就换成各种跨平台的app，自动在各种终端上同步数据。</p>
 
 <!--more-->

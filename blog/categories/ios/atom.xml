@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 直觉的印记]]></title>
   <link href="http://erikge.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-04-30T16:10:00+08:00</updated>
+  <updated>2014-04-30T21:55:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[开始iOS开发]]></title>
-    <link href="http://erikge.comarticles/SetupEnvironment"/>
+    <link href="http://erikge.com/articles/SetupEnvironment"/>
     <updated>2014-03-12T16:04:53+08:00</updated>
-    <id>http://erikge.comarticles/SetupEnvironment</id>
+    <id>http://erikge.com/articles/SetupEnvironment</id>
     <content type="html"><![CDATA[<p>简要列出快速上手开发iOS程序需要做得事项，以便于在心中有一个整体估计。本文尽量作为一个避免细节的梗概。</p>
 
 <!--more-->

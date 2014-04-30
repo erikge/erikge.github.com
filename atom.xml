@@ -4,7 +4,7 @@
   <title><![CDATA[直觉的印记]]></title>
   <link href="http://erikge.com/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-04-30T16:10:00+08:00</updated>
+  <updated>2014-04-30T21:55:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[开始iOS开发]]></title>
-    <link href="http://erikge.comarticles/SetupEnvironment"/>
+    <link href="http://erikge.com/articles/SetupEnvironment"/>
     <updated>2014-03-12T16:04:53+08:00</updated>
-    <id>http://erikge.comarticles/SetupEnvironment</id>
+    <id>http://erikge.com/articles/SetupEnvironment</id>
     <content type="html"><![CDATA[<p>简要列出快速上手开发iOS程序需要做得事项，以便于在心中有一个整体估计。本文尽量作为一个避免细节的梗概。</p>
 
 <!--more-->
@@ -90,9 +90,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何打开Disqus Discovery功能]]></title>
-    <link href="http://erikge.comarticles/DisqusDiscovery"/>
+    <link href="http://erikge.com/articles/DisqusDiscovery"/>
     <updated>2014-02-18T22:16:18+08:00</updated>
-    <id>http://erikge.comarticles/DisqusDiscovery</id>
+    <id>http://erikge.com/articles/DisqusDiscovery</id>
     <content type="html"><![CDATA[<p>自己搭建博客用到Disqus，但是经常看到别人的Disqus和自己的不一样。别人的评论下面有一些类似推广的文章和广告的东西，直觉告诉我这个估计有收入。</p>
 
 <!--more-->
@@ -116,9 +116,9 @@
   
   <entry>
     <title type="html"><![CDATA[Octopress Jekyll-Bootstrap 比较]]></title>
-    <link href="http://erikge.comarticles/OctopressVsJekyllBootstrap"/>
+    <link href="http://erikge.com/articles/OctopressVsJekyllBootstrap"/>
     <updated>2014-02-17T21:17:33+08:00</updated>
-    <id>http://erikge.comarticles/OctopressVsJekyllBootstrap</id>
+    <id>http://erikge.com/articles/OctopressVsJekyllBootstrap</id>
     <content type="html"><![CDATA[<p>想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。</p>
 
 <!-- more -->
@@ -203,9 +203,9 @@ rake preview // 实时监视，并且启动本地webserver，通过http://localh
   
   <entry>
     <title type="html"><![CDATA[尝试了下RAID]]></title>
-    <link href="http://erikge.comarticles/TryRaidOnMac"/>
+    <link href="http://erikge.com/articles/TryRaidOnMac"/>
     <updated>2014-02-11T19:00:53+08:00</updated>
-    <id>http://erikge.comarticles/TryRaidOnMac</id>
+    <id>http://erikge.com/articles/TryRaidOnMac</id>
     <content type="html"><![CDATA[<p>随着各种电子产品的使用，要存储的东西越来越多。开始就是存在电脑里，后来电脑旧了坏了，换电脑，也不止一台电脑了，数据就存移动硬盘里。再后来，电脑似乎也不那么常用了，就换成各种跨平台的app，自动在各种终端上同步数据。</p>
 <p><!--more--></p>
 <p>体积比较大的文件也可以存到各种网盘、云盘里了。但是，最珍贵、最想保存下来的，就是这么多年来的照片了，满满的都似乎回忆。而这些照片往往不太愿意放到网上去，毕竟是自己的私人数据，还是不太相信没有底线的互联网，即便是有各种加密，自己设置的密码也不一定靠的住。所以，我一直还是存在两块移动硬盘里，还是身边的柜子她是些。唯一的问题是，两块硬盘上的数据我是没仔细同步的，自己也搞不清楚那个是数据最完整的了。</p>
@@ -263,9 +263,9 @@ SoftRAID最可爱的地方：</p>
   
   <entry>
     <title type="html"><![CDATA[JavaScript初始化]]></title>
-    <link href="http://erikge.comarticles/JavaScript-GetStarted"/>
+    <link href="http://erikge.com/articles/JavaScript-GetStarted"/>
     <updated>2014-02-08T15:01:53+08:00</updated>
-    <id>http://erikge.comarticles/JavaScript-GetStarted</id>
+    <id>http://erikge.com/articles/JavaScript-GetStarted</id>
     <content type="html"><![CDATA[<h2>背景</h2>
 <p>JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。<br />
 解释型语言，动态语言，脚本语言。</p>
