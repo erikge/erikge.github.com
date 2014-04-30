@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iOS | 直觉的印记]]></title>
+  <link href="http://erikge.com/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://erikge.com/"/>
+  <updated>2014-04-30T16:10:00+08:00</updated>
+  <id>http://erikge.com/</id>
+  <author>
+    <name><![CDATA[erik ge]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[开始iOS开发]]></title>
+    <link href="http://erikge.comarticles/SetupEnvironment"/>
+    <updated>2014-03-12T16:04:53+08:00</updated>
+    <id>http://erikge.comarticles/SetupEnvironment</id>
+    <content type="html"><![CDATA[<p>简要列出快速上手开发iOS程序需要做得事项，以便于在心中有一个整体估计。本文尽量作为一个避免细节的梗概。</p>
+
+<!--more-->
+
+<h2 id="开发环境">开发环境</h2>
+
+<p>搭建开发环境，基本上就是安装各种工具软件。</p>
+
+<ol>
+<li>xcode安装
+
+<ul>
+<li>AppStore中下载安装xcode程序</li>
+<li>安装command line tools。xcode5中不再提供下载，需要从<a href="https://developer.apple.com/downloads/index.action">Apple Developer Tools site</a>下载，或者通过命令行运行<code>xcode-select --install</code>下载安装</li>
+<li>第一次在xcode运行程序时，enable developer mode，输入本机密码</li>
+<li>在xcode中下载开发文档</li>
+</ul></li>
+<li>真机调试（如果加入苹果开发者计划，并且是Agent、Admin，如下自动化操作最省事）
+
+<ul>
+<li><code>Xcode-&gt;Preferences-&gt;Account</code>添加自己的账号，<code>View Details</code>刷新Provisioning Profiles</li>
+<li>插入iphone设备，选择信任</li>
+<li>运行程序，出现签名错误，选择自动Fix Issue；出现证书问题，选择自动Fix Issue</li>
+<li>（可选）可以导出account备份，下次换机器就不用再重复上述第1、3步</li>
+</ul></li>
+<li>JDK安装</li>
+<li>source tree安装，便于git做代码管理</li>
+<li>Homebrew安装，便于安装各种命令行工具
+
+<ul>
+<li><code>ruby -e &quot;$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”</code></li>
+<li>You should run <code>brew doctor</code> <em>before</em> you install anything.</li>
+</ul></li>
+<li>SlickEdit安装，非常好用的IDE，需要写c、cpp代码必备</li>
+</ol>
+
+<h2 id="处理器架构">处理器架构</h2>
+
+<p>到目前为止，iOS设备采用的都是arm架构的处理器，使用arm指令集；模拟器运行在intel芯片的mac机上，采用的是x86架构，使用x86指令集，对应的编译选项是i386。armv6, armv7等实质上是arm指令集的不同版本，原则上是向下兼容的，例如支持armv7的cpu可以运行armv7选项编译出的程序，也可以运行armv6选项编译出的程序。</p>
+
+<p>已有的iOS设备和arm指令集版本对应关系如下：</p>
+
+<table><thead>
+<tr>
+<th>指令集版本</th>
+<th>iOS设备</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>armv6</td>
+<td>iPhone，iPhone2，iPhone 3G，第一代、第二代iPod Touch</td>
+</tr>
+<tr>
+<td>armv7</td>
+<td>iPhone 3GS,iPhone 4,iPhone 4S，iPad，iPad 2，the new iPad，iPod Touch 3G，iPod Touch 4</td>
+</tr>
+<tr>
+<td>armv7s</td>
+<td>iPhone 5</td>
+</tr>
+<tr>
+<td>arm64</td>
+<td>iphone 5s，iPad mini 2，iPad Air</td>
+</tr>
+</tbody></table>
+
+<p>xcode可以把不同指令集编译的版本都打包到同一程序中，这样在不同的设备上就可以自动选择最佳的指令集编译版本，缺点就是体积大点儿。可以根据想支持的iOS设备的多少设置工程Build Setting的Architectures中的<code>Build Active Architecture Only</code>和<code>Architectures</code>，<code>Valid Architectures</code>。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,89 +1,128 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Octopress Jekyll-Bootstrap 比较 | erikge.com</title>
-    <meta name="author" content="erikge" />
-    <meta name="description" content="erikge's Blog" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    
-    <link rel="stylesheet" href="/assets/css/foundation.min.css" />
-    <link rel="stylesheet" href="/assets/foundation-icons.css" />
-    <!-- syntax highlighting CSS -->
-    <link rel="stylesheet" href="/assets/css/syntax.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/assets/css/overrides.css" />
-    <script src="/assets/js/modernizr.js"></script>
-    
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/assets/atom.xml" />
-    
-    <!-- article outline -->
-    <link rel="stylesheet" href="/assets/css/article_outline.css" type="text/css" />
-    <script src="/assets/js/jquery-1.7.1.min.js" type="text/javascript"></script>
-    
-  </head>
-    <body>
-      <!-- Header and Nav -->
-  
-      <div class="row">
-          <div class="home-menu">
-              <div class="home-icon-con">
-                  <a class="home-menu-icon" href="/">erikge</a>
-              </div>
-          </div>
-        <div class="large-9 columns">
-          <nav role="navigation">
-            <ul class="inline-list right">
-              <li><a href="/index.html">Home</a></li>
-              <li><a href="/index.html">Category</a></li>
-              <li><a href="/index.html">About</a></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-  <div class="row">
-      
-    <!-- Main Content Section -->
-<!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
-<div class="large-8 medium-8 push-1 columns entry">
-    
-<article class="hentry post" role="main">
-  <header>
-    <h1 class="entry-title">Octopress Jekyll-Bootstrap 比较</h1>
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2014-02-17T00:00:00+08:00">2014 February 17 at 00:00  </time></span>
-      
-      <span rel="tag">
-        
-          
-            <a href="/categories/web/index.html">web</a>
-          
-        
-      </span>
-      
-    </div>
-  </header>
-  <div class="entry-content">
-    <p>想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。</p>
 
-<!--more-->
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopress Jekyll-Bootstrap 比较 - 直觉的印记</title>
+  <meta name="author" content="erik ge">
+
+  
+  <meta name="description" content="想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。 找到了octopress和jekyll-bootstrap两个工具，拿来试用了下，顺手写个对比。 jekyll-bootstrap &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://erikge.comarticles/OctopressVsJekyllBootstrap">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="直觉的印记" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50514628-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:erikge.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            直觉的印记
+        </span>
+       
+           <span class="blue_dark">
+             by erik
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopress Jekyll-Bootstrap 比较</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-17T21:17:33+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。</p>
+
+<!-- more -->
 
 <p>找到了octopress和jekyll-bootstrap两个工具，拿来试用了下，顺手写个对比。</p>
 
-<h2 id="toc_0">jekyll-bootstrap</h2>
+<h2 id="jekyll-bootstrap">jekyll-bootstrap</h2>
 
-<h3 id="toc_1">快速开始</h3>
+<h3 id="快速开始">快速开始</h3>
 
 <p>通过以下命令就可以开始使用了，用法和jekyll一样</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">git clone https://github.com/plusjade/jekyll-bootstrap.git
+<div class="highlight"><pre><code class="text">git clone https://github.com/plusjade/jekyll-bootstrap.git
 $ cd jekyll-bootstrap
 $ jekyll serve
 </code></pre></div>
 <p><a href="http://jekyllbootstrap.com/usage/jekyll-quick-start.html">详细文档</a></p>
 
-<h3 id="toc_2">优缺点</h3>
+<h3 id="优缺点">优缺点</h3>
 
 <p>优点：</p>
 
@@ -98,30 +137,40 @@ $ jekyll serve
 <li>主题比较少，只有官方的几款主题用起来最省事</li>
 </ol>
 
-<h2 id="toc_3">octopress</h2>
+<h2 id="octopress">octopress</h2>
 
-<h3 id="toc_4">octopress安装</h3>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">git clone git://github.com/imathis/octopress.git octopress
+<h3 id="快速开始">快速开始</h3>
+<div class="highlight"><pre><code class="text">// 安装
+git clone git://github.com/imathis/octopress.git octopress
 cd octopress
 gem install bundler
-rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+rbenv rehash    # Mac上用不到。If you use rbenv, rehash to be able to run the bundle command
 bundle install
 rake install    # Install the default Octopress theme
+// 创建文章
+rake new_post[&#39;Post title&#39;]
+// 生成文章
+rake generate
+// 发布到github的USERNAME.github.com
+rake setup_github_pages
+rake deploy
+// 安装第三方主题方法
+cd octopress
+git clone GIT_URL .themes/THEME_NAME
+rake install[&#39;THEME_NAME&#39;]
+rake generate
+// 本地运行
+rake watch // 实时监视本地修改并regenerate
+rake preview // 实时监视，并且启动本地webserver，通过http://localhost:4000访问
 </code></pre></div>
-<h3 id="toc_5">octopress切换主题</h3>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ cd octopress
-$ git clone GIT_URL .themes/THEME_NAME
-$ rake install[&#39;THEME_NAME&#39;]
-$ rake generate
-</code></pre></div>
-<h3 id="toc_6">主题选择</h3>
+<h3 id="主题选择">主题选择</h3>
 
 <ul>
 <li><a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">3rd-Party-Octopress-Themes</a></li>
 <li><a href="http://opthemes.com/">opthemes</a></li>
 </ul>
 
-<h3 id="toc_7">优缺点</h3>
+<h3 id="优缺点">优缺点</h3>
 
 <p>优点：</p>
 
@@ -135,147 +184,116 @@ $ rake generate
 <li>安装麻烦，安装了一些不想加入到系统中的依赖</li>
 <li>自建了一套语法系统，需要再学</li>
 </ol>
+</div>
 
-  </div>
-  <i class="fi-price-tag"></i><span class="entry-meta" rel="tag"> </span>
 
-  
-  <div class="share-buttons">
-    <!--div class="share-icon twitter-share">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-via="ThatAmyMac" data-lang="en">Tweet</a>
-    </div-->
-    <div class="share-icon">
-      <div class="fb-share-button" data-type="button_count" style="vertical-align: none"></div>
-    </div>
-    <div class="share-icon">
-      <div class="g-plus" data-action="share" data-annotation="bubble"></div>
-    </div>
-    <div class="share-icon">
-      <a href="http://www.tumblr.com/share/link?url=/articles/OctopressVsJekyllBootstrap&name=Octopress Jekyll-Bootstrap 比较" title="Share on Tumblr" style="display:inline-block; text-indent:-9999px; overflow:hidden; padding: 0 10px; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent;">Share on Tumblr</a>
-    </div>
-    <div class="share-icon">
-      <script type="IN/Share" data-counter="right"></script>
-    </div>
-  </div>
+  <footer>
+    <p class="meta">
+      
   
 
+<span class="byline author vcard">Posted by <span class="fn">erik ge</span></span>
+
+      
+
+
+
+
+
+
+
+
   
-  <hr />
-    <section id="disqus_thread"></section>
+
+
+<time datetime="2014-02-17T21:17:33+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
+      
+
+<span class="categories">
   
+    <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="articles/TryRaidOnMac" title="Previous Post: 尝试了下RAID">&laquo; 尝试了下RAID</a>
+      
+      
+        <a class="basic-alignment right" href="articles/DisqusDiscovery" title="Next Post: 如何打开Disqus Discovery功能">如何打开Disqus Discovery功能 &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
 </div>
 
-<div class="large-6 medium-6 push-3 columns" id="content">
-    
-<script src="/assets/js/article_outline.js" type="text/javascript"></script>
-
-</div>
-
-    
-    <!-- Nav Sidebar -->
-    <!-- This is source ordered to be pulled to the left on larger screens -->
-    <!--
-    <div class="large-3 medium-3 pull-9 columns">
-        
-      <blockquote>Art is never finished, only abandoned.<cite>Leonardo Da Vinci</cite></blockquote>
-      
-      <p><img src="/images/amymac.jpg" alt="Amy MacKinnon" title="Photo by Michael O'Donnell"/></p>
-
-      <h3>Everywhere Else</h3>
-      <a href="http://www.behance.net/amy_mac" class="webicon behance">Behance</a>
-      <a href="http://www.flickr.com/photos/amy_sloan/" class="webicon flickr">Flickr</a>
-      <a href="https://github.com/amy-mac" class="webicon github" rel="me">Github</a>
-      <a href="http://www.linkedin.com/in/amymsloan" class="webicon linkedin">Linked In</a>
-      <a href="http://www.rdio.com/people/amy_mackinnon/" class="webicon rdio">Rdio</a>
-      <a href="http://amysloan.tumblr.com/" class="webicon tumblr">Tumblr</a>
-      <a href="https://twitter.com/thatamymac" class="webicon twitter" rel="me">Twitter</a>
-      <a href="http://www.youtube.com/user/morriganjett" class="webicon youtube">Youtube</a>
-    </div>
-     -->
-    
-  </div>
-
-  <!-- Footer -->
+<aside class="sidebar">
   
-  <footer class="row">
-    <div class="large-12 columns">
-      <hr />
-      <div class="row">
-        <div class="large-6 columns">
-          <p>Copyright © 2013&ndash;2014 Erik Ge</p>
-        </div>
-        <div class="large-6 columns">
-          <nav role="navigation">
-            <ul class="inline-list right">
-                <li><a href="/index.html">Home</a></li>
-                <li><a href="/index.html">Category</a></li>
-                <li><a href="/index.html">About</a></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </div> 
-  </footer>
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="articles/SetupEnvironment">开始iOS开发</a>
+      </li>
+    
+      <li class="post">
+        <a href="articles/DisqusDiscovery">如何打开Disqus Discovery功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="articles/OctopressVsJekyllBootstrap">Octopress Jekyll-Bootstrap 比较</a>
+      </li>
+    
+      <li class="post">
+        <a href="articles/TryRaidOnMac">尝试了下RAID</a>
+      </li>
+    
+      <li class="post">
+        <a href="articles/JavaScript-GetStarted">JavaScript初始化</a>
+      </li>
+    
+  </ul>
+</section>
 
-    <script src="/assets/js/jquery.js"></script>
-    <script src="/assets/js/foundation.min.js"></script>
-    <script>
-      $(document).foundation();
-    </script>
-    
-    <script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname = 'erikge'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-     })();
-     
-     /* * * DON'T EDIT BELOW THIS LINE * * */
-     (function () {
-      var s = document.createElement('script'); s.async = true;
-      s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-      (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-      }());
-     
-    </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    <!-- Twitter Share Button -->
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<!-- Facebook Share Button -->
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=139738486099462";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-<script src="https://apis.google.com/js/plusone.js"></script>
-<script src="http://platform.tumblr.com/v1/share.js"></script>
-<script src="http://platform.linkedin.com/in.js" type="text/javascript"></script>
-    <!-- TODO 代码统计 -->
-<script type="text/javascript">
-    
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'TODO-UA-18603607-1']);
-    _gaq.push(['_setDomainName', 'erikge.com']);
-    _gaq.push(['_trackPageview']);
-    
-    (function() {
-     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-     })();
-     
-    </script>
 
-    </body>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - erik ge -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  <!-- 
+
+
+
+
+
+
+
+ -->
+
+
+
+</body>
 </html>

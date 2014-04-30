@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: web | 直觉的印记]]></title>
+  <link href="http://erikge.com/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://erikge.com/"/>
+  <updated>2014-04-30T16:10:00+08:00</updated>
+  <id>http://erikge.com/</id>
+  <author>
+    <name><![CDATA[erik ge]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何打开Disqus Discovery功能]]></title>
+    <link href="http://erikge.comarticles/DisqusDiscovery"/>
+    <updated>2014-02-18T22:16:18+08:00</updated>
+    <id>http://erikge.comarticles/DisqusDiscovery</id>
+    <content type="html"><![CDATA[<p>自己搭建博客用到Disqus，但是经常看到别人的Disqus和自己的不一样。别人的评论下面有一些类似推广的文章和广告的东西，直觉告诉我这个估计有收入。</p>
+
+<!--more-->
+
+<p>果然，通过<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#earn-money">官方介绍</a>发现果然可以。</p>
+
+<h2 id="赚钱方式">赚钱方式</h2>
+
+<ul>
+<li>CPC(cost-per-click)，按点击付费，详情参考<a href="http://help.disqus.com/customer/portal/articles/1388608-advertiser-faq">官方说明</a>.</li>
+<li>达到100美金以上付款，详情参考<a href="http://help.disqus.com/customer/portal/articles/1208081-receiving-payments-from-disqus">官方说明</a></li>
+</ul>
+
+<h2 id="如可开启">如可开启</h2>
+
+<p>如何打开这么好的功能呢？搜索了半天，很沮丧的没有找到，<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#discovery-settings">官方</a>也只是简单的说要通过邀请激活，可是没说清楚谁邀请谁啊。后来在<a href="http://blog.acgtyrant.com/how-to-use-disqus-masterly.html">这篇文章</a>中得到启发。原来这个功能的开启不是个人来设置的，而是官方根据你账号的情况决定是否开启这个功能的。。。。。。也就是说，由disqus来决定你的网站上是否有Promoted Discovery。</p>
+
+<p>我简单的把博客上自己的disqus shortname改为别人的（如jekyllbootstrap），就出现了Promoted Discovery内容。瀑布汗啊～～～＃@＃¥&amp;＊&amp;……！@&amp;……＊不过说实在的，老外这样的规则确实有利于维护良好的生态系统，膜拜下吧。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress Jekyll-Bootstrap 比较]]></title>
+    <link href="http://erikge.comarticles/OctopressVsJekyllBootstrap"/>
+    <updated>2014-02-17T21:17:33+08:00</updated>
+    <id>http://erikge.comarticles/OctopressVsJekyllBootstrap</id>
+    <content type="html"><![CDATA[<p>想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。</p>
+
+<!-- more -->
+
+<p>找到了octopress和jekyll-bootstrap两个工具，拿来试用了下，顺手写个对比。</p>
+
+<h2 id="jekyll-bootstrap">jekyll-bootstrap</h2>
+
+<h3 id="快速开始">快速开始</h3>
+
+<p>通过以下命令就可以开始使用了，用法和jekyll一样</p>
+<div class="highlight"><pre><code class="text">git clone https://github.com/plusjade/jekyll-bootstrap.git
+$ cd jekyll-bootstrap
+$ jekyll serve
+</code></pre></div>
+<p><a href="http://jekyllbootstrap.com/usage/jekyll-quick-start.html">详细文档</a></p>
+
+<h3 id="优缺点">优缺点</h3>
+
+<p>优点：</p>
+
+<ol>
+<li>文档详尽（都不需要我再整理什么了）</li>
+<li>用法、语法等和jekyll一致，没有自建一套系统</li>
+</ol>
+
+<p>缺点：</p>
+
+<ol>
+<li>主题比较少，只有官方的几款主题用起来最省事</li>
+</ol>
+
+<h2 id="octopress">octopress</h2>
+
+<h3 id="快速开始">快速开始</h3>
+<div class="highlight"><pre><code class="text">// 安装
+git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+gem install bundler
+rbenv rehash    # Mac上用不到。If you use rbenv, rehash to be able to run the bundle command
+bundle install
+rake install    # Install the default Octopress theme
+// 创建文章
+rake new_post[&#39;Post title&#39;]
+// 生成文章
+rake generate
+// 发布到github的USERNAME.github.com
+rake setup_github_pages
+rake deploy
+// 安装第三方主题方法
+cd octopress
+git clone GIT_URL .themes/THEME_NAME
+rake install[&#39;THEME_NAME&#39;]
+rake generate
+// 本地运行
+rake watch // 实时监视本地修改并regenerate
+rake preview // 实时监视，并且启动本地webserver，通过http://localhost:4000访问
+</code></pre></div>
+<h3 id="主题选择">主题选择</h3>
+
+<ul>
+<li><a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">3rd-Party-Octopress-Themes</a></li>
+<li><a href="http://opthemes.com/">opthemes</a></li>
+</ul>
+
+<h3 id="优缺点">优缺点</h3>
+
+<p>优点：</p>
+
+<ol>
+<li>主题丰富</li>
+</ol>
+
+<p>缺点：</p>
+
+<ol>
+<li>安装麻烦，安装了一些不想加入到系统中的依赖</li>
+<li>自建了一套语法系统，需要再学</li>
+</ol>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript初始化]]></title>
+    <link href="http://erikge.comarticles/JavaScript-GetStarted"/>
+    <updated>2014-02-08T15:01:53+08:00</updated>
+    <id>http://erikge.comarticles/JavaScript-GetStarted</id>
+    <content type="html"><![CDATA[<p>h2. 背景</p>
+
+<p>JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。
+解释型语言，动态语言，脚本语言。</p>
+
+<!--more-->
+
+<p>JavaScript真正的官方名称是ECMAScript，它是由 &ldquo;ECMA组织&rdquo;:<a href="http://www.ecma-international.org">http://www.ecma-international.org</a> 开发和维护的。</p>
+
+<p>h2. 如何使用</p>
+
+<p>h3. 直接嵌入在HTML中</p>
+
+<p>通过标记符 &lt; script /&gt; 在HTML页面中插入JS(JavaScript)脚本.</p>
+
+<p><div>
+  <pre><code class='html'>&lt;html&gt;
+&lt;body&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+document.write(&amp;quot;Hello World&amp;quot;)
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</p>
+
+<p>p. 以上例子脚步是放在body标签中，放在body标签中的脚本会在页面加载时执行，放在head标签中的脚本会在被调用时执行</p>
+
+<p>h3. 单独的js文件</p>
+
+<p>为避免重复代码，脚本可以保存在单独的.js文件中，文件中不要再包含 &lt; script &gt; 标签。
+<div>
+  <pre><code class='html'>&lt;html&gt;
+&lt;head&gt;
+&lt;script src=”xxx.js”&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</p>
+
+<p>h2. 基本语法</p>
+
+<ul>
+<li>语句结束不必需以分号结束，但多条语句写在同一行里需要以分号分隔。</li>
+<li>区分大小写</li>
+<li>忽略多余的空格</li>
+<li>使用 // 或者 /* */ 来注释</li>
+</ul>
+
+<p>h3. 变量</p>
+
+<ul>
+<li>变量是一个容器，值和类型都可以动态的改变。</li>
+<li>变量名区分大小写，必须以字母或下划线开头。</li>
+<li>通过关键字var声明，也可以不声名直接使用（这样的缺点是会被自动声明定义为全局变量，在需要定义局部变量时将不是我们需要的）。</li>
+</ul>
+
+<p><div>
+  <pre><code class='javascript'>var myUrl = “&lt;a href=&quot;http://www.erikge.com%E2%80%9D&quot;&gt;http://www.erikge.com”&lt;/a&gt;
+myUrl = “&lt;a href=&quot;http://www.erikge.com%E2%80%9D&quot;&gt;http://www.erikge.com”&lt;/a&gt;</code></pre>
+</div>
+</p>
+
+<ul>
+<li>变量可被重复声明，而且不会丢失原来的值。</li>
+<li>函数中定义的变量只在函数中可见，函数外定义的变量在整个页面可见。</li>
+</ul>
+
+<p>h3. 操作符</p>
+
+<p><strong>算数操作符：</strong> <notextile>+, -, <em>, /, %, ++, &ndash;,</notextile>
+**赋值操作符：</em>* <notextile>=, +=, -=, <em>=, /=, %=,</notextile>
+**比较操作符：</em>* <notextile>==, ===（值和类型都比较）, !=, &gt;, &lt;, &gt;=, &lt;=,</notextile>
+<strong>逻辑运算符：</strong> <notextile>&amp;&amp;, ||, !</notextile>
+<strong>字符串连接符：</strong> <notextile>+</notextile>
+<strong>条件操作符：</strong> variablename=(condition)?value1:value2</p>
+
+<p>h3. 条件语句</p>
+
+<p><div>
+  <pre><code class='html'>&lt;script type=”text/javascript”&gt;
+if (x&lt;10) {
+} else if (x == 10 &amp;&amp; y &gt; 10) {
+}else{
+}
+&lt;/script&gt;</code></pre>
+</div>
+</p>
+
+<p><div>
+  <pre><code class='html'>&lt;script type=”text/javascript”&gt;
+switch(n) {
+case 1:
+break
+case 2:
+break
+default:
+}
+&lt;/script&gt;</code></pre>
+</div>
+</p>
+
+<p>h3. 函数</p>
+
+<p>函数是可以重复执行的代码块。函数一般定义在head部分或者单独.js文件中。
+定义方法：</p>
+
+<p><div>
+  <pre><code class='html'>&lt;script type=”text/javascript”&gt;
+function functionname(var1,var2,…,varX) {
+some code
+return value
+}&lt;/script&gt;</code></pre>
+</div>
+</p>
+
+<p>h3. 循环</p>
+
+<p><div>
+  <pre><code class='html'>for (var=初始值;var&amp;lt;=结束值;var=var+增量) {
+要执行的代码
+}</code></pre>
+</div>
+</p>
+
+<p><div>
+  <pre><code class='html'>while (var&amp;lt;=endvalue) {
+code to be executed
+}</code></pre>
+</div>
+</p>
+
+<p><div>
+  <pre><code class='html'>do {
+code to be executed
+} while (var&amp;lt;=endvalue)</code></pre>
+</div>
+</p>
+
+<p><div>
+  <pre><code class='html'>for (variable in object) {
+要执行的代码
+}</code></pre>
+</div>
+</p>
+
+<p>p. JavaScript也有和Cpp/Java类似功能的 break 和 continue。</p>
+
+<p>h3. 事件</p>
+
+<p>事件在HTML的tag中定义。JavaScript的事件列表如下：</p>
+
+<p>|_. 事件属性 |_. 发生条件 |
+|onabort|一个图片的加载被终止 (只用于&lt; img&gt;)|
+|onblur|当一个元素失去焦点（光标移开）|
+|onchange|用户改变了一个域的值（用于 &lt; input type=”text”&gt;, &lt; select&gt;, &lt; textarea&gt;）|
+|onclick|鼠标点击对象|
+|ondblclick|鼠标双击对象|
+|onerror|文件或图片加载出错（ &lt; img&gt;, &lt; object&gt;, &lt; style&gt;）|
+|onfocus|一个元素得到焦点|
+|onkeydown|键盘上任一键被按下|
+|onkeypress|键盘上任一键被按下或保持按下|
+|onkeyup|当被按下的键被释放时|
+|onload|当页面或图片完成加载|
+|onmousedown|当一个鼠标键被按下|
+|onmousemove|鼠标移动|
+|onmouseout|鼠标被从一个元素上移开|
+|onmouseover|鼠标移至某元素上|
+|onmouseup|鼠标键被释放|
+|onreset|重置按钮被点击|
+|onresize|窗口或框架大小被改变|
+|onselect|文本被选择|
+|onsubmit|提交按钮被点击|
+|onunload|用户关闭页面|</p>
+
+<p>p. 用法举例：</p>
+
+<p><div>
+  <pre><code class='html'>&lt;input type=”text” size=”30″ id=”email” onchange=”checkEmail()”&gt;;
+&lt;form method=”post” action=”xxx.htm” onsubmit=”return checkForm()”&gt;
+&lt;a href=”http://erikge.com”
+onmouseover=”alert(‘An onMouseOver event’);”&gt; erikge &lt;/a&gt;</code></pre>
+</div>
+</p>
+
+<p>h3. 异常处理</p>
+
+<p>如果不处理异常，当网页出错时，会弹出一个JavaScript的警告窗口，告诉我们发生运行出错， 并询问是否要“debug?”。这种出错信息也许对开发者有用，但是对用户没有用处。
+有两种异常处理的方式：
+* 使用 try…catch 语句 (适用于IE5以上, Mozilla 1.0, 和 Netscape 6)
+* 使用onerror 事件。 这是捕捉错误的旧的传统做法(自从Netscape 3以后就开始使用)</p>
+
+<p><div>
+  <pre><code class='js'>try
+{
+//Run some code here
+}
+catch(err)
+{
+//Handle errors here
+}</code></pre>
+</div>
+</p>
+
+<p>p. 例如：</p>
+
+<p><div>
+  <pre><code class='js'>function message()
+{
+try
+{
+adddlert(“Welcome guest!”)
+}
+catch(err)
+{
+txt=”本页面出错.\n”
+txt+=”Error description: ” + err.description + “\n\n”
+txt+=”点击OK继续浏览本页,\n”
+txt+=”或点击 Cancel 返回主页\n\n”
+if(!confirm(txt))
+{
+document.location.href=”&lt;a href=&quot;http://www.shorelinesolution.com/%E2%80%9D&quot;&gt;http://www.shorelinesolution.com/”&lt;/a&gt;
+}
+}
+}</code></pre>
+</div>
+</p>
+
+<p>p. throw语句可以生成一个例外(exception)。try…catch和throw语句可以结合使用。</p>
+
+<p><div>
+  <pre><code class='js'>try
+{
+if(x&amp;gt;10)
+throw “Err1″
+else if(x&amp;lt;0)
+throw “Err2″
+}
+catch(er)
+{
+if(er==”Err1″)
+alert(“错误! 值太大了”)
+if(er == “Err2″)
+alert(“错误! 值太小了”)
+}</code></pre>
+</div>
+</p>
+
+<p>h3. 特殊字符</p>
+
+<p>反斜杠 backslash () 用来表示特殊字符。</p>
+
+<p>bq.. \’ 单引号(single quote)
+\” 双引号(double quote)
+&amp; 与符号(ampersand)
+\ 反斜杠(backslash)
+\n 换行(new line)
+\r 回车键(carriage return)
+\t 制表符(tab)
+\b 退格符(backspace)
+\f 换页(form feed)</p>
+
+<p>h2. 常用API</p>
+
+<p>h3. 弹出窗口</p>
+
+<p><div>
+  <pre><code class='html'>&lt;html&gt;
+&lt;head&gt;
+&lt;script type=”text/javascript”&gt;
+function disp_alert()
+{
+alert(“警示窗口 （Alert Box）: 你好! ” + ‘\n’ + “第二行内容.”)
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;input type=”button” onclick=”disp_alert()” value=”显示提示窗口” /&gt;&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</p>
+
+<p><div>
+  <pre><code class='html'>&lt;html&gt;
+&lt;head&gt;
+&lt;script type=”text/javascript”&gt;
+function disp_confirm()
+{
+var r=confirm(“确认窗口（Confirm Box）: Press a button”)
+if (r==true)
+{
+document.write(“You pressed OK!”)
+}
+else
+{
+document.write(“You pressed Cancel!”)
+}
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;input type=”button” onclick=”disp_confirm()” value=”显示确认窗口” /&gt;&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</p>
+
+<p><div>
+  <pre><code class='html'>&lt;html&gt;
+&lt;head&gt;
+&lt;script type=”text/javascript”&gt;
+function disp_prompt()
+{
+var name=prompt(“提问窗口（Prompt Box）: Please enter your name”,”Aqua”)
+if (name!=null &amp;amp;&amp;amp; name!=”&amp;quot;)
+{
+document.write(“Hello ” + name + “! How are you today?”)
+}
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;input type=”button” onclick=”disp_prompt()” value=”显示提问窗口” /&gt;&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</p>
+
+<p>h2. to be continued</p>
+
+<p>需要继续阅读的链接</p>
+
+<p>&ldquo;JavaScript对象&rdquo;:<a href="http://www.prglab.com/blog/js-tutorial">http://www.prglab.com/blog/js-tutorial</a>
+&ldquo;$&rdquo;:<a href="http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html">http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html</a>
+&ldquo;$&rdquo;:<a href="http://jsperf.com/">http://jsperf.com/</a></p>
+]]></content>
+  </entry>
+  
+</feed>

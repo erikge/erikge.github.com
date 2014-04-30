@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[直觉的印记]]></title>
+  <link href="http://erikge.com/atom.xml" rel="self"/>
+  <link href="http://erikge.com/"/>
+  <updated>2014-04-30T16:10:00+08:00</updated>
+  <id>http://erikge.com/</id>
+  <author>
+    <name><![CDATA[erik ge]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[开始iOS开发]]></title>
+    <link href="http://erikge.comarticles/SetupEnvironment"/>
+    <updated>2014-03-12T16:04:53+08:00</updated>
+    <id>http://erikge.comarticles/SetupEnvironment</id>
+    <content type="html"><![CDATA[<p>简要列出快速上手开发iOS程序需要做得事项，以便于在心中有一个整体估计。本文尽量作为一个避免细节的梗概。</p>
+
+<!--more-->
+
+<h2 id="开发环境">开发环境</h2>
+
+<p>搭建开发环境，基本上就是安装各种工具软件。</p>
+
+<ol>
+<li>xcode安装
+
+<ul>
+<li>AppStore中下载安装xcode程序</li>
+<li>安装command line tools。xcode5中不再提供下载，需要从<a href="https://developer.apple.com/downloads/index.action">Apple Developer Tools site</a>下载，或者通过命令行运行<code>xcode-select --install</code>下载安装</li>
+<li>第一次在xcode运行程序时，enable developer mode，输入本机密码</li>
+<li>在xcode中下载开发文档</li>
+</ul></li>
+<li>真机调试（如果加入苹果开发者计划，并且是Agent、Admin，如下自动化操作最省事）
+
+<ul>
+<li><code>Xcode-&gt;Preferences-&gt;Account</code>添加自己的账号，<code>View Details</code>刷新Provisioning Profiles</li>
+<li>插入iphone设备，选择信任</li>
+<li>运行程序，出现签名错误，选择自动Fix Issue；出现证书问题，选择自动Fix Issue</li>
+<li>（可选）可以导出account备份，下次换机器就不用再重复上述第1、3步</li>
+</ul></li>
+<li>JDK安装</li>
+<li>source tree安装，便于git做代码管理</li>
+<li>Homebrew安装，便于安装各种命令行工具
+
+<ul>
+<li><code>ruby -e &quot;$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”</code></li>
+<li>You should run <code>brew doctor</code> <em>before</em> you install anything.</li>
+</ul></li>
+<li>SlickEdit安装，非常好用的IDE，需要写c、cpp代码必备</li>
+</ol>
+
+<h2 id="处理器架构">处理器架构</h2>
+
+<p>到目前为止，iOS设备采用的都是arm架构的处理器，使用arm指令集；模拟器运行在intel芯片的mac机上，采用的是x86架构，使用x86指令集，对应的编译选项是i386。armv6, armv7等实质上是arm指令集的不同版本，原则上是向下兼容的，例如支持armv7的cpu可以运行armv7选项编译出的程序，也可以运行armv6选项编译出的程序。</p>
+
+<p>已有的iOS设备和arm指令集版本对应关系如下：</p>
+
+<table><thead>
+<tr>
+<th>指令集版本</th>
+<th>iOS设备</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>armv6</td>
+<td>iPhone，iPhone2，iPhone 3G，第一代、第二代iPod Touch</td>
+</tr>
+<tr>
+<td>armv7</td>
+<td>iPhone 3GS,iPhone 4,iPhone 4S，iPad，iPad 2，the new iPad，iPod Touch 3G，iPod Touch 4</td>
+</tr>
+<tr>
+<td>armv7s</td>
+<td>iPhone 5</td>
+</tr>
+<tr>
+<td>arm64</td>
+<td>iphone 5s，iPad mini 2，iPad Air</td>
+</tr>
+</tbody></table>
+
+<p>xcode可以把不同指令集编译的版本都打包到同一程序中，这样在不同的设备上就可以自动选择最佳的指令集编译版本，缺点就是体积大点儿。可以根据想支持的iOS设备的多少设置工程Build Setting的Architectures中的<code>Build Active Architecture Only</code>和<code>Architectures</code>，<code>Valid Architectures</code>。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何打开Disqus Discovery功能]]></title>
+    <link href="http://erikge.comarticles/DisqusDiscovery"/>
+    <updated>2014-02-18T22:16:18+08:00</updated>
+    <id>http://erikge.comarticles/DisqusDiscovery</id>
+    <content type="html"><![CDATA[<p>自己搭建博客用到Disqus，但是经常看到别人的Disqus和自己的不一样。别人的评论下面有一些类似推广的文章和广告的东西，直觉告诉我这个估计有收入。</p>
+
+<!--more-->
+
+<p>果然，通过<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#earn-money">官方介绍</a>发现果然可以。</p>
+
+<h2 id="赚钱方式">赚钱方式</h2>
+
+<ul>
+<li>CPC(cost-per-click)，按点击付费，详情参考<a href="http://help.disqus.com/customer/portal/articles/1388608-advertiser-faq">官方说明</a>.</li>
+<li>达到100美金以上付款，详情参考<a href="http://help.disqus.com/customer/portal/articles/1208081-receiving-payments-from-disqus">官方说明</a></li>
+</ul>
+
+<h2 id="如可开启">如可开启</h2>
+
+<p>如何打开这么好的功能呢？搜索了半天，很沮丧的没有找到，<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#discovery-settings">官方</a>也只是简单的说要通过邀请激活，可是没说清楚谁邀请谁啊。后来在<a href="http://blog.acgtyrant.com/how-to-use-disqus-masterly.html">这篇文章</a>中得到启发。原来这个功能的开启不是个人来设置的，而是官方根据你账号的情况决定是否开启这个功能的。。。。。。也就是说，由disqus来决定你的网站上是否有Promoted Discovery。</p>
+
+<p>我简单的把博客上自己的disqus shortname改为别人的（如jekyllbootstrap），就出现了Promoted Discovery内容。瀑布汗啊～～～＃@＃¥&amp;＊&amp;……！@&amp;……＊不过说实在的，老外这样的规则确实有利于维护良好的生态系统，膜拜下吧。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress Jekyll-Bootstrap 比较]]></title>
+    <link href="http://erikge.comarticles/OctopressVsJekyllBootstrap"/>
+    <updated>2014-02-17T21:17:33+08:00</updated>
+    <id>http://erikge.comarticles/OctopressVsJekyllBootstrap</id>
+    <content type="html"><![CDATA[<p>想为项目建一个项目网站，希望简单快速搭建，又省事好维护，jekyll成为了一个好选择，可惜没主题的网页不好看，好看的主题还要改半天，不符合“简单快速搭建”的原则了。</p>
+
+<!-- more -->
+
+<p>找到了octopress和jekyll-bootstrap两个工具，拿来试用了下，顺手写个对比。</p>
+
+<h2 id="jekyll-bootstrap">jekyll-bootstrap</h2>
+
+<h3 id="快速开始">快速开始</h3>
+
+<p>通过以下命令就可以开始使用了，用法和jekyll一样</p>
+<div class="highlight"><pre><code class="text">git clone https://github.com/plusjade/jekyll-bootstrap.git
+$ cd jekyll-bootstrap
+$ jekyll serve
+</code></pre></div>
+<p><a href="http://jekyllbootstrap.com/usage/jekyll-quick-start.html">详细文档</a></p>
+
+<h3 id="优缺点">优缺点</h3>
+
+<p>优点：</p>
+
+<ol>
+<li>文档详尽（都不需要我再整理什么了）</li>
+<li>用法、语法等和jekyll一致，没有自建一套系统</li>
+</ol>
+
+<p>缺点：</p>
+
+<ol>
+<li>主题比较少，只有官方的几款主题用起来最省事</li>
+</ol>
+
+<h2 id="octopress">octopress</h2>
+
+<h3 id="快速开始">快速开始</h3>
+<div class="highlight"><pre><code class="text">// 安装
+git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+gem install bundler
+rbenv rehash    # Mac上用不到。If you use rbenv, rehash to be able to run the bundle command
+bundle install
+rake install    # Install the default Octopress theme
+// 创建文章
+rake new_post[&#39;Post title&#39;]
+// 生成文章
+rake generate
+// 发布到github的USERNAME.github.com
+rake setup_github_pages
+rake deploy
+// 安装第三方主题方法
+cd octopress
+git clone GIT_URL .themes/THEME_NAME
+rake install[&#39;THEME_NAME&#39;]
+rake generate
+// 本地运行
+rake watch // 实时监视本地修改并regenerate
+rake preview // 实时监视，并且启动本地webserver，通过http://localhost:4000访问
+</code></pre></div>
+<h3 id="主题选择">主题选择</h3>
+
+<ul>
+<li><a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">3rd-Party-Octopress-Themes</a></li>
+<li><a href="http://opthemes.com/">opthemes</a></li>
+</ul>
+
+<h3 id="优缺点">优缺点</h3>
+
+<p>优点：</p>
+
+<ol>
+<li>主题丰富</li>
+</ol>
+
+<p>缺点：</p>
+
+<ol>
+<li>安装麻烦，安装了一些不想加入到系统中的依赖</li>
+<li>自建了一套语法系统，需要再学</li>
+</ol>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[尝试了下RAID]]></title>
+    <link href="http://erikge.comarticles/TryRaidOnMac"/>
+    <updated>2014-02-11T19:00:53+08:00</updated>
+    <id>http://erikge.comarticles/TryRaidOnMac</id>
+    <content type="html"><![CDATA[<p>随着各种电子产品的使用，要存储的东西越来越多。开始就是存在电脑里，后来电脑旧了坏了，换电脑，也不止一台电脑了，数据就存移动硬盘里。再后来，电脑似乎也不那么常用了，就换成各种跨平台的app，自动在各种终端上同步数据。</p>
+<p><!--more--></p>
+<p>体积比较大的文件也可以存到各种网盘、云盘里了。但是，最珍贵、最想保存下来的，就是这么多年来的照片了，满满的都似乎回忆。而这些照片往往不太愿意放到网上去，毕竟是自己的私人数据，还是不太相信没有底线的互联网，即便是有各种加密，自己设置的密码也不一定靠的住。所以，我一直还是存在两块移动硬盘里，还是身边的柜子她是些。唯一的问题是，两块硬盘上的数据我是没仔细同步的，自己也搞不清楚那个是数据最完整的了。</p>
+<p>还好，最近听说了RAID可以在电脑上通过软件实现，所以再次开启折腾之路。</p>
+<h2><span class="caps">RAID</span></h2>
+<p>RAID，Redundant Array of Inexpensive Disks，廉价磁盘冗余阵列。通过多个磁盘的组合提高数据可靠性、访问速度等。</p>
+<ul>
+	<li><span class="caps">RAID</span> 0: 磁盘串联，无冗余，磁盘利用率高，读写速度快，最少两块硬盘</li>
+	<li><span class="caps">RAID</span> 1: 镜像，磁盘利用率低，读速度快，写速度稍慢，最少两块硬盘</li>
+	<li><span class="caps">RAID</span> 2: 汉明码校验，冗余多，读写速度慢，最少三块硬盘</li>
+	<li><span class="caps">RAID</span> 3:</li>
+	<li><span class="caps">RAID</span> 4:</li>
+	<li><span class="caps">RAID</span> 5: 最有用的方案（对企业来说），RAID 0 和 <span class="caps">RAID</span> 1 的折中，最少三块硬盘</li>
+	<li><span class="caps">RAID</span> 6:</li>
+	<li><span class="caps">RAID</span> 7:</li>
+	<li><span class="caps">RAID</span> 10: 先组成RAID 1，再在RAID1的基础上组成RAID 0，常用。</li>
+	<li><span class="caps">RAID</span> 01: 顺序和RAID 10相反，不常用。</li>
+</ul>
+<h2><span class="caps">MAC</span> OS 上的软件实现</h2>
+<p>据说有RAID卡的硬件实现，不过偶银子紧张，只好寻找软件实现。目前找到的比较好的软件有两个，系统自带的Disk Utility和SoftRAID。</p>
+<h3>Disk Utility</h3>
+<p>打开“实用工具”中的“磁盘工具”，通过“RAID”的标签创建即可。软件有说明，创建成功并不复杂。<br />
+如果不是用整块磁盘创建RAID，而是用分区创建RAID，创建过程中可能会遇到如下错误：</p>
+<blockquote>
+<p>无法将磁盘“XXX”添加到RAID磁盘阵列，因为此宗卷所在的磁盘以“主引导记录”为分区图方案。此分区图方案不被支持。</p>
+</blockquote>
+<p>这是因为磁盘是MBR分区方式，需要改成GPT分区方式。可以在磁盘工具的“分区”重新为磁盘分区，分区时选择“选项”，分区方案选择“GUID分区表”。</p>
+<h3>Disk Utility 缺点</h3>
+<p>论坛里有人说，DU是系统自带的，稳定省事，而且个人用也足够了。还是不能盲目相信啊，稳定确实是稳定，但是不一定够用。<br />
+我有两块移动硬盘，保存照片时作为RAID使用，但是希望也可以单独使用，后续有机会再组合为RAID同步数据。移动硬盘上还有不组合为RAID的分区，大多时候移动硬盘还是需要单独使用。所以，简单说，我要求RAID可以随意拆分和组合。<br />
+DU的缺点：</p>
+<ul>
+	<li>DU创建的RAID不能分开用</li>
+	<li>重建时间太漫长</li>
+	<li>据说出现磁盘错误，DU不会报警。这个可以通过&quot;RaidEye&quot;:http://www.hanynet.com/raideye/ 解决</li>
+</ul>
+<p>创建好RAID之后，我单独使用一块移动硬盘，然后拔下来换另一个，反复几次之后，DU里RAID的状态从丢失，变成故障，然后就再也回不去了。还有一个不能忍受的是，我几乎没有修改任何内容，重建（rebuild）也需要一天之久，最短的时间也在三小时以上，这。。。无法接受。。。</p>
+<h3>SoftRAID</h3>
+<p>于是，只能尝试SoftRAID。<br />
+SoftRAID也并不难使用，要注意的是SoftRAID需要装自己的磁盘驱动，然后需要创建自己的分区才能实现各种功能。自己摸索一阵子，掌握各种功能应该不难。<br />
+SoftRAID最可爱的地方：</p>
+<ul>
+	<li>重建真快，文件变化不大时20s内搞定，增量重建</li>
+	<li>可以分开使用，将Secondary的分区转换为Read-only Secondary</li>
+</ul>
+<p>开始以为不能分开用，因为我把作为Secondary的磁盘单独插上后，再两个磁盘都插进去就无法组建RAID了，一直是两个同名的分区。后来研究文档发现，SoftRAID的RAID工作时必须要有一个作为Primary的磁盘的，如果没有的话，就会将Secondary转换为Primary。一个work around的方法是将Secondary的分区转换为Read-only Secondary，需要同步时再转换回来。</p>
+<h3>SoftRAID 缺点</h3>
+<p>正当我满心欢喜，就准备这么干时，SoftRAID卡死了。在我做一个删除分区的操作时，SoftRAID没有反应了。而且dmg格式的文件也大不开了。我意识到SoftRAID把磁盘操作程序弄坏了。我准备重启，悲剧的是，电脑竟然关不了机了，我只好把Mac像该死的windows一样断电了。<br />
+后来这种情况又在别的操作的时候出现了几次，我开始不信任SoftRAID了，不敢将珍贵的照片交给SoftRAID。</p>
+<p>$129可以省了。</p>
+<h2>美好的RAID</h2>
+<p>如此折腾了两天，RAID还只是想象中那么美好啊。别人盲目推崇的东西不一定能妥善的解决自己的问题，还是要多测试。<br />
+试验RAID的过程中知道了CCC，还是这货好用，先用着这个解决问题，暂时不碰RAID了。</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript初始化]]></title>
+    <link href="http://erikge.comarticles/JavaScript-GetStarted"/>
+    <updated>2014-02-08T15:01:53+08:00</updated>
+    <id>http://erikge.comarticles/JavaScript-GetStarted</id>
+    <content type="html"><![CDATA[<h2>背景</h2>
+<p>JavaScript是Web上应用最广泛的脚本语音，几乎可以在所有的浏览器中工作。<br />
+解释型语言，动态语言，脚本语言。</p>
+<p><!--more--></p>
+<p>JavaScript真正的官方名称是ECMAScript，它是由 <a href="http://www.ecma-international.org">ECMA组织</a> 开发和维护的。</p>
+<h2>如何使用</h2>
+<h3>直接嵌入在HTML中</h3>
+<p>通过标记符 &lt; script /&gt; 在HTML页面中插入JS(JavaScript)脚本.</p>
+<div>
+<pre><code class='html'>&amp;lt;html&amp;gt;
+<p>&lt;body&gt;<br />
+&lt;script type=&quot;text/javascript&quot;&gt;<br />
+document.write(&quot;Hello World&quot;)<br />
+&lt;/script&gt;<br />
+&lt;/body&gt;<br />
+&lt;/html&gt;</code></pre></p>
+</div>
+<p>以上例子脚步是放在body标签中，放在body标签中的脚本会在页面加载时执行，放在head标签中的脚本会在被调用时执行</p>
+<h3>单独的js文件</h3>
+<p>为避免重复代码，脚本可以保存在单独的.js文件中，文件中不要再包含 &lt; script &gt; 标签。<br />
+<div><br />
+  <pre><code class='html'>&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;script src=”xxx.js”&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;</code></pre></p>
+</div>
+<h2>基本语法</h2>
+<ul>
+	<li>语句结束不必需以分号结束，但多条语句写在同一行里需要以分号分隔。</li>
+	<li>区分大小写</li>
+	<li>忽略多余的空格</li>
+	<li>使用 // 或者 /* */ 来注释</li>
+</ul>
+<h3>变量</h3>
+<ul>
+	<li>变量是一个容器，值和类型都可以动态的改变。</li>
+	<li>变量名区分大小写，必须以字母或下划线开头。</li>
+	<li>通过关键字var声明，也可以不声名直接使用（这样的缺点是会被自动声明定义为全局变量，在需要定义局部变量时将不是我们需要的）。</li>
+</ul>
+<div>
+<pre><code class='javascript'>var myUrl = “http://www.erikge.com”
+<p>myUrl = “http://www.erikge.com”</code></pre></p>
+</div>
+<ul>
+	<li>变量可被重复声明，而且不会丢失原来的值。</li>
+	<li>函数中定义的变量只在函数中可见，函数外定义的变量在整个页面可见。</li>
+</ul>
+<h3>操作符</h3>
+<p><b>算数操作符：</b> +, -, *, /, %, ++, &#8211;,<br />
+<b>赋值操作符：</b> =, +=, -=, *=, /=, %=,<br />
+<b>比较操作符：</b> ==, ===（值和类型都比较）, !=, >, <, >=, <=,<br />
+<b>逻辑运算符：</b> &&, ||, !<br />
+<b>字符串连接符：</b> +<br />
+<b>条件操作符：</b> variablename=(condition)?value1:value2</p>
+<h3>条件语句</h3>
+<div>
+<pre><code class='html'>&amp;lt;script type=”text/javascript”&amp;gt;
+<p>if (x&lt;10) {<br />
+} else if (x == 10 &amp;&amp; y &gt; 10) {<br />
+}else{<br />
+}<br />
+&lt;/script&gt;</code></pre></p>
+</div>
+<div>
+<pre><code class='html'>&amp;lt;script type=”text/javascript”&amp;gt;
+<p>switch(n) {<br />
+case 1:<br />
+break<br />
+case 2:<br />
+break<br />
+default:<br />
+}<br />
+&lt;/script&gt;</code></pre></p>
+</div>
+<h3>函数</h3>
+<p>函数是可以重复执行的代码块。函数一般定义在head部分或者单独.js文件中。<br />
+定义方法：</p>
+<div>
+<pre><code class='html'>&amp;lt;script type=”text/javascript”&amp;gt;
+<p>function functionname(var1,var2,…,varX) {<br />
+some code<br />
+return value<br />
+}&lt;/script&gt;</code></pre></p>
+</div>
+<h3>循环</h3>
+<div>
+<pre><code class='html'>for (var=初始值;var&amp;lt;=结束值;var=var+增量) {
+<p>要执行的代码<br />
+}</code></pre></p>
+</div>
+<div>
+<pre><code class='html'>while (var&amp;lt;=endvalue) {
+<p>code to be executed<br />
+}</code></pre></p>
+</div>
+<div>
+<pre><code class='html'>do {
+<p>code to be executed<br />
+} while (var&lt;=endvalue)</code></pre></p>
+</div>
+<div>
+<pre><code class='html'>for (variable in object) {
+<p>要执行的代码<br />
+}</code></pre></p>
+</div>
+<p>JavaScript也有和Cpp/Java类似功能的 break 和 continue。</p>
+<h3>事件</h3>
+<p>事件在HTML的tag中定义。JavaScript的事件列表如下：</p>
+<table>
+	<tr>
+		<th>事件属性 </th>
+		<th>发生条件 </th>
+	</tr>
+	<tr>
+		<td>onabort</td>
+		<td>一个图片的加载被终止 (只用于&lt; img&gt;)</td>
+	</tr>
+	<tr>
+		<td>onblur</td>
+		<td>当一个元素失去焦点（光标移开）</td>
+	</tr>
+	<tr>
+		<td>onchange</td>
+		<td>用户改变了一个域的值（用于 &lt; input type=”text”&gt;, &lt; select&gt;, &lt; textarea&gt;）</td>
+	</tr>
+	<tr>
+		<td>onclick</td>
+		<td>鼠标点击对象</td>
+	</tr>
+	<tr>
+		<td>ondblclick</td>
+		<td>鼠标双击对象</td>
+	</tr>
+	<tr>
+		<td>onerror</td>
+		<td>文件或图片加载出错（ &lt; img&gt;, &lt; object&gt;, &lt; style&gt;）</td>
+	</tr>
+	<tr>
+		<td>onfocus</td>
+		<td>一个元素得到焦点</td>
+	</tr>
+	<tr>
+		<td>onkeydown</td>
+		<td>键盘上任一键被按下</td>
+	</tr>
+	<tr>
+		<td>onkeypress</td>
+		<td>键盘上任一键被按下或保持按下</td>
+	</tr>
+	<tr>
+		<td>onkeyup</td>
+		<td>当被按下的键被释放时</td>
+	</tr>
+	<tr>
+		<td>onload</td>
+		<td>当页面或图片完成加载</td>
+	</tr>
+	<tr>
+		<td>onmousedown</td>
+		<td>当一个鼠标键被按下</td>
+	</tr>
+	<tr>
+		<td>onmousemove</td>
+		<td>鼠标移动</td>
+	</tr>
+	<tr>
+		<td>onmouseout</td>
+		<td>鼠标被从一个元素上移开</td>
+	</tr>
+	<tr>
+		<td>onmouseover</td>
+		<td>鼠标移至某元素上</td>
+	</tr>
+	<tr>
+		<td>onmouseup</td>
+		<td>鼠标键被释放</td>
+	</tr>
+	<tr>
+		<td>onreset</td>
+		<td>重置按钮被点击</td>
+	</tr>
+	<tr>
+		<td>onresize</td>
+		<td>窗口或框架大小被改变</td>
+	</tr>
+	<tr>
+		<td>onselect</td>
+		<td>文本被选择</td>
+	</tr>
+	<tr>
+		<td>onsubmit</td>
+		<td>提交按钮被点击</td>
+	</tr>
+	<tr>
+		<td>onunload</td>
+		<td>用户关闭页面</td>
+	</tr>
+</table>
+<p>用法举例：</p>
+<div>
+<pre><code class='html'>&amp;lt;input type=”text” size=”30″ id=”email” onchange=”checkEmail()”&amp;gt;;
+<p>&lt;form method=”post” action=”xxx.htm” onsubmit=”return checkForm()”&gt;<br />
+&lt;a href=”http://erikge.com”<br />
+onmouseover=”alert(‘An onMouseOver event’);”&gt; erikge &lt;/a&gt;</code></pre></p>
+</div>
+<h3>异常处理</h3>
+<p>如果不处理异常，当网页出错时，会弹出一个JavaScript的警告窗口，告诉我们发生运行出错， 并询问是否要“debug?”。这种出错信息也许对开发者有用，但是对用户没有用处。<br />
+有两种异常处理的方式：</p>
+<ul>
+	<li>使用 try…catch 语句 (适用于IE5以上, Mozilla 1.0, 和 Netscape 6)</li>
+	<li>使用onerror 事件。 这是捕捉错误的旧的传统做法(自从Netscape 3以后就开始使用)</li>
+</ul>
+<div>
+<pre><code class='js'>try
+<p>{<br />
+//Run some code here<br />
+}<br />
+catch(err)<br />
+{<br />
+//Handle errors here<br />
+}</code></pre></p>
+</div>
+<p>例如：</p>
+<div>
+<pre><code class='js'>function message()
+<p>{<br />
+try<br />
+{<br />
+adddlert(“Welcome guest!”)<br />
+}<br />
+catch(err)<br />
+{<br />
+txt=”本页面出错.\n”<br />
+txt+=”Error description: ” + err.description + “\n\n”<br />
+txt+=”点击OK继续浏览本页,\n”<br />
+txt+=”或点击 Cancel 返回主页\n\n”<br />
+if(!confirm(txt))<br />
+{<br />
+document.location.href=”http://www.shorelinesolution.com/”<br />
+}<br />
+}<br />
+}</code></pre></p>
+</div>
+<p>throw语句可以生成一个例外(exception)。try…catch和throw语句可以结合使用。</p>
+<div>
+<pre><code class='js'>try
+<p>{<br />
+if(x&gt;10)<br />
+throw “Err1″<br />
+else if(x&lt;0)<br />
+throw “Err2″<br />
+}<br />
+catch(er)<br />
+{<br />
+if(er==”Err1″)<br />
+alert(“错误! 值太大了”)<br />
+if(er == “Err2″)<br />
+alert(“错误! 值太小了”)<br />
+}</code></pre></p>
+</div>
+<h3>特殊字符</h3>
+<p>反斜杠 backslash (\) 用来表示特殊字符。</p>
+<blockquote>
+<p>\’ 单引号(single quote)<br />
+\” 双引号(double quote)<br />
+\&amp; 与符号(ampersand)<br />
+&#92; 反斜杠(backslash)<br />
+\n 换行(new line)<br />
+\r 回车键(carriage return)<br />
+\t 制表符(tab)<br />
+\b 退格符(backspace)<br />
+\f 换页(form feed)</p>
+</blockquote>
+<h2>常用API</h2>
+<h3>弹出窗口</h3>
+<div>
+<pre><code class='html'>&amp;lt;html&amp;gt;
+<p>&lt;head&gt;<br />
+&lt;script type=”text/javascript”&gt;<br />
+function disp_alert()<br />
+{<br />
+alert(“警示窗口 （Alert Box）: 你好! ” + ‘\n’ + “第二行内容.”)<br />
+}<br />
+&lt;/script&gt;<br />
+&lt;/head&gt;<br />
+&lt;body&gt;&lt;input type=”button” onclick=”disp_alert()” value=”显示提示窗口” /&gt;&lt;/body&gt;<br />
+&lt;/html&gt;</code></pre></p>
+</div>
+<div>
+<pre><code class='html'>&amp;lt;html&amp;gt;
+<p>&lt;head&gt;<br />
+&lt;script type=”text/javascript”&gt;<br />
+function disp_confirm()<br />
+{<br />
+var r=confirm(“确认窗口（Confirm Box）: Press a button”)<br />
+if (r==true)<br />
+{<br />
+document.write(“You pressed OK!”)<br />
+}<br />
+else<br />
+{<br />
+document.write(“You pressed Cancel!”)<br />
+}<br />
+}<br />
+&lt;/script&gt;<br />
+&lt;/head&gt;<br />
+&lt;body&gt;&lt;input type=”button” onclick=”disp_confirm()” value=”显示确认窗口” /&gt;&lt;/body&gt;<br />
+&lt;/html&gt;</code></pre></p>
+</div>
+<div>
+<pre><code class='html'>&amp;lt;html&amp;gt;
+<p>&lt;head&gt;<br />
+&lt;script type=”text/javascript”&gt;<br />
+function disp_prompt()<br />
+{<br />
+var name=prompt(“提问窗口（Prompt Box）: Please enter your name”,”Aqua”)<br />
+if (name!=null &amp;&amp; name!=”&quot;)<br />
+{<br />
+document.write(“Hello ” + name + “! How are you today?”)<br />
+}<br />
+}<br />
+&lt;/script&gt;<br />
+&lt;/head&gt;<br />
+&lt;body&gt;&lt;input type=”button” onclick=”disp_prompt()” value=”显示提问窗口” /&gt;&lt;/body&gt;<br />
+&lt;/html&gt;</code></pre></p>
+</div>
+<h2>to be continued</h2>
+<p>需要继续阅读的链接</p>
+<p><a href="http://www.prglab.com/blog/js-tutorial">JavaScript对象</a><br />
+<a href="http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html">$</a><br />
+<a href="http://jsperf.com/">$</a></p>]]></content>
+  </entry>
+  
+</feed>
