@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/web/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-05-04T11:31:46+08:00</updated>
+  <updated>2014-05-04T22:34:39+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -12,6 +12,282 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Markdown语法说明]]></title>
+    <link href="http://erikge.com/articles/markdownSyntax"/>
+    <updated>2014-05-04T14:16:39+08:00</updated>
+    <id>http://erikge.com/articles/markdownSyntax</id>
+    <content type="html"><![CDATA[<p>Markdown简洁易用，非常适合整理简单文档。不过在使用过程中，遇到在不同解析器上效果、扩展不同的问题，在这里简单总结一下。</p>
+
+<!-- more -->
+
+<h2 id="通用语法">通用语法</h2>
+
+<p>Markdown本身的语法很简洁，详情参考<a href="http://daringfireball.net/projects/markdown/syntax">这里</a>，中文参考<a href="http://wowubuntu.com/markdown/index.html">这里</a>。常用语法如下，可以作为cheatsheet。</p>
+
+<h4 id="代码">代码</h4>
+<div class="highlight"><pre><code class="text">Use the `printf()` function.
+这是一个普通段落：
+
+    这是一个代码区块。
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p>Use the <code>printf()</code> function.
+这是一个普通段落：</p>
+<div class="highlight"><pre><code class="text">这是一个代码区块。
+</code></pre></div></blockquote>
+
+<h4 id="链接">链接</h4>
+<div class="highlight"><pre><code class="text">&lt;http://erikge.com/&gt; &lt;erikge@qq.com&gt;
+
+[直接跟着链接](http://erikge.com/)
+
+[参考式链接][link_id]
+[link_id]: http://erikge.com/  &quot;Optional Title Here&quot;
+
+[隐式链接][]
+[隐式链接]: http://erikge.com/        &quot;my blog&quot;
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p><a href="http://erikge.com/">http://erikge.com/</a> <a href="mailto:erikge@qq.com">erikge@qq.com</a></p>
+
+<p><a href="http://erikge.com/">直接跟着链接</a></p>
+
+<p><a href="http://erikge.com/" title="Optional Title Here">参考式链接</a></p>
+
+<p><a href="http://erikge.com/" title="my blog">隐式链接</a></p>
+</blockquote>
+
+<h4 id="图片">图片</h4>
+
+<p>Markdown 还没有办法指定图片的宽高，如果需要，可以使用普通的 <code>&lt;img&gt;</code> 标签。</p>
+<div class="highlight"><pre><code class="text">![Alt text](/images/email.png &quot;Optional title&quot;)
+![Alt text][id]
+[id]: /images/search.png  &quot;Optional title attribute&quot;
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p><img src="/images/email.png" alt="Alt text" title="Optional title">
+<img src="/images/search.png" alt="Alt text" title="Optional title attribute"></p>
+</blockquote>
+
+<h4 id="强调">强调</h4>
+<div class="highlight"><pre><code class="text">*italic*   **bold**
+_italic_   __bold__
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p><em>italic</em>   <strong>bold</strong></p>
+
+<p><em>italic</em>   <strong>bold</strong></p>
+</blockquote>
+
+<h4 id="标题">标题</h4>
+<div class="highlight"><pre><code class="text">This is an H1
+=============
+
+This is an H2
+-------------
+# 这是 H1
+
+## 这是 H2
+
+###### 这是 H6
+</code></pre></div>
+<h4 id="列表">列表</h4>
+
+<p>* + - 都可以作为列表开始标记。新段落缩进一个tab或4个空格可以嵌入列表。</p>
+<div class="highlight"><pre><code class="text">-   Red
+-   Green
+-   Blue
+
+1.  Bird
+2.  McHale
+1.  Parish
+
+1.  A list item.
+
+    With multiple paragraphs.
+1.  Bar
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<ul>
+<li>  Red</li>
+<li>  Green</li>
+<li>  Blue</li>
+</ul>
+
+<ol>
+<li> Bird</li>
+<li> McHale</li>
+<li><p>Parish</p></li>
+<li><p>A list item.</p>
+
+<p>With multiple paragraphs.</p></li>
+<li><p>Bar</p></li>
+</ol>
+</blockquote>
+
+<h4 id="引用">引用</h4>
+
+<p>引用内可以嵌套别的格式。</p>
+<div class="highlight"><pre><code class="text">&gt; Email-style angle brackets
+&gt; are used for blockquotes.
+
+&gt; &gt; And, they can be nested.
+
+&gt; #### Headers in blockquotes
+&gt; 
+&gt; * You can quote a list.
+&gt; * Etc.
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<blockquote>
+<p>Email-style angle brackets
+are used for blockquotes.</p>
+
+<blockquote>
+<p>And, they can be nested.</p>
+</blockquote>
+
+<h4 id="headers-in-blockquotes">Headers in blockquotes</h4>
+
+<ul>
+<li>You can quote a list.</li>
+<li>Etc.</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<h4 id="分割线">分割线</h4>
+
+<p>三个以上的* - _可以作为分隔符。</p>
+<div class="highlight"><pre><code class="text">***
+---
+___
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<hr>
+
+<hr>
+
+<hr>
+</blockquote>
+
+<h4 id="特殊符号">特殊符号</h4>
+
+<p>反斜杠用来插入特殊符号。可用的特殊符号如下</p>
+<div class="highlight"><pre><code class="text">\   反斜线
+`   反引号
+*   星号
+_   底线
+{}  花括号
+[]  方括号
+()  括弧
+#   井字号
++   加号
+-   减号
+.   英文句点
+!   惊叹号
+</code></pre></div>
+<h2 id="扩展语法">扩展语法</h2>
+
+<p>通用的语法适用范围广，但是总有一些效果是我们特别想有，但是通用Markdown太简洁而缺少的，比如 <strong>表格</strong>。</p>
+
+<h4 id="表格">表格</h4>
+
+<p>markdown渲染引擎有很多，如maruku、rdiscount、redcarpet、BlueCloth等。尝试对比了各种Markdown渲染引擎之后，发现redcarpet的语法比较简洁，据说速度也很快。
+目前的缺点是最终表格的效果不是很漂亮，还不知道怎么调整T_T</p>
+<div class="highlight"><pre><code class="text">table list below:
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+
+| Item      | Value |
+| --------- | -----:|
+| Computer  | $1600 |
+| Phone     |   $12 |
+| Pipe      |    $1 |
+
+| Function name | Description                    |
+| ------------- | ------------------------------ |
+| `help()`      | Display the help window.       |
+| `destroy()`   | **Destroy your computer!**     |
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p>table list below:</p>
+
+<table><thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Item</th>
+<th style="text-align: right">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Computer</td>
+<td style="text-align: right">$1600</td>
+</tr>
+<tr>
+<td>Phone</td>
+<td style="text-align: right">$12</td>
+</tr>
+<tr>
+<td>Pipe</td>
+<td style="text-align: right">$1</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Function name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>help()</code></td>
+<td>Display the help window.</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td><strong>Destroy your computer!</strong></td>
+</tr>
+</tbody></table>
+</blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何打开Disqus Discovery功能]]></title>

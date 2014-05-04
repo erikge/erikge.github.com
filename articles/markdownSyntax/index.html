@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Markdown语法说明 - 时光 &#149 印记</title>
+  <meta name="author" content="erik ge">
+
+  
+  <meta name="description" content="Markdown简洁易用，非常适合整理简单文档。不过在使用过程中，遇到在不同解析器上效果、扩展不同的问题，在这里简单总结一下。 通用语法 Markdown本身的语法很简洁，详情参考这里，中文参考这里。常用语法如下，可以作为cheatsheet。 代码
+Use the `printf()` &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://erikge.com/articles/markdownSyntax">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="时光 &#149 印记" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    
+<link rel="stylesheet" href="/assets/foundation-icons.css" />
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50514628-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:erikge.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            时光 &#149 印记
+        </span>
+       
+           <span class="blue_dark">
+             by erik
+           </span>
+       
+    </a></li>
+  <li><a href="/iOS.html">iOS开发</a></li>
+  <li><a href="/archives.html">所有文章</a></li>
+  <li><a href="/about.html">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Markdown语法说明</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-04T14:16:39+08:00" pubdate data-updated="true">May 4<span>th</span>, 2014</time>
+        
+      </p>
+    
+    
+    <span><font size=".9em" color="#aaa"> <i class="fi-clock"></i> about 2  minutes</font></span>
+    
+  </header>
+
+
+<div class="entry-content"><p>Markdown简洁易用，非常适合整理简单文档。不过在使用过程中，遇到在不同解析器上效果、扩展不同的问题，在这里简单总结一下。</p>
+
+<!-- more -->
+
+<h2 id="通用语法">通用语法</h2>
+
+<p>Markdown本身的语法很简洁，详情参考<a href="http://daringfireball.net/projects/markdown/syntax">这里</a>，中文参考<a href="http://wowubuntu.com/markdown/index.html">这里</a>。常用语法如下，可以作为cheatsheet。</p>
+
+<h4 id="代码">代码</h4>
+<div class="highlight"><pre><code class="text">Use the `printf()` function.
+这是一个普通段落：
+
+    这是一个代码区块。
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p>Use the <code>printf()</code> function.
+这是一个普通段落：</p>
+<div class="highlight"><pre><code class="text">这是一个代码区块。
+</code></pre></div></blockquote>
+
+<h4 id="链接">链接</h4>
+<div class="highlight"><pre><code class="text">&lt;http://erikge.com/&gt; &lt;erikge@qq.com&gt;
+
+[直接跟着链接](http://erikge.com/)
+
+[参考式链接][link_id]
+[link_id]: http://erikge.com/  &quot;Optional Title Here&quot;
+
+[隐式链接][]
+[隐式链接]: http://erikge.com/        &quot;my blog&quot;
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p><a href="http://erikge.com/">http://erikge.com/</a> <a href="mailto:erikge@qq.com">erikge@qq.com</a></p>
+
+<p><a href="http://erikge.com/">直接跟着链接</a></p>
+
+<p><a href="http://erikge.com/" title="Optional Title Here">参考式链接</a></p>
+
+<p><a href="http://erikge.com/" title="my blog">隐式链接</a></p>
+</blockquote>
+
+<h4 id="图片">图片</h4>
+
+<p>Markdown 还没有办法指定图片的宽高，如果需要，可以使用普通的 <code>&lt;img&gt;</code> 标签。</p>
+<div class="highlight"><pre><code class="text">![Alt text](/images/email.png &quot;Optional title&quot;)
+![Alt text][id]
+[id]: /images/search.png  &quot;Optional title attribute&quot;
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p><img src="/images/email.png" alt="Alt text" title="Optional title">
+<img src="/images/search.png" alt="Alt text" title="Optional title attribute"></p>
+</blockquote>
+
+<h4 id="强调">强调</h4>
+<div class="highlight"><pre><code class="text">*italic*   **bold**
+_italic_   __bold__
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p><em>italic</em>   <strong>bold</strong></p>
+
+<p><em>italic</em>   <strong>bold</strong></p>
+</blockquote>
+
+<h4 id="标题">标题</h4>
+<div class="highlight"><pre><code class="text">This is an H1
+=============
+
+This is an H2
+-------------
+# 这是 H1
+
+## 这是 H2
+
+###### 这是 H6
+</code></pre></div>
+<h4 id="列表">列表</h4>
+
+<p>* + - 都可以作为列表开始标记。新段落缩进一个tab或4个空格可以嵌入列表。</p>
+<div class="highlight"><pre><code class="text">-   Red
+-   Green
+-   Blue
+
+1.  Bird
+2.  McHale
+1.  Parish
+
+1.  A list item.
+
+    With multiple paragraphs.
+1.  Bar
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<ul>
+<li>  Red</li>
+<li>  Green</li>
+<li>  Blue</li>
+</ul>
+
+<ol>
+<li> Bird</li>
+<li> McHale</li>
+<li><p>Parish</p></li>
+<li><p>A list item.</p>
+
+<p>With multiple paragraphs.</p></li>
+<li><p>Bar</p></li>
+</ol>
+</blockquote>
+
+<h4 id="引用">引用</h4>
+
+<p>引用内可以嵌套别的格式。</p>
+<div class="highlight"><pre><code class="text">&gt; Email-style angle brackets
+&gt; are used for blockquotes.
+
+&gt; &gt; And, they can be nested.
+
+&gt; #### Headers in blockquotes
+&gt; 
+&gt; * You can quote a list.
+&gt; * Etc.
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<blockquote>
+<p>Email-style angle brackets
+are used for blockquotes.</p>
+
+<blockquote>
+<p>And, they can be nested.</p>
+</blockquote>
+
+<h4 id="headers-in-blockquotes">Headers in blockquotes</h4>
+
+<ul>
+<li>You can quote a list.</li>
+<li>Etc.</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<h4 id="分割线">分割线</h4>
+
+<p>三个以上的* - _可以作为分隔符。</p>
+<div class="highlight"><pre><code class="text">***
+---
+___
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<hr>
+
+<hr>
+
+<hr>
+</blockquote>
+
+<h4 id="特殊符号">特殊符号</h4>
+
+<p>反斜杠用来插入特殊符号。可用的特殊符号如下</p>
+<div class="highlight"><pre><code class="text">\   反斜线
+`   反引号
+*   星号
+_   底线
+{}  花括号
+[]  方括号
+()  括弧
+#   井字号
++   加号
+-   减号
+.   英文句点
+!   惊叹号
+</code></pre></div>
+<h2 id="扩展语法">扩展语法</h2>
+
+<p>通用的语法适用范围广，但是总有一些效果是我们特别想有，但是通用Markdown太简洁而缺少的，比如 <strong>表格</strong>。</p>
+
+<h4 id="表格">表格</h4>
+
+<p>markdown渲染引擎有很多，如maruku、rdiscount、redcarpet、BlueCloth等。尝试对比了各种Markdown渲染引擎之后，发现redcarpet的语法比较简洁，据说速度也很快。
+目前的缺点是最终表格的效果不是很漂亮，还不知道怎么调整T_T</p>
+<div class="highlight"><pre><code class="text">table list below:
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+
+| Item      | Value |
+| --------- | -----:|
+| Computer  | $1600 |
+| Phone     |   $12 |
+| Pipe      |    $1 |
+
+| Function name | Description                    |
+| ------------- | ------------------------------ |
+| `help()`      | Display the help window.       |
+| `destroy()`   | **Destroy your computer!**     |
+</code></pre></div>
+<p>效果如下</p>
+
+<blockquote>
+<p>table list below:</p>
+
+<table><thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Item</th>
+<th style="text-align: right">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Computer</td>
+<td style="text-align: right">$1600</td>
+</tr>
+<tr>
+<td>Phone</td>
+<td style="text-align: right">$12</td>
+</tr>
+<tr>
+<td>Pipe</td>
+<td style="text-align: right">$1</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Function name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>help()</code></td>
+<td>Display the help window.</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td><strong>Destroy your computer!</strong></td>
+</tr>
+</tbody></table>
+</blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">erik ge</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-04T14:16:39+08:00" pubdate data-updated="true">May 4<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    <p class="meta">
+        版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">BY-NC-ND 3.0</a>
+    </p>
+    <div class="sharing">
+    <style>
+        .flash-video{display:none;}
+    </style>
+  
+  
+  
+  
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_weixin">微信</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_douban">豆瓣</a>
+	<a class="jiathis_button_xqw">雪球</a>
+	<a href="http://www.jiathis.com/share?uid=1923944" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+    var jiathis_config = {data_track_clickback:'true'};
+    </script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394075736790327" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+</div>
+
+    <br />
+    
+
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1923944"></script>
+<!-- UY END -->
+
+
+
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/articles/SetupEnvironment" title="Previous Post: 开始iOS开发">&laquo; 开始iOS开发</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/articles/markdownSyntax">Markdown语法说明</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/SetupEnvironment">开始iOS开发</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/DisqusDiscovery">如何打开Disqus Discovery功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/OctopressVsJekyllBootstrap">Octopress Jekyll-Bootstrap 比较</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/TryRaidOnMac">尝试了下RAID</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+    <h1>Categories</h1>
+    <ul>
+        
+        
+        <li><a class='category' href='/categories/web/'>web (4)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/life/'>life (1)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/ios/'>iOS (1)</a></li>
+        
+        
+    </ul>
+</section>
+
+
+
+
+
+
+<section>
+    <!--a data-type="3" data-tmpl="200x200" data-tmplid="197" data-rd="2" data-style="2" data-border="1" href="#"></a-->
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><!-- UJian Button BEGIN -->
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide&fade=1&uid=1923944"></script>
+<a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+<!-- UJian Button END -->
+
+
+<p>
+  Copyright &copy; 2014 - erik ge -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  <!-- Included file 'disqus.html' not found in _includes directory
+Included file 'facebook_like.html' not found in _includes directory
+Included file 'google_plus_one.html' not found in _includes directory
+Included file 'twitter_sharing.html' not found in _includes directory -->
+
+
+
+</body>
+</html>
