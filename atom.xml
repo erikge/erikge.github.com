@@ -4,7 +4,7 @@
   <title><![CDATA[时光 &#149 印记]]></title>
   <link href="http://erikge.com/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-05-06T10:04:42+08:00</updated>
+  <updated>2014-05-07T23:58:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -26,13 +26,13 @@
 
 <p>Markdown详细语法参考<a href="http://daringfireball.net/projects/markdown/syntax">这里</a>，中文参考<a href="http://wowubuntu.com/markdown/index.html">这里</a>。</p>
 
-<h4 id="代码">代码</h4>
+<h3 id="代码">代码</h3>
 <div class="highlight"><pre><code class="text">Use the `printf()` function.
 这是一个普通段落：
 
     这是一个代码区块。
 </code></pre></div>
-<h4 id="链接">链接</h4>
+<h3 id="链接">链接</h3>
 <div class="highlight"><pre><code class="text">&lt;http://erikge.com/&gt; &lt;erikge@qq.com&gt;
 
 [直接跟着链接](http://erikge.com/)
@@ -43,18 +43,18 @@
 [隐式链接][]
 [隐式链接]: http://erikge.com/        &quot;my blog&quot;
 </code></pre></div>
-<h4 id="图片">图片</h4>
+<h3 id="图片">图片</h3>
 
 <p>Markdown 还没有办法指定图片的宽高，如果需要，可以使用普通的 <code>&lt;img&gt;</code> 标签。</p>
 <div class="highlight"><pre><code class="text">![Alt text](/images/email.png &quot;Optional title&quot;)
 ![Alt text][id]
 [id]: /images/search.png  &quot;Optional title attribute&quot;
 </code></pre></div>
-<h4 id="强调">强调</h4>
+<h3 id="强调">强调</h3>
 <div class="highlight"><pre><code class="text">*italic*   **bold**
 _italic_   __bold__
 </code></pre></div>
-<h4 id="标题">标题</h4>
+<h3 id="标题">标题</h3>
 <div class="highlight"><pre><code class="text">This is an H1
 =============
 
@@ -66,7 +66,7 @@ This is an H2
 
 ###### 这是 H6
 </code></pre></div>
-<h4 id="列表">列表</h4>
+<h3 id="列表">列表</h3>
 
 <p>* + - 都可以作为列表开始标记。新段落第一行缩进一个tab或4个空格可以嵌入列表。</p>
 <div class="highlight"><pre><code class="text">-   Red
@@ -82,7 +82,7 @@ This is an H2
     With multiple paragraphs.
 1.  Bar
 </code></pre></div>
-<h4 id="引用">引用</h4>
+<h3 id="引用">引用</h3>
 
 <p>引用内可以嵌套别的格式。</p>
 <div class="highlight"><pre><code class="text">&gt; Email-style angle brackets
@@ -95,14 +95,14 @@ This is an H2
 &gt; * You can quote a list.
 &gt; * Etc.
 </code></pre></div>
-<h4 id="分割线">分割线</h4>
+<h3 id="分割线">分割线</h3>
 
 <p>三个以上的* - _可以作为分隔符。</p>
 <div class="highlight"><pre><code class="text">***
 ---
 ___
 </code></pre></div>
-<h4 id="特殊符号">特殊符号</h4>
+<h3 id="特殊符号">特殊符号</h3>
 
 <p>反斜杠用来插入特殊符号。可用的特殊符号如下</p>
 <div class="highlight"><pre><code class="text">\   反斜线
@@ -122,7 +122,7 @@ _   底线
 
 <p>通用的语法适用范围广，但是总有一些效果是我们特别想有，但是通用Markdown太简洁而缺少的，比如 <strong>表格</strong>。</p>
 
-<h4 id="表格">表格</h4>
+<h3 id="表格">表格</h3>
 
 <p>markdown渲染引擎有很多，如maruku、rdiscount、redcarpet、BlueCloth等。尝试对比了各种Markdown渲染引擎之后，发现redcarpet的语法比较简洁，据说速度也很快。
 目前的缺点是最终表格的效果不是很漂亮，还不知道怎么调整T_T</p>
@@ -148,7 +148,7 @@ Content Cell  | Content Cell
 
 <p><a href="http://octopress.org/">Octopress</a>是一个基于Jekyll的博客框架，集成了很多Jekyll的插件来提供增强的显示效果。</p>
 
-<h4 id="code-blocks">Code Blocks</h4>
+<h3 id="code-blocks">Code Blocks</h3>
 <div class="highlight"><pre><code class="text">``` [language] [title] [url] [link text] [linenos:false] [start:#] [mark:#,#-#]
 code snippet
 ```
@@ -160,35 +160,35 @@ code snippet
 
 <p><code>[linenos:false]</code><code>[start:#]</code><code>[mark:#,#-#]</code>目前Octopress 2.0版本（master分支）还不支持，从2.1开始支持。2.1分支目前变为2.5分支，不过Octopress好像主要正在开发3.0版本，希望3.0版本会带上这个功能。当然，也可以自己Hack一下，已经有人这么做了，参考<a href="https://github.com/imathis/octopress/pull/1485">这里</a>，可以尝试这个<a href="https://github.com/benedict-chan/octopress/commit/c6b84659a9c3ed3f4dfc9653931ba797dad434db">patch</a></p>
 
-<h4 id="gist-tag">Gist Tag</h4>
+<h3 id="gist-tag">Gist Tag</h3>
 <div class="highlight"><pre><code class="text">{% gist gist_id [filename] %}
 </code></pre></div>
-<h4 id="code-in-file">Code in file</h4>
+<h3 id="code-in-file">Code in file</h3>
 <div class="highlight"><pre><code class="text">{% include_code [title] [lang:language] path/to/file [start:#] [end:#] [range:#-#] [mark:#,#-#] [linenos:false] %}
 </code></pre></div>
-<h4 id="image-tag">Image Tag</h4>
+<h3 id="image-tag">Image Tag</h3>
 <div class="highlight"><pre><code class="text">{% img [class names] /path/to/image [width] [height] [title text [alt text]] %}
 {% img right http://image_url 150 250 &#39;title #1&#39; &#39;An image to shown&#39; %}
 </code></pre></div>
-<h4 id="excerpts">Excerpts</h4>
+<h3 id="excerpts">Excerpts</h3>
 
 <p>用于控制摘要的终止位置。</p>
 <div class="highlight"><pre><code class="text">&lt;!--more--&gt;
 </code></pre></div>
-<h4 id="video-tag">Video Tag</h4>
+<h3 id="video-tag">Video Tag</h3>
 <div class="highlight"><pre><code class="text">{% video url/to/video [width height] [url/to/poster] %}
 </code></pre></div>
-<h4 id="import-file">Import file</h4>
+<h3 id="import-file">Import file</h3>
 <div class="highlight"><pre><code class="text">{% render_partial path/to/file %}
 </code></pre></div>
 <p>适用于多篇文章引用同一内容，减少重复。相对路径是相对于<code>source</code>目录。</p>
 
-<h4 id="blockquote">Blockquote</h4>
+<h3 id="blockquote">Blockquote</h3>
 <div class="highlight"><pre><code class="text">{% blockquote [author[, source]] [link] [source_link_title] %}
 Quote string
 {% endblockquote %}
 </code></pre></div>
-<h4 id="pullquote">Pullquote</h4>
+<h3 id="pullquote">Pullquote</h3>
 
 <p>Pullquote用于强化或突出显示段落中的关键字句，而且不打断原段落的阅读。</p>
 <div class="highlight"><pre><code class="text">{% pullquote [left]%}
@@ -196,7 +196,7 @@ Surround your paragraph with the pull quote tags. Then when you come to
 the text you want to pull, {&quot; surround it like this &quot;} and that&#39;s all there is to it.
 {% endpullquote %}
 </code></pre></div>
-<h4 id="puts">Puts</h4>
+<h3 id="puts">Puts</h3>
 
 <p>Log From Liquid to the Terminal，一个debug Liquid的方法。</p>
 <div class="highlight"><pre><code class="text">{% puts %}Optional Text: {{ some_liquid_variable }}{% endputs %}
@@ -296,7 +296,7 @@ the text you want to pull, {&quot; surround it like this &quot;} and that&#39;s 
 <li>达到100美金以上付款，详情参考<a href="http://help.disqus.com/customer/portal/articles/1208081-receiving-payments-from-disqus">官方说明</a></li>
 </ul>
 
-<h2 id="如可开启">如可开启</h2>
+<h2 id="如何开启">如何开启</h2>
 
 <p>如何打开这么好的功能呢？搜索了半天，很沮丧的没有找到，<a href="http://help.disqus.com/customer/portal/articles/666278-promoted-discovery-f-a-q-#discovery-settings">官方</a>也只是简单的说要通过邀请激活，可是没说清楚谁邀请谁啊。后来在<a href="http://blog.acgtyrant.com/how-to-use-disqus-masterly.html">这篇文章</a>中得到启发。原来这个功能的开启不是个人来设置的，而是官方根据你账号的情况决定是否开启这个功能的。。。。。。也就是说，由disqus来决定你的网站上是否有Promoted Discovery。</p>
 
