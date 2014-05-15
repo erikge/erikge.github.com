@@ -14,7 +14,7 @@
     </url>
     <url>
         <loc>http://erikge.com/articles/DisqusDiscovery</loc>
-        <lastmod>2014-05-06T18:32:56+08:00</lastmod>
+        <lastmod>2014-05-15T16:51:30+08:00</lastmod>
     </url>
     <url>
         <loc>http://erikge.com/articles/SetupEnvironment</loc>
@@ -22,7 +22,15 @@
     </url>
     <url>
         <loc>http://erikge.com/articles/markdownSyntax</loc>
-        <lastmod>2014-05-07T23:57:39+08:00</lastmod>
+        <lastmod>2014-05-15T16:51:30+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://erikge.com/articles/HelloNinja</loc>
+        <lastmod>2014-05-15T20:23:41+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://erikge.com/articles/HelloCMake</loc>
+        <lastmod>2014-05-15T20:27:39+08:00</lastmod>
     </url>
     <url>
         <loc>http://erikge.com/404.html</loc>
@@ -38,7 +46,7 @@
     </url>
     <url>
         <loc>http://erikge.com/</loc>
-        <lastmod>2014-05-07T23:57:39+08:00</lastmod>
+        <lastmod>2014-05-15T20:27:39+08:00</lastmod>
     </url>
     <url>
         <loc>http://erikge.com/iOS.html</loc>

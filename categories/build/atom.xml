@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: build | 时光 &#149 印记]]></title>
+  <link href="http://erikge.com/categories/build/atom.xml" rel="self"/>
+  <link href="http://erikge.com/"/>
+  <updated>2014-05-15T20:28:32+08:00</updated>
+  <id>http://erikge.com/</id>
+  <author>
+    <name><![CDATA[erik ge]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hello CMake]]></title>
+    <link href="http://erikge.com/articles/HelloCMake"/>
+    <updated>2014-05-15T14:06:09+08:00</updated>
+    <id>http://erikge.com/articles/HelloCMake</id>
+    <content type="html"><![CDATA[<p>CMake简明语法参考。</p>
+
+<!--more-->
+
+<h2 id="安装">安装</h2>
+
+<p>可以下载<a href="http://www.cmake.org/cmake/resources/software.html">对应平台编译好的版本</a>直接安装，也可以<a href="http://www.cmake.org/cmake/help/install.html">从源码自己编译</a>。</p>
+
+<h2 id="使用">使用</h2>
+
+<ol>
+<li>编写CMakeLists.txt文件</li>
+<li>运行CMake生成makefile、build.ninja文件或xcode、vs等工程。可以使用图形界面，也可以使用命令行
+
+<ul>
+<li>make -DVARIABLE:TYPE=VALUE</li>
+<li>cmake [options] <path-to-source></li>
+<li>cmake -h for more information</li>
+</ul></li>
+<li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
+</ol>
+
+<p>CMake的文档很详细，在线文档参考<a href="http://www.cmake.org/cmake/help/v2.8.12/cmake.html">这里</a>。好玩的是，CMake可以本地生成一份和在线文档一模一样的文档。运行<code>cmake --help-html &gt; doc.html</code>即可。</p>
+
+<h2 id="cmakelists.txt使用场景">CMakeLists.txt使用场景</h2>
+
+<p>列出一些case by case的简单模版，作为参考。</p>
+
+<p>最小的CMakeLists.txt
+<code>cmake
+cmake_minimum_required (VERSION 2.8.9)
+project (Tutorial)
+add_executable(Tutorial tutorial.cxx)
+</code>
+&ldquo;` cmake
+cmake_minimum_required(VERSION 2.8)
+project (hello)</p>
+
+<p>add_library(hello *.cpp)</p>
+
+<p>add_executable(dist.exe main.cpp)
+target_link_libraries(dist.exe hello)
+<code>
+</code> cmake</p>
+
+<h1 id="the-name-of-our-project-is-&quot;hello&quot;.-cmakelists-files-in-this-project-can">The name of our project is &quot;HELLO&rdquo;. CMakeLists files in this project can</h1>
+
+<h1 id="refer-to-the-root-source-directory-of-the-project-as-${hello_source_dir}-and">refer to the root source directory of the project as ${HELLO_SOURCE_DIR} and</h1>
+
+<h1 id="to-the-root-binary-directory-of-the-project-as-${hello_binary_dir}.">to the root binary directory of the project as ${HELLO_BINARY_DIR}.</h1>
+
+<p>cmake_minimum_required (VERSION 2.6) 
+project (HELLO) </p>
+
+<h1 id="recurse-into-the-&quot;hello&quot;-and-&quot;demo&quot;-subdirectories.-this-does-not-actually">Recurse into the &ldquo;Hello&rdquo; and &ldquo;Demo&rdquo; subdirectories. This does not actually</h1>
+
+<h1 id="cause-another-cmake-executable-to-run.-the-same-process-will-walk-through">cause another cmake executable to run. The same process will walk through</h1>
+
+<h1 id="the-project&#39;s-entire-directory-structure.">the project&rsquo;s entire directory structure.</h1>
+
+<p>add_subdirectory (Hello) 
+add_subdirectory (Demo)
+<code>
+</code> cmake</p>
+
+<h1 id="create-a-library-called-&quot;hello&quot;-which-includes-the-source-file-&quot;hello.cxx&quot;.">Create a library called &ldquo;Hello&rdquo; which includes the source file &ldquo;hello.cxx&rdquo;.</h1>
+
+<h1 id="the-extension-is-already-found.-any-number-of-sources-could-be-listed-here.">The extension is already found. Any number of sources could be listed here.</h1>
+
+<p>add_library (Hello hello.cxx)
+<code>
+</code> cmake</p>
+
+<h1 id="make-sure-the-compiler-can-find-include-files-from-our-hello-library.">Make sure the compiler can find include files from our Hello library.</h1>
+
+<p>include_directories (${HELLO_SOURCE_DIR}/Hello) </p>
+
+<h1 id="make-sure-the-linker-can-find-the-hello-library-once-it-is-built.">Make sure the linker can find the Hello library once it is built.</h1>
+
+<p>link_directories (${HELLO_BINARY_DIR}/Hello) </p>
+
+<h1 id="add-executable-called-&quot;hellodemo&quot;-that-is-built-from-the-source-files">Add executable called &ldquo;helloDemo&rdquo; that is built from the source files</h1>
+
+<h1 id="&quot;demo.cxx&quot;-and-&quot;demo_b.cxx&quot;.-the-extensions-are-automatically-found.">&ldquo;demo.cxx&rdquo; and &ldquo;demo_b.cxx&rdquo;. The extensions are automatically found.</h1>
+
+<p>add_executable (helloDemo demo.cxx demo_b.cxx) </p>
+
+<h1 id="link-the-executable-to-the-hello-library.">Link the executable to the Hello library.</h1>
+
+<p>target_link_libraries (helloDemo Hello) 
+&ldquo;`</p>
+
+<h2 id="cmakelists.txt常用语法">CMakeLists.txt常用语法</h2>
+
+<p>官方语法说明在<a href="http://www.cmake.org/cmake/help/syntax.html">这里</a>。</p>
+
+<ul>
+<li>注释以#开头</li>
+<li><p>命令，包括内置的命令和用户自定义的命令，命令的名字是大小写不敏感的。</p>
+
+<p><code>command (args...)</code></p></li>
+<li><p>空格（spaces, line feeds, tabs）作为分隔符，双引号包括的部分作为一个整体。</p></li>
+<li><p>backslash作为escape characters</p></li>
+</ul>
+
+<p>list
+<code>cmake
+set(VAR a;b;c)
+set(Foo a b c)
+command(${Foo}) #变量使用，等价于command(a b c)
+command(&quot;${Foo}&quot;) #abc的list作为一个参数
+</code></p>
+
+<p>macro and function, function available in 2.6 and greater
+&rdquo;` cmake</p>
+
+<h1 id="define-a-macro-hello">define a macro hello</h1>
+
+<p>macro(hello MESSAGE)
+    message(${MESSAGE})
+endmacro(hello) </p>
+
+<h1 id="call-the-macro-with-the-string-&quot;hello-world&quot;">call the macro with the string &ldquo;hello world&rdquo;</h1>
+
+<p>hello(&ldquo;hello world&rdquo;) </p>
+
+<h1 id="define-a-function-hello">define a function hello</h1>
+
+<p>function(hello MESSAGE)
+    message(${MESSAGE}) 
+endfunction(hello)
+&ldquo;`</p>
+
+<p>Flow Control
+&rdquo;` cmake</p>
+
+<h1 id="some_command-will-be-called-if-the-variable&#39;s-value-is-not:">some_command will be called if the variable&rsquo;s value is not:</h1>
+
+<h1 id="empty,-0,-n,-no,-off,-false,-notfound,-or--notfound.">empty, 0, N, NO, OFF, FALSE, NOTFOUND, or -NOTFOUND.</h1>
+
+<p>if(var) 
+   some_command(&hellip;) 
+endif(var) 
+<code>
+</code> cmake
+while(condition)
+    COMMAND1(ARGS &hellip;)
+    COMMAND2(ARGS &hellip;)
+    &hellip;
+endwhile(condition)
+<code>
+</code> cmake
+set(VAR a b c) 
+  # loop over a, b,c with the variable f 
+foreach(f ${VAR}) 
+    message(${f}) 
+endforeach(f)
+&ldquo;`</p>
+
+<p>通配符
+<code>plain
+^ Matches at beginning of a line or string
+$ Matches at end of a line or string
+. Matches any single character other than a newline
+[ ] Matches any character(s) inside the brackets
+[^ ] Matches any character(s) not inside the brackets
+[-] Matches any character in range on either side of a dash
+* Matches preceding pattern zero or more times
++ Matches preceding pattern one or more times
+? Matches preceding pattern zero or once only
+() Saves a matched expression and uses it in a later replacement
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Ninja]]></title>
+    <link href="http://erikge.com/articles/HelloNinja"/>
+    <updated>2014-05-12T11:28:25+08:00</updated>
+    <id>http://erikge.com/articles/HelloNinja</id>
+    <content type="html"><![CDATA[<p>Ninja，中文“忍者”的意思。这里说到的Ninja是一个<a href="https://github.com/martine/ninja">专注于速度的构建系统</a>，正式的版本可以从<a href="https://github.com/martine/ninja/releases">这里</a>下载。写本文时的版本是1.4.0。</p>
+
+<p>最初遇到Ninja是在编译Webrtc的时候，记得以前还是感觉乱乱的<a href="https://code.google.com/p/gyp/">gyp</a>，不知什么时候换成陌生的Ninja了。当时匆匆解决了编译问题，没仔细看Ninja的细节，后来在看aosabook的<a href="http://aosabook.org/en/intro1.html">《The Architecture of Open Source Applications》</a>、<a href="http://aosabook.org/en/posa/introduction.html">《The Performance of Open Source Applications》</a>系列的书时，又提到了Ninja，不由得想用用试试看了。</p>
+
+<!-- more -->
+
+<h2 id="特别之处">特别之处</h2>
+
+<p>对比别的构建系统，Ninja的特点是快和简洁，仅保留最少的特性来提高编译速度。Ninja最初的想法源于martine在开发Chromium项目时对编译速度的<a href="http://neugierig.org/software/chromium/notes/2011/02/ninja.html">抱怨</a>。</p>
+
+<p>简单来说，Ninja是一个很快的make替代品。ninja对应make，build.ninja对应makefile，CMake、gyp对应autoconf、automake。</p>
+
+<p>更详细的feature可以参考Ninja的<a href="http://martine.github.io/ninja/manual.html#_introduction">文档</a>。</p>
+
+<h2 id="使用">使用</h2>
+
+<p>Ninja的设计理念并不包括提高可读性。所以直接写build.niinja文件会过于繁琐。实际使用过程中更推荐和CMake或gyp配合使用。</p>
+
+<p>build.niinja文件示例如下，分为rule和dependency两部分。</p>
+<div class="highlight"><pre><code class="makefile"><span class="c"># part rull</span>
+<span class="nv">cc</span><span class="o">=</span>gcc
+<span class="nv">cflags</span><span class="o">=</span> -g -c
+
+<span class="err">rule</span> <span class="err">cc</span>
+     <span class="nv">command</span> <span class="o">=</span>  <span class="nv">$cc</span> <span class="nv">$cflags</span> <span class="nv">$in</span> -o <span class="nv">$out</span>
+
+<span class="err">rule</span> <span class="err">link</span>
+     <span class="nv">command</span> <span class="o">=</span> <span class="nv">$cc</span> <span class="nv">$in</span> -o <span class="nv">$out</span>
+
+<span class="err">rule</span> <span class="err">cleanup</span>
+     <span class="nv">command</span> <span class="o">=</span> rm -rf *.exe *.o
+
+<span class="c">#part dependency</span>
+<span class="nf">build func.o           </span><span class="o">:</span> <span class="m">cc func.c</span>
+<span class="nf">build main.o           </span><span class="o">:</span> <span class="m">cc main.c</span>
+
+<span class="nf">build app.exe            </span><span class="o">:</span> <span class="m">link main.o func.o</span>
+
+<span class="nf">build all</span><span class="o">:</span>  <span class="m">phony || app.exe</span>
+<span class="nf">build clean</span><span class="o">:</span> <span class="m">cleanup</span>
+</code></pre></div>
+<p>ninja命令使用示例如下
+&ldquo;` makefile</p>
+
+<h1 id="compile">compile</h1>
+
+<p>ninja</p>
+
+<h1 id="help">help</h1>
+
+<p>ninja -h
+&rdquo;`</p>
+
+<h3 id="配合cmake使用">配合CMake使用</h3>
+
+<p>CMake从2.8.9开始可以支持生成Ninja的build.ninja文件。CMake的简单用法参考<a href="/articles/HelloCMake">这里</a>。</p>
+
+<p>CMake生成build.ninja文件的方法如下
+<code>sh
+cmake -G Ninja
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>
