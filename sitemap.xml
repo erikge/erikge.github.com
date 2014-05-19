@@ -26,11 +26,19 @@
     </url>
     <url>
         <loc>http://erikge.com/articles/HelloNinja</loc>
-        <lastmod>2014-05-15T20:23:41+08:00</lastmod>
+        <lastmod>2014-05-17T17:54:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://erikge.com/articles/HelloCMake</loc>
-        <lastmod>2014-05-15T20:27:39+08:00</lastmod>
+        <lastmod>2014-05-17T13:58:38+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://erikge.com/articles/HelloGyp</loc>
+        <lastmod>2014-05-17T17:10:29+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://erikge.com/articles/HelloWebrtc</loc>
+        <lastmod>2014-05-19T23:24:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://erikge.com/404.html</loc>
@@ -46,7 +54,7 @@
     </url>
     <url>
         <loc>http://erikge.com/</loc>
-        <lastmod>2014-05-15T20:27:39+08:00</lastmod>
+        <lastmod>2014-05-19T23:24:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://erikge.com/iOS.html</loc>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>尝试了下RAID - 时光 &#149 印记</title>
+  <title>Hello GYP - 时光 &#149 印记</title>
   <meta name="author" content="erik ge">
 
   
-  <meta name="description" content="为了解决越来越多的照片存储问题，尝试了下RAID">
+  <meta name="description" content="GYP，Generate Your Projects，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如V8和node-gyp。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。 安装 前提条件：本机需要安装python和svn。 下载 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://erikge.com/articles/TryRaidOnMac">
+  <link rel="canonical" href="http://erikge.com/articles/HelloGyp">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -86,7 +86,7 @@
   
   <header>
     
-      <h1 class="entry-title">尝试了下RAID</h1>
+      <h1 class="entry-title">Hello GYP</h1>
     
     
       <p class="meta">
@@ -102,7 +102,7 @@
   
 
 
-<time datetime="2014-02-11T19:00:53+08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+<time datetime="2014-05-17T13:43:55+08:00" pubdate data-updated="true">May 17<span>th</span>, 2014</time>
         
       </p>
     
@@ -112,59 +112,94 @@
   </header>
 
 
-<div class="entry-content"><p>随着各种电子产品的使用，要存储的东西越来越多。开始就是存在电脑里，后来电脑旧了坏了，换电脑，也不止一台电脑了，数据就存移动硬盘里。再后来，电脑似乎也不那么常用了，就换成各种跨平台的app，自动在各种终端上同步数据。</p>
-<p><!--more--></p>
-<p>体积比较大的文件也可以存到各种网盘、云盘里了。但是，最珍贵、最想保存下来的，就是这么多年来的照片了，满满的都似乎回忆。而这些照片往往不太愿意放到网上去，毕竟是自己的私人数据，还是不太相信没有底线的互联网，即便是有各种加密，自己设置的密码也不一定靠的住。所以，我一直还是存在两块移动硬盘里，还是身边的柜子她是些。唯一的问题是，两块硬盘上的数据我是没仔细同步的，自己也搞不清楚那个是数据最完整的了。</p>
-<p>还好，最近听说了RAID可以在电脑上通过软件实现，所以再次开启折腾之路。</p>
-<h2><span class="caps">RAID</span></h2>
-<p>RAID，Redundant Array of Inexpensive Disks，廉价磁盘冗余阵列。通过多个磁盘的组合提高数据可靠性、访问速度等。</p>
+<div class="entry-content"><p>GYP，Generate Your Projects，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如<a href="https://code.google.com/p/v8/">V8</a>和<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。</p>
+
+<!--more-->
+
+<h2 id="安装">安装</h2>
+
+<p>前提条件：本机需要安装python和svn。</p>
+
+<p>下载：<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code></p>
+
+<p>有两种安装方式。第一种安装方法如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> &lt;gyp-dir&gt; <span class="c"># 刚才的下载目录</span>
+</span><span class='line'><span class="o">[</span>sudo<span class="o">]</span> python setup.py install
+</span></code></pre></td></tr></table></div></figure>
+这个命令做的事情主要是安装python的第三方扩展到/Library/Python/2.7/site-packages/gyp-0.1-py2.7.egg，并把gyp的可执行文件copy到/usr/local/bin。</p>
+
+<p>第二种安装方式是直接将&lt;gyp-dir&gt;加入PATH。</p>
+
+<h2 id="使用">使用</h2>
+
+<ol>
+<li>编写.gyp文件</li>
+<li>运行gyp命令生成makefile、build.ninja文件或xcode、vs等工程
+
 <ul>
-	<li><span class="caps">RAID</span> 0: 磁盘串联，无冗余，磁盘利用率高，读写速度快，最少两块硬盘</li>
-	<li><span class="caps">RAID</span> 1: 镜像，磁盘利用率低，读速度快，写速度稍慢，最少两块硬盘</li>
-	<li><span class="caps">RAID</span> 2: 汉明码校验，冗余多，读写速度慢，最少三块硬盘</li>
-	<li><span class="caps">RAID</span> 3:</li>
-	<li><span class="caps">RAID</span> 4:</li>
-	<li><span class="caps">RAID</span> 5: 最有用的方案（对企业来说），RAID 0 和 <span class="caps">RAID</span> 1 的折中，最少三块硬盘</li>
-	<li><span class="caps">RAID</span> 6:</li>
-	<li><span class="caps">RAID</span> 7:</li>
-	<li><span class="caps">RAID</span> 10: 先组成RAID 1，再在RAID1的基础上组成RAID 0，常用。</li>
-	<li><span class="caps">RAID</span> 01: 顺序和RAID 10相反，不常用。</li>
-</ul>
-<h2><span class="caps">MAC</span> OS 上的软件实现</h2>
-<p>据说有RAID卡的硬件实现，不过偶银子紧张，只好寻找软件实现。目前找到的比较好的软件有两个，系统自带的Disk Utility和SoftRAID。</p>
-<h3>Disk Utility</h3>
-<p>打开“实用工具”中的“磁盘工具”，通过“RAID”的标签创建即可。软件有说明，创建成功并不复杂。<br />
-如果不是用整块磁盘创建RAID，而是用分区创建RAID，创建过程中可能会遇到如下错误：</p>
-<blockquote>
-<p>无法将磁盘“XXX”添加到RAID磁盘阵列，因为此宗卷所在的磁盘以“主引导记录”为分区图方案。此分区图方案不被支持。</p>
-</blockquote>
-<p>这是因为磁盘是MBR分区方式，需要改成GPT分区方式。可以在磁盘工具的“分区”重新为磁盘分区，分区时选择“选项”，分区方案选择“GUID分区表”。</p>
-<h3>Disk Utility 缺点</h3>
-<p>论坛里有人说，DU是系统自带的，稳定省事，而且个人用也足够了。还是不能盲目相信啊，稳定确实是稳定，但是不一定够用。<br />
-我有两块移动硬盘，保存照片时作为RAID使用，但是希望也可以单独使用，后续有机会再组合为RAID同步数据。移动硬盘上还有不组合为RAID的分区，大多时候移动硬盘还是需要单独使用。所以，简单说，我要求RAID可以随意拆分和组合。<br />
-DU的缺点：</p>
+<li><code>gyp --depth=. main.gyp</code></li>
+<li><code>gyp --depth=. main.gyp -fninja</code></li>
+</ul></li>
+<li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
+</ol>
+
+<p>举一个最简单的例子，源文件如下：
+<figure class='code'><figcaption><span>main.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+编写.gyp文件如下：
+<figure class='code'><figcaption><span>main.gyp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">&#39;targets&#39;:</span> <span class="err">[</span>
+</span><span class='line'>    <span class="err">{</span>
+</span><span class='line'>      <span class="err">&#39;target_name&#39;:</span> <span class="err">&#39;main&#39;,</span>
+</span><span class='line'>      <span class="err">&#39;type&#39;:</span> <span class="err">&#39;executable&#39;,</span>
+</span><span class='line'>      <span class="err">&#39;sources&#39;:</span> <span class="err">[</span>
+</span><span class='line'>        <span class="err">&#39;main.cpp&#39;,</span>
+</span><span class='line'>      <span class="err">],</span>
+</span><span class='line'>    <span class="p">}</span><span class="err">,</span>
+</span><span class='line'>  <span class="err">],</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>在源文件目录下运行命令<code>gyp --depth=. main.gyp</code>，生成工程文件。打开生成的工程文件编译、运行即可。</p>
+
+<p>更多例子可以参考<a href="https://github.com/examplecode/gypdemo">gypdemo</a></p>
+
+<h2 id="语法">语法</h2>
+
+<p><em>.gyp文件的语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
+
 <ul>
-	<li>DU创建的RAID不能分开用</li>
-	<li>重建时间太漫长</li>
-	<li>据说出现磁盘错误，DU不会报警。这个可以通过&quot;RaidEye&quot;:http://www.hanynet.com/raideye/ 解决</li>
+<li>模版和例子：<a href="https://code.google.com/p/gyp/wiki/GypUserDocumentation">GypUserDocumentation</a></li>
+<li>所有可配置的项目：<a href="https://code.google.com/p/gyp/wiki/GypLanguageSpecification">GypLanguageSpecification</a></li>
+<li>生成流程，可查询内置的变量：<a href="https://code.google.com/p/gyp/wiki/InputFormatReference">InputFormatReference</a></li>
 </ul>
-<p>创建好RAID之后，我单独使用一块移动硬盘，然后拔下来换另一个，反复几次之后，DU里RAID的状态从丢失，变成故障，然后就再也回不去了。还有一个不能忍受的是，我几乎没有修改任何内容，重建（rebuild）也需要一天之久，最短的时间也在三小时以上，这。。。无法接受。。。</p>
-<h3>SoftRAID</h3>
-<p>于是，只能尝试SoftRAID。<br />
-SoftRAID也并不难使用，要注意的是SoftRAID需要装自己的磁盘驱动，然后需要创建自己的分区才能实现各种功能。自己摸索一阵子，掌握各种功能应该不难。<br />
-SoftRAID最可爱的地方：</p>
-<ul>
-	<li>重建真快，文件变化不大时20s内搞定，增量重建</li>
-	<li>可以分开使用，将Secondary的分区转换为Read-only Secondary</li>
-</ul>
-<p>开始以为不能分开用，因为我把作为Secondary的磁盘单独插上后，再两个磁盘都插进去就无法组建RAID了，一直是两个同名的分区。后来研究文档发现，SoftRAID的RAID工作时必须要有一个作为Primary的磁盘的，如果没有的话，就会将Secondary转换为Primary。一个work around的方法是将Secondary的分区转换为Read-only Secondary，需要同步时再转换回来。</p>
-<h3>SoftRAID 缺点</h3>
-<p>正当我满心欢喜，就准备这么干时，SoftRAID卡死了。在我做一个删除分区的操作时，SoftRAID没有反应了。而且dmg格式的文件也大不开了。我意识到SoftRAID把磁盘操作程序弄坏了。我准备重启，悲剧的是，电脑竟然关不了机了，我只好把Mac像该死的windows一样断电了。<br />
-后来这种情况又在别的操作的时候出现了几次，我开始不信任SoftRAID了，不敢将珍贵的照片交给SoftRAID。</p>
-<p>$129可以省了。</p>
-<h2>美好的RAID</h2>
-<p>如此折腾了两天，RAID还只是想象中那么美好啊。别人盲目推崇的东西不一定能妥善的解决自己的问题，还是要多测试。<br />
-试验RAID的过程中知道了CCC，还是这货好用，先用着这个解决问题，暂时不碰RAID了。</p></div>
+
+<h2 id="issues">Issues</h2>
+</div>
 
 
   <footer>
@@ -186,12 +221,12 @@ SoftRAID最可爱的地方：</p>
   
 
 
-<time datetime="2014-02-11T19:00:53+08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+<time datetime="2014-05-17T13:43:55+08:00" pubdate data-updated="true">May 17<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/categories/life/'>life</a>
+    <a class='category' href='/categories/build/'>build</a>
   
 </span>
 
@@ -245,10 +280,10 @@ SoftRAID最可爱的地方：</p>
     <br />
     <p class="meta">
       
-        <a class="basic-alignment left" href="/articles/JavaScript-GetStarted" title="Previous Post: JavaScript初始化">&laquo; JavaScript初始化</a>
+        <a class="basic-alignment left" href="/articles/HelloCMake" title="Previous Post: Hello CMake">&laquo; Hello CMake</a>
       
       
-        <a class="basic-alignment right" href="/articles/OctopressVsJekyllBootstrap" title="Next Post: Octopress Jekyll-Bootstrap 比较">Octopress Jekyll-Bootstrap 比较 &raquo;</a>
+        <a class="basic-alignment right" href="/articles/HelloWebrtc" title="Next Post: Webrtc Getting Started">Webrtc Getting Started &raquo;</a>
       
     </p>
   </footer>

@@ -195,6 +195,41 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>cmake -G Ninja
 </span></code></pre></td></tr></table></div></figure></p>
+
+<h3 id="配合gyp使用">配合GYP使用</h3>
+
+<p>gyp，Generate Your Projects，一个google开源的构建系统。gyp的简单用法参考<a href="/articles/HelloGyp">这里</a>。</p>
+
+<p>gyp生成build.ninja文件的方法如下
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>gyp ***.gyp -fninja
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="调试">调试</h2>
+
+<p>我们希望使用ninja的编译速度，但是我们还希望能够在图形界面的IDE（如VS，Xcode）中debug、设置断点等。</p>
+
+<h3 id="xcode">Xcode</h3>
+
+<p>如果仅仅是需要抓crash，或者Attach到进程看性能</p>
+
+<ul>
+<li>打开任意Xcode工程</li>
+<li>Debug &gt; Attach to Process &gt; {app-name}</li>
+<li>如果触发crash，Xcode debugger会出现</li>
+</ul>
+
+<p>设置断点。必须要有程序对应的源码的Xcode工程，CMake、gyp都可以生成</p>
+
+<ul>
+<li>打开包含源码的Xcode工程</li>
+<li>打开需要的文件，设置断点</li>
+<li>手机，或Mac上启动程序</li>
+<li>Xcode中 Debug &gt; Attach to Process &gt; {app-name}</li>
+<li>切换到app，做一些操作触发断点</li>
+</ul>
+
+<p>如果断点不能触发，尝试在&ldquo;Debugging&quot;面板中关闭&quot;Load Symbols Lazily&quot;功能。</p>
 </div>
 
 
@@ -303,6 +338,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/articles/HelloWebrtc">Webrtc Getting Started</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/HelloGyp">Hello GYP</a>
+      </li>
+    
+      <li class="post">
         <a href="/articles/HelloCMake">Hello CMake</a>
       </li>
     
@@ -312,14 +355,6 @@
     
       <li class="post">
         <a href="/articles/markdownSyntax">Markdown语法说明</a>
-      </li>
-    
-      <li class="post">
-        <a href="/articles/SetupEnvironment">开始iOS开发</a>
-      </li>
-    
-      <li class="post">
-        <a href="/articles/DisqusDiscovery">如何打开Disqus Discovery功能</a>
       </li>
     
   </ul>
@@ -341,7 +376,11 @@
         
         
         
-        <li><a class='category' href='/categories/build/'>build (2)</a></li>
+        <li><a class='category' href='/categories/build/'>build (3)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/webrtc/'>webrtc (1)</a></li>
         
         
     </ul>

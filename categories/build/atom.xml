@@ -4,7 +4,7 @@
   <title><![CDATA[Category: build | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/build/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-05-15T20:28:32+08:00</updated>
+  <updated>2014-05-19T23:25:05+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -12,6 +12,86 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello GYP]]></title>
+    <link href="http://erikge.com/articles/HelloGyp"/>
+    <updated>2014-05-17T13:43:55+08:00</updated>
+    <id>http://erikge.com/articles/HelloGyp</id>
+    <content type="html"><![CDATA[<p>GYP，Generate Your Projects，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如<a href="https://code.google.com/p/v8/">V8</a>和<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。</p>
+
+<!--more-->
+
+<h2 id="安装">安装</h2>
+
+<p>前提条件：本机需要安装python和svn。</p>
+
+<p>下载：<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code></p>
+
+<p>有两种安装方式。第一种安装方法如下：
+<code>sh
+cd &lt;gyp-dir&gt; # 刚才的下载目录
+[sudo] python setup.py install
+</code>
+这个命令做的事情主要是安装python的第三方扩展到/Library/Python/2.7/site-packages/gyp-0.1-py2.7.egg，并把gyp的可执行文件copy到/usr/local/bin。</p>
+
+<p>第二种安装方式是直接将&lt;gyp-dir&gt;加入PATH。</p>
+
+<h2 id="使用">使用</h2>
+
+<ol>
+<li>编写.gyp文件</li>
+<li>运行gyp命令生成makefile、build.ninja文件或xcode、vs等工程
+
+<ul>
+<li><code>gyp --depth=. main.gyp</code></li>
+<li><code>gyp --depth=. main.gyp -fninja</code></li>
+</ul></li>
+<li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
+</ol>
+
+<p>举一个最简单的例子，源文件如下：
+&ldquo;` cpp main.cpp</p>
+
+<h1 id="include-">include <iostream></h1>
+
+<p>int main(int argc, const char* argv[]) {
+    std::cout &lt;&lt; &quot;Hello World!&rdquo; &lt;&lt; std::endl;
+    return 0;
+}
+<code>
+编写.gyp文件如下：
+</code> json main.gyp
+{
+  &lsquo;targets&rsquo;: [
+    {
+      &lsquo;target_name&rsquo;: &lsquo;main&rsquo;,
+      &lsquo;type&rsquo;: &lsquo;executable&rsquo;,
+      &lsquo;sources&rsquo;: [
+        &lsquo;main.cpp&rsquo;,
+      ],
+    },
+  ],
+}
+&ldquo;`</p>
+
+<p>在源文件目录下运行命令<code>gyp --depth=. main.gyp</code>，生成工程文件。打开生成的工程文件编译、运行即可。</p>
+
+<p>更多例子可以参考<a href="https://github.com/examplecode/gypdemo">gypdemo</a></p>
+
+<h2 id="语法">语法</h2>
+
+<p><em>.gyp文件的语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
+
+<ul>
+<li>模版和例子：<a href="https://code.google.com/p/gyp/wiki/GypUserDocumentation">GypUserDocumentation</a></li>
+<li>所有可配置的项目：<a href="https://code.google.com/p/gyp/wiki/GypLanguageSpecification">GypLanguageSpecification</a></li>
+<li>生成流程，可查询内置的变量：<a href="https://code.google.com/p/gyp/wiki/InputFormatReference">InputFormatReference</a></li>
+</ul>
+
+<h2 id="issues">Issues</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hello CMake]]></title>
@@ -33,7 +113,7 @@
 <li>运行CMake生成makefile、build.ninja文件或xcode、vs等工程。可以使用图形界面，也可以使用命令行
 
 <ul>
-<li>make -DVARIABLE:TYPE=VALUE</li>
+<li>cmake -DVARIABLE:TYPE=VALUE</li>
 <li>cmake [options] <path-to-source></li>
 <li>cmake -h for more information</li>
 </ul></li>
@@ -259,6 +339,41 @@ $ Matches at end of a line or string
 <code>sh
 cmake -G Ninja
 </code></p>
+
+<h3 id="配合gyp使用">配合GYP使用</h3>
+
+<p>gyp，Generate Your Projects，一个google开源的构建系统。gyp的简单用法参考<a href="/articles/HelloGyp">这里</a>。</p>
+
+<p>gyp生成build.ninja文件的方法如下
+<code>sh
+gyp ***.gyp -fninja
+</code></p>
+
+<h2 id="调试">调试</h2>
+
+<p>我们希望使用ninja的编译速度，但是我们还希望能够在图形界面的IDE（如VS，Xcode）中debug、设置断点等。</p>
+
+<h3 id="xcode">Xcode</h3>
+
+<p>如果仅仅是需要抓crash，或者Attach到进程看性能</p>
+
+<ul>
+<li>打开任意Xcode工程</li>
+<li>Debug &gt; Attach to Process &gt; {app-name}</li>
+<li>如果触发crash，Xcode debugger会出现</li>
+</ul>
+
+<p>设置断点。必须要有程序对应的源码的Xcode工程，CMake、gyp都可以生成</p>
+
+<ul>
+<li>打开包含源码的Xcode工程</li>
+<li>打开需要的文件，设置断点</li>
+<li>手机，或Mac上启动程序</li>
+<li>Xcode中 Debug &gt; Attach to Process &gt; {app-name}</li>
+<li>切换到app，做一些操作触发断点</li>
+</ul>
+
+<p>如果断点不能触发，尝试在&ldquo;Debugging&quot;面板中关闭&quot;Load Symbols Lazily&quot;功能。</p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: webrtc | 时光 &#149 印记]]></title>
+  <link href="http://erikge.com/categories/webrtc/atom.xml" rel="self"/>
+  <link href="http://erikge.com/"/>
+  <updated>2014-05-19T23:25:05+08:00</updated>
+  <id>http://erikge.com/</id>
+  <author>
+    <name><![CDATA[erik ge]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Webrtc Getting Started]]></title>
+    <link href="http://erikge.com/articles/HelloWebrtc"/>
+    <updated>2014-05-17T13:44:24+08:00</updated>
+    <id>http://erikge.com/articles/HelloWebrtc</id>
+    <content type="html"><![CDATA[<p>开始搭建个可以看代码的环境。</p>
+
+<!--more-->
+
+<h2 id="获取代码">获取代码</h2>
+
+<p>官方推荐步骤：
+&ldquo;` sh
+$ git clone <a href="https://chromium.googlesource.com/chromium/tools/depot_tools.git">https://chromium.googlesource.com/chromium/tools/depot_tools.git</a></p>
+
+<h2 id="add-depot_tools-to-your-path">Add depot_tools to your PATH</h2>
+
+<p>$ gclient config <a href="http://webrtc.googlecode.com/svn/trunk">http://webrtc.googlecode.com/svn/trunk</a>
+$ gclient sync &ndash;force
+&rdquo;`</p>
+
+<p><code>gclient sync</code>需要下载太多第三方库，很容易失败，搞了很多次都没成功。其实也没有必要都拉全，只获取webrtc自身的代码就可以。用git维护方便看代码时修改，可以只获取最近的代码
+<code>sh
+asd
+</code></p>
+
+<h2 id="构建过程">构建过程</h2>
+
+<p>官方推荐的构建过程：
+&ldquo;` sh
+$ gclient runhooks &ndash;force
+$ cd trunk</p>
+
+<h2 id="debug:">Debug:</h2>
+
+<p>$ ninja -C out/Debug</p>
+
+<h2 id="release:">Release:</h2>
+
+<p>$ ninja -C out/Release
+&rdquo;`</p>
+
+<p>可以控制生成不同平台的工程文件，以Android为例
+<code>sh
+$ echo &quot;target_os = [&#39;android&#39;, &#39;unix&#39;]&quot; &gt;&gt; .gclient
+$ gclient sync --nohooks
+$ cd trunk
+$ source ./build/android/envsetup.sh
+$ GYP_DEFINES=&quot;$GYP_DEFINES OS=android&quot;
+$ JAVA_HOME=&lt;location of Java SE 6 - JDK&gt;
+</code></p>
+
+<p>也可以通过修改GYP_GENERATORS，生成Ninja以外的工程文件</p>
+
+<ul>
+<li>make for Makefiles</li>
+<li>msvs for Visual Studio</li>
+<li>msvs-ninja for Visual Studio project building with ninja</li>
+<li>xcode for Xcode</li>
+</ul>
+]]></content>
+  </entry>
+  
+</feed>
