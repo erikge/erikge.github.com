@@ -4,7 +4,7 @@
   <title><![CDATA[Category: webrtc | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/webrtc/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-05-19T23:25:05+08:00</updated>
+  <updated>2014-06-20T16:12:59+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -36,12 +36,13 @@ $ gclient sync &ndash;force
 
 <p><code>gclient sync</code>需要下载太多第三方库，很容易失败，搞了很多次都没成功。其实也没有必要都拉全，只获取webrtc自身的代码就可以。用git维护方便看代码时修改，可以只获取最近的代码
 <code>sh
-asd
+svn info http://webrtc.googlecode.com/svn/
+git svn clone -s --prefix=svn/ -r [latest-10-version]:HEAD http://webrtc.googlecode.com/svn/
 </code></p>
 
 <h2 id="构建过程">构建过程</h2>
 
-<p>官方推荐的构建过程：
+<p>官方推荐的构建过程，默认生成对应PC平台的工程文件
 &ldquo;` sh
 $ gclient runhooks &ndash;force
 $ cd trunk</p>
@@ -73,6 +74,180 @@ $ JAVA_HOME=&lt;location of Java SE 6 - JDK&gt;
 <li>msvs-ninja for Visual Studio project building with ninja</li>
 <li>xcode for Xcode</li>
 </ul>
+
+<h2 id="在ios上运行的步骤">在iOS上运行的步骤</h2>
+
+<p>感谢<a href="http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/">这篇文章</a>，确实节省了我们宝贵的生命。总结主要的步骤如下。</p>
+
+<h3 id="模拟器">模拟器</h3>
+<div class="highlight"><pre><code class="sh">touch makeall-iossim.sh
+chmod +x makeall-iossim.sh
+</code></pre></div>
+<p>makeall-iossim.sh脚本的内容为
+&ldquo;`sh
+function fetch() {
+echo &rdquo;&ndash; fetching webrtc&quot;
+gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
+echo &ldquo;target_os = [&lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
+gclient sync</p>
+
+<p>sed -i &ldquo;&rdquo; &lsquo;$d&rsquo; .gclient
+echo &ldquo;target_os = [&lsquo;ios&rsquo;, &lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
+gclient sync
+echo &ldquo;&ndash; webrtc has been sucessfully fetched&rdquo;</p>
+
+<p>}</p>
+
+<p>function wrbase() {
+export GYP_DEFINES=&ldquo;build_with_libjingle=1 build_with_chromium=0 libjingle_objc=1&rdquo;
+export GYP_GENERATORS=&ldquo;ninja&rdquo;
+}</p>
+
+<p>function wrsim() {
+wrbase
+export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=ios target_arch=ia32&rdquo;
+export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_sim&rdquo;
+export GYP_CROSSCOMPILE=1
+}</p>
+
+<p>function wrmac() {
+wrbase
+export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=mac target_arch=x64&rdquo;
+export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_mac&rdquo;
+}</p>
+
+<p>function build() {
+echo &ldquo;&ndash; building webrtc&rdquo;
+pushd trunk
+gclient runhooks
+ninja -C out_sim/Debug iossim AppRTCDemo
+popd
+echo &ldquo;&ndash; webrtc has been sucessfully built&rdquo;
+}</p>
+
+<p>function run() {
+echo &ldquo;&ndash; running webrtc appdemo&rdquo;
+pushd trunk
+./out_sim/Debug/iossim out_sim/Debug/AppRTCDemo.app
+popd
+}</p>
+
+<p>function fail() {
+echo &ldquo;*** webrtc build failed&rdquo;
+exit 1
+}</p>
+
+<p>fetch || fail
+wrsim || fail
+build || fail
+run || fail
+<code>
+然后执行该脚本就可以编译、运行。
+</code>sh
+./makeall-iossim.sh
+&ldquo;`
+接下来如何玩呢？正常情况下，iOS的模拟器已经自动弹出，并启动了测试程序，然后可以按以下步骤体验下视频通话：
+1. 打开PC或者android上的Chrome浏览器
+2. 访问<a href="http://apprtc.appspot.com%E3%80%82%E5%8F%AF%E6%83%9C%E8%A2%AB%E5%A2%99%E4%BA%86%EF%BC%8C%E6%83%B3%E5%8A%9E%E6%B3%95%E7%BF%BB%E5%A2%99%E5%90%A7%EF%BC%8Csign%E3%80%82%E3%80%82%E3%80%82">http://apprtc.appspot.com。可惜被墙了，想办法翻墙吧，sign。。。</a>
+3. 浏览器里的地址发生变化时，获得房间号成功。这时URL类似<a href="http://apprtc.appspot.com?r=34576398%EF%BC%8C%E8%BF%99%E9%87%8C34576398%E4%B8%BA%E6%88%BF%E9%97%B4%E5%8F%B7">http://apprtc.appspot.com?r=34576398，这里34576398为房间号</a>
+4. 在iOS模拟器上运行的测试程序中，输入上一步获得的房间号（34576398），便可以体验了</p>
+
+<h3 id="真机">真机</h3>
+
+<p>将生成的app安装到真机上时，需要用到<a href="https://github.com/libimobiledevice/ideviceinstaller">ideviceinstaller</a>。可以通过<a href="http://brew.sh/">HomeBrew</a>安装。
+<code>sh
+brew install ideviceinstaller --HEAD
+</code>
+其他的和模拟器类似：
+<code>sh
+touch makeall-iosdevice.sh
+chmod +x makeall-iosdevice.sh
+</code>
+makeall-iosdevice.sh脚本的内容为
+&rdquo;`sh
+function fetch() {
+echo &ldquo;&ndash; fetching webrtc&rdquo;
+gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
+echo &ldquo;target_os = [&lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
+gclient sync</p>
+
+<p>sed -i &ldquo;&rdquo; &lsquo;$d&rsquo; .gclient
+echo &ldquo;target_os = [&lsquo;ios&rsquo;, &lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
+gclient sync
+echo &ldquo;&ndash; webrtc has been sucessfully fetched&rdquo;</p>
+
+<p>}</p>
+
+<p>function wrbase() {
+export GYP_DEFINES=&ldquo;build_with_libjinglth_chromium=0 libjingle_objc=1&rdquo;
+export GYP_GENERATORS=&ldquo;ninja&rdquo;
+}</p>
+
+<p>function wrios() {
+wrbase
+export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=ios target_arch=armv7&rdquo;
+export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_ios&rdquo;
+export GYP_CROSSCOMPILE=1
+}</p>
+
+<p>function wrmac() {
+wrbase
+export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=mac target_arch=x64&rdquo;
+export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_mac&rdquo;
+}</p>
+
+<p>function buildios() {
+echo &ldquo;&ndash; building webrtc ios&rdquo;
+pushd trunk
+wrios &amp;&amp; gclient runhooks &amp;&amp; ninja -C out_ios/Debug-iphoneos AppRTCDemo
+popd
+echo &ldquo;&ndash; webrtc has been sucessfully built&rdquo;
+}</p>
+
+<p>function launch() {
+echo &ldquo;&ndash; launching on device&rdquo;
+ideviceinstaller -i trunk/out_ios/Debug-iphoneos/AppRTCDemo.app
+echo &ldquo;&ndash; launch complete&rdquo;
+}</p>
+
+<p>function fail() {
+echo &ldquo;*** webrtc build failed&rdquo;
+exit 1
+}</p>
+
+<h1 id="fetch-||-fail">fetch || fail</h1>
+
+<p>wrios || fail
+buildios || fail
+launch || fail
+&ldquo;`</p>
+
+<h3 id="可能会遇到的问题">可能会遇到的问题</h3>
+
+<h4 id="codesigning">Codesigning</h4>
+
+<p>签名时，webrtc脚本（gyp）会查找本机钥匙串，寻找和“iPhone developer”相符的证书。如果没有证书或者有多个证书都会出现异常。
+如果没有证书，需要向Apple申请一个。
+当有多个证书时，可以通过<code>security find-identity</code>查看所有匹配的证书，然后选择一个合适的，在trunk/build/common.gypi的‘CODE_SIGN_IDENTITY’中修改。
+&rdquo;`</p>
+
+<h1 id="ios-sdk-wants-everything-for-device-signed">iOS SDK wants everything for device signed</h1>
+
+<p>‘CODE_SIGN_IDENTITY[sdk=iphoneos*]‘: ‘iPhone Developer’ # 修改前
+‘CODE_SIGN_IDENTITY[sdk=iphoneos*]‘: ‘iPhone Developer: Jason Adams (SZ2V5SDF5DF)’ # 修改后
+&ldquo;`
+测试工程的默认bound ID是com.google.AppRTCDemo，可以通过修改trunk/talk/examples/objc/AppRTCDemo/ios/Info.plist文件，改成正确的。<br>
+如果还有错误，可以看看证书和provisioning profile文件是否匹配。</p>
+
+<h2 id="todo">TODO</h2>
+
+<p>AppRTCDemo test project - trunk/talk/examples/objc</p>
+
+<p>This is the demo application with the high level communication logic and UI</p>
+
+<p>Objective-C WebRTC libraries – trunk/talk/app/webrtc/objc</p>
+
+<p>These are the Objective-C wrappers to the core communication libraries.</p>
 ]]></content>
   </entry>
   

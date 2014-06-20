@@ -4,7 +4,7 @@
   <title><![CDATA[时光 &#149 印记]]></title>
   <link href="http://erikge.com/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-05-19T23:25:05+08:00</updated>
+  <updated>2014-06-20T16:12:59+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -12,6 +12,94 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Swift资源汇总]]></title>
+    <link href="http://erikge.com/articles/SwiftResSummary"/>
+    <updated>2014-06-20T15:54:19+08:00</updated>
+    <id>http://erikge.com/articles/SwiftResSummary</id>
+    <content type="html"><![CDATA[<p>最近iOS的开发世界里最热的应该就是Swift了。Swift让大家再次站在了同一起跑线上，而且是那么酷的脚本语言的语法。<br>
+经过这不到一个月的时间，Swift的相关教程、资源、论坛蓬勃而出。就像美剧养肥了再看一样，汇总一些养肥的资源。</p>
+
+<!--more-->
+
+<h2 id="教程">教程</h2>
+
+<ul>
+<li><a href="http://vdisk.weibo.com/s/EhsPPzRRQ5CZ/1402621206">The Swift Programming Language中文完整版（CocoaChina精校</a></li>
+<li><a href="http://numbbbbb.gitbooks.io/-the-swift-programming-language-/">github上的翻译项目，网友力量的再一次体现</a>，离线<a href="https://www.gitbook.io/download/pdf/book/numbbbbb/-the-swift-programming-language-?lang=">pdf版</a></li>
+</ul>
+
+<h2 id="热闹的论坛">热闹的论坛</h2>
+
+<ul>
+<li><a href="http://swiftist.org/">http://swiftist.org/</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Doubango Getting Started]]></title>
+    <link href="http://erikge.com/articles/DoubangoGettingStarted"/>
+    <updated>2014-05-22T21:11:29+08:00</updated>
+    <id>http://erikge.com/articles/DoubangoGettingStarted</id>
+    <content type="html"><![CDATA[<!--more-->
+
+<p>获取源码</p>
+
+<p>Doubango基础代码：
+* <a href="http://doubango.org/">官网</a>
+* <a href="https://code.google.com/p/doubango/">google code</a>
+* code: <code>svn checkout http://doubango.googlecode.com/svn/ doubango-read-only</code>
+* 帮助: <a href="http://www.doubango.org/gettingstarted.html">http://www.doubango.org/gettingstarted.html</a></p>
+
+<hr>
+
+<p>Server side</p>
+
+<p>webrtc2sip 
+* <a href="http://www.webrtc2sip.org/">官网</a>
+* <a href="https://code.google.com/p/webrtc2sip/">google code</a>
+* code: <code>svn checkout http://webrtc2sip.googlecode.com/svn/trunk/ webrtc2sip-read-only</code></p>
+
+<p>telepresence
+* <a href="https://code.google.com/p/telepresence/">google code</a>
+* code: <code>svn checkout http://telepresence.googlecode.com/svn/trunk/ telepresence-read-only</code></p>
+
+<hr>
+
+<p>Client-side components</p>
+
+<p>sipML5<br>
+* <a href="https://code.google.com/p/sipml5/">google code</a>
+* code: <code>svn checkout http://sipml5.googlecode.com/svn/trunk/ sipml5-read-only</code></p>
+
+<p>click2dial
+* <a href="http://click2dial.org/index.html">官网</a>
+* <a href="https://code.google.com/p/click-2-dial/">google code</a>
+* code: <code>svn checkout http://click-2-dial.googlecode.com/svn/trunk/ click-2-dial-read-only</code></p>
+
+<p>webrtc4all
+* <a href="https://code.google.com/p/webrtc4all/">google code</a>
+* code: <code>svn checkout http://webrtc4all.googlecode.com/svn/trunk/ webrtc4all-read-only</code></p>
+
+<p>Boghe
+* <a href="https://code.google.com/p/boghe/">google code</a>
+* code: <code>svn checkout http://boghe.googlecode.com/svn/ boghe-read-only</code></p>
+
+<p>iDoubs
+* <a href="https://code.google.com/p/idoubs/">google code</a>
+* code: <code>svn checkout http://idoubs.googlecode.com/svn/ idoubs-read-only</code></p>
+
+<p>IMSDroid
+* <a href="https://code.google.com/p/imsdroid/">google code</a>
+* code: <code>svn checkout http://imsdroid.googlecode.com/svn/branches/2.0/ imsdroid-read-only</code></p>
+
+<p>libSigComp
+* <a href="https://code.google.com/p/libsigcomp/">google code</a>
+* code: <code>svn checkout http://libsigcomp.googlecode.com/svn/trunk/ libsigcomp-read-only</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Webrtc Getting Started]]></title>
@@ -37,12 +125,14 @@
 
 <p><code>gclient sync</code>需要下载太多第三方库，很容易失败，搞了很多次都没成功。其实也没有必要都拉全，只获取webrtc自身的代码就可以。用git维护方便看代码时修改，可以只获取最近的代码
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>asd
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>svn info <a href="http://webrtc.googlecode.com/svn/">http://webrtc.googlecode.com/svn/</a>
+</span><span class='line'>git svn clone -s --prefix<span class="o">=</span>svn/ -r <span class="o">[</span>latest-10-version<span class="o">]</span>:HEAD <a href="http://webrtc.googlecode.com/svn/">http://webrtc.googlecode.com/svn/</a>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <h2 id="构建过程">构建过程</h2>
 
-<p>官方推荐的构建过程：
+<p>官方推荐的构建过程，默认生成对应PC平台的工程文件
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -80,6 +170,292 @@
 <li>msvs-ninja for Visual Studio project building with ninja</li>
 <li>xcode for Xcode</li>
 </ul>
+
+<h2 id="在ios上运行的步骤">在iOS上运行的步骤</h2>
+
+<p>感谢<a href="http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/">这篇文章</a>，确实节省了我们宝贵的生命。总结主要的步骤如下。</p>
+
+<h3 id="模拟器">模拟器</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>touch makeall-iossim.sh
+</span><span class='line'>chmod +x makeall-iossim.sh
+</span></code></pre></td></tr></table></div></figure>
+
+<p>makeall-iossim.sh脚本的内容为
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>fetch<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- fetching webrtc&quot;</span>
+</span><span class='line'>gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'>gclient sync
+</span><span class='line'>
+</span><span class='line'>sed -i <span class="s2">&quot;&quot;</span> <span class="s1">&#39;$d&#39;</span> .gclient
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;ios&#39;, &#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'>gclient sync
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully fetched&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>wrbase<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;build_with_libjingle=1 build_with_chromium=0 libjingle_objc=1&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span><span class="s2">&quot;ninja&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>wrsim<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>wrbase
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=ios target_arch=ia32&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_sim&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>wrmac<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>wrbase
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=mac target_arch=x64&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_mac&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>build<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- building webrtc&quot;</span>
+</span><span class='line'><span class="nb">pushd </span>trunk
+</span><span class='line'>gclient runhooks
+</span><span class='line'>ninja -C out_sim/Debug iossim AppRTCDemo
+</span><span class='line'><span class="nb">popd</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully built&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>run<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- running webrtc appdemo&quot;</span>
+</span><span class='line'><span class="nb">pushd </span>trunk
+</span><span class='line'>./out_sim/Debug/iossim out_sim/Debug/AppRTCDemo.app
+</span><span class='line'><span class="nb">popd</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>fail<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;*** webrtc build failed&quot;</span>
+</span><span class='line'><span class="nb">exit </span>1
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>fetch <span class="o">||</span> fail
+</span><span class='line'>wrsim <span class="o">||</span> fail
+</span><span class='line'>build <span class="o">||</span> fail
+</span><span class='line'>run <span class="o">||</span> fail
+</span></code></pre></td></tr></table></div></figure>
+然后执行该脚本就可以编译、运行。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>./makeall-iossim.sh
+</span></code></pre></td></tr></table></div></figure>
+接下来如何玩呢？正常情况下，iOS的模拟器已经自动弹出，并启动了测试程序，然后可以按以下步骤体验下视频通话：
+1. 打开PC或者android上的Chrome浏览器
+2. 访问<a href="http://apprtc.appspot.com%E3%80%82%E5%8F%AF%E6%83%9C%E8%A2%AB%E5%A2%99%E4%BA%86%EF%BC%8C%E6%83%B3%E5%8A%9E%E6%B3%95%E7%BF%BB%E5%A2%99%E5%90%A7%EF%BC%8Csign%E3%80%82%E3%80%82%E3%80%82">http://apprtc.appspot.com。可惜被墙了，想办法翻墙吧，sign。。。</a>
+3. 浏览器里的地址发生变化时，获得房间号成功。这时URL类似<a href="http://apprtc.appspot.com?r=34576398%EF%BC%8C%E8%BF%99%E9%87%8C34576398%E4%B8%BA%E6%88%BF%E9%97%B4%E5%8F%B7">http://apprtc.appspot.com?r=34576398，这里34576398为房间号</a>
+4. 在iOS模拟器上运行的测试程序中，输入上一步获得的房间号（34576398），便可以体验了</p>
+
+<h3 id="真机">真机</h3>
+
+<p>将生成的app安装到真机上时，需要用到<a href="https://github.com/libimobiledevice/ideviceinstaller">ideviceinstaller</a>。可以通过<a href="http://brew.sh/">HomeBrew</a>安装。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>brew install ideviceinstaller --HEAD
+</span></code></pre></td></tr></table></div></figure>
+其他的和模拟器类似：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>touch makeall-iosdevice.sh
+</span><span class='line'>chmod +x makeall-iosdevice.sh
+</span></code></pre></td></tr></table></div></figure>
+makeall-iosdevice.sh脚本的内容为
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>fetch<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- fetching webrtc&quot;</span>
+</span><span class='line'>gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'>gclient sync
+</span><span class='line'>
+</span><span class='line'>sed -i <span class="s2">&quot;&quot;</span> <span class="s1">&#39;$d&#39;</span> .gclient
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;ios&#39;, &#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'>gclient sync
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully fetched&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>wrbase<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;build_with_libjinglth_chromium=0 libjingle_objc=1&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span><span class="s2">&quot;ninja&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>wrios<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>wrbase
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=ios target_arch=armv7&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_ios&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>wrmac<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>wrbase
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=mac target_arch=x64&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_mac&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>buildios<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- building webrtc ios&quot;</span>
+</span><span class='line'><span class="nb">pushd </span>trunk
+</span><span class='line'>wrios <span class="o">&amp;&amp;</span> gclient runhooks <span class="o">&amp;&amp;</span> ninja -C out_ios/Debug-iphoneos AppRTCDemo
+</span><span class='line'><span class="nb">popd</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully built&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>launch<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- launching on device&quot;</span>
+</span><span class='line'>ideviceinstaller -i trunk/out_ios/Debug-iphoneos/AppRTCDemo.app
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- launch complete&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>fail<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;*** webrtc build failed&quot;</span>
+</span><span class='line'><span class="nb">exit </span>1
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#fetch || fail</span>
+</span><span class='line'>wrios <span class="o">||</span> fail
+</span><span class='line'>buildios <span class="o">||</span> fail
+</span><span class='line'>launch <span class="o">||</span> fail
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3 id="可能会遇到的问题">可能会遇到的问题</h3>
+
+<h4 id="codesigning">Codesigning</h4>
+
+<p>签名时，webrtc脚本（gyp）会查找本机钥匙串，寻找和“iPhone developer”相符的证书。如果没有证书或者有多个证书都会出现异常。
+如果没有证书，需要向Apple申请一个。
+当有多个证书时，可以通过<code>security find-identity</code>查看所有匹配的证书，然后选择一个合适的，在trunk/build/common.gypi的‘CODE_SIGN_IDENTITY’中修改。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># iOS SDK wants everything for device signed</span>
+</span><span class='line'>‘CODE_SIGN_IDENTITY<span class="o">[</span><span class="nv">sdk</span><span class="o">=</span>iphoneos*<span class="o">]</span>‘: ‘iPhone Developer’ <span class="c"># 修改前</span>
+</span><span class='line'>‘CODE_SIGN_IDENTITY<span class="o">[</span><span class="nv">sdk</span><span class="o">=</span>iphoneos*<span class="o">]</span>‘: ‘iPhone Developer: Jason Adams <span class="o">(</span>SZ2V5SDF5DF<span class="o">)</span>’ <span class="c"># 修改后</span>
+</span></code></pre></td></tr></table></div></figure>
+测试工程的默认bound ID是com.google.AppRTCDemo，可以通过修改trunk/talk/examples/objc/AppRTCDemo/ios/Info.plist文件，改成正确的。<br>
+如果还有错误，可以看看证书和provisioning profile文件是否匹配。</p>
+
+<h2 id="todo">TODO</h2>
+
+<p>AppRTCDemo test project - trunk/talk/examples/objc</p>
+
+<p>This is the demo application with the high level communication logic and UI</p>
+
+<p>Objective-C WebRTC libraries – trunk/talk/app/webrtc/objc</p>
+
+<p>These are the Objective-C wrappers to the core communication libraries.</p>
 ]]></content>
   </entry>
   
@@ -88,15 +464,39 @@
     <link href="http://erikge.com/articles/HelloGyp"/>
     <updated>2014-05-17T13:43:55+08:00</updated>
     <id>http://erikge.com/articles/HelloGyp</id>
-    <content type="html"><![CDATA[<p>GYP，Generate Your Projects，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如<a href="https://code.google.com/p/v8/">V8</a>和<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。</p>
+    <content type="html"><![CDATA[<p>GYP，<a href="https://code.google.com/p/gyp/">Generate Your Projects</a>，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如<a href="https://code.google.com/p/v8/">V8</a>和<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。</p>
 
 <!--more-->
+
+<h2 id="特别之处">特别之处</h2>
+
+<p>在已经有很多的构建系统的情况下，gyp诞生的哲学或者说优点如下：</p>
+
+<ol>
+<li>各平台使用各自主流的构建系统。
+
+<ul>
+<li>程序员更熟悉自己的平台，减少学习成本。</li>
+<li>构建速度快。自己平台的主流构建系统的速度是各平台优化过的。</li>
+</ul></li>
+<li>在一个平台上可以生成所有支持的平台的工程文件。
+
+<ul>
+<li>如在mac上也可以生成Visual Studio工程，windows上也可以生成Xcode工程。</li>
+</ul></li>
+<li>生成的工程文件和手工创建的工程文件没有区别
+
+<ul>
+<li>这样，随时可以停止使用gyp。别人可以只使用相关工程文件而不使用gyp</li>
+</ul></li>
+</ol>
 
 <h2 id="安装">安装</h2>
 
 <p>前提条件：本机需要安装python和svn。</p>
 
-<p>下载：<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code></p>
+<p>下载：<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code>
+<br>或者通过git仓库：<a href="http://git.chromium.org/external/gyp.git">http://git.chromium.org/external/gyp.git</a></p>
 
 <p>有两种安装方式。第一种安装方法如下：
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -116,7 +516,14 @@
 
 <ul>
 <li><code>gyp --depth=. main.gyp</code></li>
-<li><code>gyp --depth=. main.gyp -fninja</code></li>
+<li><code>gyp --depth=. --generator-output=build -f ninja main.gyp</code>
+
+<ul>
+<li>&ndash;depth指定工程的根目录</li>
+<li>&ndash;generator-output指定工程文件的输出目录，默认为当前目录</li>
+<li>-f指定生成工程文件的类型，常用的有&#39;make&#39;, &lsquo;ninja&rsquo;, &lsquo;xcode&rsquo;, &lsquo;msvs&rsquo;, &lsquo;scons&rsquo;</li>
+</ul></li>
+<li><code>gyp -h</code>显示命令行帮助信息</li>
 </ul></li>
 <li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
 </ol>
@@ -166,15 +573,169 @@
 
 <h2 id="语法">语法</h2>
 
-<p><em>.gyp文件的语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
+<p>GYP的输入文件习惯上后缀为.gyp或.gypi。.gypi文件作为.gyp文件的include文件。
+以Visual Studio为例，.gyp文件对应.sln工作空间，.gyp文件中的target对应.vcproj或.vxcproj工程。</p>
+
+<p><em>.gyp文件的顶级元素为&#39;variables&#39;, &lsquo;includes&rsquo;, &lsquo;target_defaults&rsquo;, &lsquo;targets&rsquo;, &lsquo;conditions&#39;。语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
+
+<h3 id="官方文档">官方文档</h3>
 
 <ul>
 <li>模版和例子：<a href="https://code.google.com/p/gyp/wiki/GypUserDocumentation">GypUserDocumentation</a></li>
-<li>所有可配置的项目：<a href="https://code.google.com/p/gyp/wiki/GypLanguageSpecification">GypLanguageSpecification</a></li>
-<li>生成流程，可查询内置的变量：<a href="https://code.google.com/p/gyp/wiki/InputFormatReference">InputFormatReference</a></li>
+<li>主要元素或者配置项：<a href="https://code.google.com/p/gyp/wiki/GypLanguageSpecification">GypLanguageSpecification</a></li>
+<li>基本语法：<a href="https://code.google.com/p/gyp/wiki/InputFormatReference">InputFormatReference</a></li>
 </ul>
 
+<h3 id="变量">变量</h3>
+
+<p>变量分为三类，Predefined、User-defined、Automatic。<br>
+变量设置默认值的方法：<code>name%:value</code>。只有name未定义时，才将name的值设置为value.</p>
+
+<ul>
+<li>Predefined，命名习惯为CAPITAL_LETTERS。
+
+<ol>
+<li>OS：用于判断操作系统</li>
+<li>EXECUTABLE_PREFIX：可执行文件的前缀</li>
+<li>EXECUTABLE_SUFFIX：可执行文件的后缀</li>
+<li>INTERMEDIATE_DIR：中间文件目录，只对单一target有效</li>
+<li>SHARED_INTERMEDIATE_DIR：中间文件共享目录，所有target（包括跨.gyp文件的target）共用同一目录</li>
+<li>PRODUCT_DIR：输出文件（编译出的可执行文件、库等）的主目录</li>
+</ol></li>
+<li>User-defined，命名习惯为lowercase_letters。变量使用的方式如下
+
+<ol>
+<li><code>&lt;(VAR)</code> early phase, value is string</li>
+<li><code>&gt;(VAR)</code> post phase, value is string</li>
+<li><code>&lt;@(VAR)</code> early phase, value is list</li>
+<li><code>&gt;@(VAR)</code> post phase, value is list</li>
+</ol></li>
+<li>Automatic，dictionary中，name:string的key/value对会自动生成一个_name的变量，值为string</li>
+</ul>
+
+<h3 id="命令">命令</h3>
+
+<p>gyp可以执行shell命令，即将命令内容传递给shell执行，然后获得返回值。<br>
+用法为<code>&lt;!(cmd)</code>或<code>&lt;!@(cmd)</code>，前者返回值为string，后者返回值为list。</p>
+
+<p>这样，虽然gyp没有提供通配符，但是可以通过命令实现这个功能，如实现添加当前目录下所有.cpp后缀的文件作为sources：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">&#39;sources&#39;:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="err">&#39;&lt;!@(ls</span> <span class="mi">-1</span> <span class="err">./*.cpp)&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">]</span><span class="err">,</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3 id="target的配置项目">target的配置项目</h3>
+
+<p>顶级元素下的target_defaults中可以设置所有targets共用的配置项目，targets中可以具体配置每个target。<br>
+常用的target可分为可运行程序、静态库、动态库等，但在跨平台时，不同平台的target各不相同，参数的设置也相差很远。
+target的通用框架如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="err">&#39;targets&#39;:</span> <span class="err">[{</span>
+</span><span class='line'>        <span class="err">&#39;target_name&#39;:</span> <span class="err">&#39;target_one&#39;,</span>
+</span><span class='line'>        <span class="err">&#39;type&#39;:</span> <span class="err">&#39;executable&#39;,</span>
+</span><span class='line'>        <span class="err">&#39;dependencies&#39;:</span> <span class="err">[</span>
+</span><span class='line'>            <span class="err">&#39;xyzzy&#39;,</span>
+</span><span class='line'>            <span class="err">&#39;../bar/bar.gyp:bar&#39;,</span>
+</span><span class='line'>        <span class="err">],</span>
+</span><span class='line'>        <span class="err">&#39;defines&#39;:</span> <span class="err">[</span>
+</span><span class='line'>            <span class="err">&#39;DEFINE_FOO&#39;,</span>
+</span><span class='line'>            <span class="err">&#39;DEFINE_A_VALUE=value&#39;,</span>
+</span><span class='line'>        <span class="err">],</span>
+</span><span class='line'>        <span class="err">&#39;include_dirs&#39;:</span> <span class="err">[</span>
+</span><span class='line'>            <span class="err">&#39;..&#39;,</span>
+</span><span class='line'>        <span class="err">],</span>
+</span><span class='line'>        <span class="err">&#39;sources&#39;:</span> <span class="err">[</span>
+</span><span class='line'>            <span class="err">&#39;file1.cc&#39;,</span>
+</span><span class='line'>            <span class="err">&#39;file2.cc&#39;,</span>
+</span><span class='line'>        <span class="err">],</span>
+</span><span class='line'>        <span class="err">&#39;conditions&#39;:</span> <span class="err">[</span>
+</span><span class='line'>          <span class="err">[&#39;OS==</span><span class="nt">&quot;linux&quot;</span><span class="err">&#39;</span><span class="p">,</span> <span class="err">{</span><span class="p">}</span><span class="err">],</span>
+</span><span class='line'>          <span class="p">[</span><span class="err">&#39;OS==</span><span class="s2">&quot;win&quot;</span><span class="err">&#39;</span><span class="p">,</span> <span class="p">{}]</span>
+</span><span class='line'>        <span class="err">],</span>
+</span><span class='line'>    <span class="err">},],</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+target的一些常用配置，各个平台都差不多，gyp提供了统一的设置方法。<br>
+defines为宏定义，对应-D或/D；<br>
+include_dirs对应-I或/I；<br>
+cflags为编译选项，对应类似-Werror或/Werror；<br>
+ldflags为链接选项，对应类似-pthread；<br></p>
+
+<p>target还有一些在类型不同、平台不同时，差别很大的配置，列举一些如下：</p>
+
+<ul>
+<li>静态库或动态库</li>
+</ul>
+
+<p><code>direct_dependent_settings</code>：定义一些编译参数、宏定义等，这些定义将导出到直接依赖该库（通常是第三方库）的target<br>
+<code>all_dependent_settings</code>：定义一些编译参数、宏定义等，这些定义将导出到所有依赖该库的target，包含直接依赖和间接依赖<br>
+<code>link_settings</code>：定义一些当将该库作为输入时需要配置的链接参数。通常是对静态库有效，动态库忽略<br>
+<code>export_dependent_settings</code>：列出一些dependencies中的target，direct_dependent_settings定义的配置将应用到export_dependent_settings列出的target。即将依赖该库的配置导出到该库依赖的target<br></p>
+
+<ul>
+<li>跨平台工程</li>
+</ul>
+
+<p>针对各个平台不同的配置，gyp的策略是直接使用各平台工程的原生参数。如生成Xcode工程时，可以直接在gyp文件中使用SDKROOT，TARGETED_DEVICE_FAMILY等Xcode中使用的参数。</p>
+
+<p>在xcode_settings对象中设置Xcode的特有参数<br>
+在msvs_settings对象中设置Visual Studio的特有参数。</p>
+
+<p>这种策略有一个便利之处。以Xcode工程为例，如果有不知道怎么设置的选项，可以先在Xcode工程中设置好，再从工程文件.xcodeproj包内的project.pbxproj文件中拷贝出来，同步到.gyp文件中。</p>
+
+<h3 id="gyp的潜规则">gyp的潜规则</h3>
+
+<ol>
+<li>target的sources项会按照对应平台自动过滤后缀（*_linux.{ext}, *_mac.{ext}, *_posix.{ext} or *_win.{ext}）不符合的源文件。</li>
+</ol>
+
 <h2 id="issues">Issues</h2>
+
+<h3 id="设置visual-studio的版本">设置Visual Studio的版本</h3>
+
+<p>如指定为vs2008</p>
+
+<ol>
+<li>环境变量: <code>GYP_MSVS_VERSION=2008</code></li>
+<li>命令行参数: <code>-G msvs_version=2008</code></li>
+</ol>
+
+<h3 id="参数定义">参数定义</h3>
+
+<p>定义各种编译参数、各种宏</p>
+
+<ol>
+<li>环境变量: <code>GYP_DEFINES=windows_sdk_path=&quot;path to sdk&quot;</code></li>
+<li>命令行参数: <code>-D XXX -D YYY=ZZZ</code></li>
+</ol>
 ]]></content>
   </entry>
   
