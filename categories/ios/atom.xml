@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/ios/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-06-24T18:36:16+08:00</updated>
+  <updated>2014-06-25T18:26:36+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -71,21 +71,6 @@ copy(7,2){return $0+$1}</p>
 })
 &rdquo;`</p>
 
-<h2 id="?号运算符">?号运算符</h2>
-
-<p>?号可以用来标志一个变量的值可以nil，也可以用来做空值判断，对于可能为空的值进行的后缀操作必须都带上?
-<code>python
-var shape:Shape? = nil
-// 如果shape为nil，则?之后的被忽略，返回nil；否则执行?后的代码
-let value = shape?.num
-</code>
-函数的返回值也可以通过?声明可能返回nil
-<code>python
-func getSomeValue() -&gt; Int? {
-    return nil
-}
-</code></p>
-
 <h2 id="枚举">枚举</h2>
 
 <p>语法示例如下，当类型已知时，可以直接通过.Apple这种方式来使用；类型未知时，通过全名Fruit.Apple来使用。
@@ -137,6 +122,76 @@ switch(apple) {
         println(&ldquo;default&rdquo;)
 }
 &ldquo;`</p>
+
+<h2 id="optional值">Optional值</h2>
+
+<p>Swift中常量（let）定义时必须赋初始值，变量（var）可以不赋值，但需要显示指定类型，如<code>var value : Int</code>。
+Swift不自动给变量赋初始值，变量使用前必须初始化。</p>
+
+<p>如果使用时还无法确定初始值，那就需要用到Optional值了。Optional可以通过?来使用。
+<code>python
+// 声明Optional值变量
+var shape:Shape? = nil
+// 对Optional值操作时，需要做空值判断，判断是否能响应后面的操作。
+// 如果shape为nil，则?之后的被忽略，返回nil；否则执行?后的代码
+let value = shape?.num
+</code>
+函数的返回值也可以是Optional值，即可能返回nil
+<code>python
+func getSomeValue() -&gt; Int? {
+    return nil
+}
+</code>
+实际上，Optional是个enum，其中定义了None和Some两种类型。nil就等价于Optional.None。所以在使用Optional值时，如调用方法、属性、下标索引等，必须在Optional值后面加?来使用，不然会有语法错误。?是Optional定义的一种快捷的拆包方式。Optional的定义如下：
+&rdquo;` python
+enum Optional<T> : LogicValue, Reflectable { 
+    case None 
+    case Some(T) 
+    init() 
+    init(_ some: T) </p>
+<div class="highlight"><pre><code class="text">/// Allow use in a Boolean context. 
+func getLogicValue() -&gt; Bool 
+
+/// Haskell&#39;s fmap, which was mis-named 
+func map&lt;U&gt;(f: (T) -&gt; U) -&gt; U? 
+func getMirror() -&gt; Mirror 
+</code></pre></div>
+<p>}
+&ldquo;`
+那除了后面加?之外，还有没有别的拆包方法呢？有的，有两种：</p>
+
+<ol>
+<li>Optional Binding
+<code>python
+var value : String?
+if let tmp = value {
+let hashStr = tmp.hashValue
+}
+</code></li>
+<li>后面加!号，表示确定非nil，强制拆包。当然，如果是nil的话会crash
+<code>python
+var value : String?
+value!.hashValue
+</code>
+哇！还有一个!号，对，!号还有一个用法，就是用来声明隐式拆包的Optional
+（Implicitly Unwrapped Optionals），这样对变量操作时，会自动补上一个!进行拆包。当然，自己补上!?也是可以的。
+<code>python
+var value : String!
+value.hashValue // 语法OK，但是会crash
+value!.hashValue // 语法OK，但是会crash
+value?.hashValue // 语法OK，不会crash
+</code>
+Optional是够复杂的，把整个Swift语法简洁漂亮的美好形象都打破了，有没有？好吧，我保证这绝对是本文里面语法最复杂的部分了，后面不再会超出你的想像了。来个测试试试看，下面这段代码会打印出啥？答案在<a href="#answer">最下方</a>
+<code>python
+let optval: Bool? = false
+if optval               { println(&quot;1&quot;) }
+if optval!              { println(&quot;2&quot;) }
+if optval == true       { println(&quot;3&quot;) }
+if optval! == true      { println(&quot;4&quot;) }
+if optval == false      { println(&quot;5&quot;) }
+if optval! == false     { println(&quot;6&quot;) }
+</code></li>
+</ol>
 
 <h2 id="类">类</h2>
 
@@ -254,6 +309,10 @@ extension Double:Speak {
 // usage
 3.2.say()
 </code></p>
+
+<h2 id="答案">答案</h2>
+
+<p><a name="answer">答案</a>是会打印出 1 5 6 。可以copy到playground里试试看 ^_^</p>
 ]]></content>
   </entry>
   

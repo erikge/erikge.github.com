@@ -4,7 +4,7 @@
   <title><![CDATA[时光 &#149 印记]]></title>
   <link href="http://erikge.com/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-06-24T18:36:16+08:00</updated>
+  <updated>2014-06-25T18:26:36+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -101,25 +101,6 @@
 </span></code></pre></td></tr></table></div></figure></li>
 </ol>
 
-<h2 id="?号运算符">?号运算符</h2>
-
-<p>?号可以用来标志一个变量的值可以nil，也可以用来做空值判断，对于可能为空的值进行的后缀操作必须都带上?
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">shape</span><span class="p">:</span><span class="n">Shape</span><span class="err">?</span> <span class="o">=</span> <span class="n">nil</span>
-</span><span class='line'><span class="o">//</span> <span class="err">如果</span><span class="n">shape</span><span class="err">为</span><span class="n">nil</span><span class="err">，则?之后的被忽略，返回</span><span class="n">nil</span><span class="err">；否则执行?后的代码</span>
-</span><span class='line'><span class="n">let</span> <span class="n">value</span> <span class="o">=</span> <span class="n">shape</span><span class="err">?</span><span class="o">.</span><span class="n">num</span>
-</span></code></pre></td></tr></table></div></figure>
-函数的返回值也可以通过?声明可能返回nil
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">func</span> <span class="n">getSomeValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Int</span><span class="err">?</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
 <h2 id="枚举">枚举</h2>
 
 <p>语法示例如下，当类型已知时，可以直接通过.Apple这种方式来使用；类型未知时，通过全名Fruit.Apple来使用。
@@ -210,6 +191,107 @@
 </span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="optional值">Optional值</h2>
+
+<p>Swift中常量（let）定义时必须赋初始值，变量（var）可以不赋值，但需要显示指定类型，如<code>var value : Int</code>。
+Swift不自动给变量赋初始值，变量使用前必须初始化。</p>
+
+<p>如果使用时还无法确定初始值，那就需要用到Optional值了。Optional可以通过?来使用。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">//</span> <span class="err">声明</span><span class="n">Optional</span><span class="err">值变量</span>
+</span><span class='line'><span class="n">var</span> <span class="n">shape</span><span class="p">:</span><span class="n">Shape</span><span class="err">?</span> <span class="o">=</span> <span class="n">nil</span>
+</span><span class='line'><span class="o">//</span> <span class="err">对</span><span class="n">Optional</span><span class="err">值操作时，需要做空值判断，判断是否能响应后面的操作。</span>
+</span><span class='line'><span class="o">//</span> <span class="err">如果</span><span class="n">shape</span><span class="err">为</span><span class="n">nil</span><span class="err">，则?之后的被忽略，返回</span><span class="n">nil</span><span class="err">；否则执行?后的代码</span>
+</span><span class='line'><span class="n">let</span> <span class="n">value</span> <span class="o">=</span> <span class="n">shape</span><span class="err">?</span><span class="o">.</span><span class="n">num</span>
+</span></code></pre></td></tr></table></div></figure>
+函数的返回值也可以是Optional值，即可能返回nil
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">func</span> <span class="n">getSomeValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Int</span><span class="err">?</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+实际上，Optional是个enum，其中定义了None和Some两种类型。nil就等价于Optional.None。所以在使用Optional值时，如调用方法、属性、下标索引等，必须在Optional值后面加?来使用，不然会有语法错误。?是Optional定义的一种快捷的拆包方式。Optional的定义如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">enum</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="n">LogicValue</span><span class="p">,</span> <span class="n">Reflectable</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="bp">None</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Some</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">init</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">init</span><span class="p">(</span><span class="n">_</span> <span class="n">some</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">///</span> <span class="n">Allow</span> <span class="n">use</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">Boolean</span> <span class="n">context</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">func</span> <span class="n">getLogicValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Bool</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">///</span> <span class="n">Haskell</span><span class="s">&#39;s fmap, which was mis-named </span>
+</span><span class='line'>    <span class="n">func</span> <span class="nb">map</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="err">?</span>
+</span><span class='line'>    <span class="n">func</span> <span class="n">getMirror</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Mirror</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+那除了后面加?之外，还有没有别的拆包方法呢？有的，有两种：</p>
+
+<ol>
+<li>Optional Binding
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="p">:</span> <span class="n">String</span><span class="err">?</span>
+</span><span class='line'><span class="k">if</span> <span class="n">let</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">value</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">hashStr</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">hashValue</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
+<li>后面加!号，表示确定非nil，强制拆包。当然，如果是nil的话会crash
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="p">:</span> <span class="n">String</span><span class="err">?</span>
+</span><span class='line'><span class="n">value</span><span class="err">!</span><span class="o">.</span><span class="n">hashValue</span>
+</span></code></pre></td></tr></table></div></figure>
+哇！还有一个!号，对，!号还有一个用法，就是用来声明隐式拆包的Optional
+（Implicitly Unwrapped Optionals），这样对变量操作时，会自动补上一个!进行拆包。当然，自己补上!?也是可以的。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="p">:</span> <span class="n">String</span><span class="err">!</span>
+</span><span class='line'><span class="n">value</span><span class="o">.</span><span class="n">hashValue</span> <span class="o">//</span> <span class="err">语法</span><span class="n">OK</span><span class="err">，但是会</span><span class="n">crash</span>
+</span><span class='line'><span class="n">value</span><span class="err">!</span><span class="o">.</span><span class="n">hashValue</span> <span class="o">//</span> <span class="err">语法</span><span class="n">OK</span><span class="err">，但是会</span><span class="n">crash</span>
+</span><span class='line'><span class="n">value</span><span class="err">?</span><span class="o">.</span><span class="n">hashValue</span> <span class="o">//</span> <span class="err">语法</span><span class="n">OK</span><span class="err">，不会</span><span class="n">crash</span>
+</span></code></pre></td></tr></table></div></figure>
+Optional是够复杂的，把整个Swift语法简洁漂亮的美好形象都打破了，有没有？好吧，我保证这绝对是本文里面语法最复杂的部分了，后面不再会超出你的想像了。来个测试试试看，下面这段代码会打印出啥？答案在<a href="#answer">最下方</a>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">let</span> <span class="n">optval</span><span class="p">:</span> <span class="n">Bool</span><span class="err">?</span> <span class="o">=</span> <span class="n">false</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span>               <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span><span class="err">!</span>              <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span> <span class="o">==</span> <span class="n">true</span>       <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;3&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span><span class="err">!</span> <span class="o">==</span> <span class="n">true</span>      <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;4&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span> <span class="o">==</span> <span class="n">false</span>      <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;5&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span><span class="err">!</span> <span class="o">==</span> <span class="n">false</span>     <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;6&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
+</ol>
 
 <h2 id="类">类</h2>
 
@@ -411,6 +493,10 @@ class默认可以修改类，无需声明，struct需要通过mutating声明会�
 </span><span class='line'><span class="o">//</span> <span class="n">usage</span>
 </span><span class='line'><span class="mf">3.2</span><span class="o">.</span><span class="n">say</span><span class="p">()</span>
 </span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="答案">答案</h2>
+
+<p><a name="answer">答案</a>是会打印出 1 5 6 。可以copy到playground里试试看 ^_^</p>
 ]]></content>
   </entry>
   
