@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/ios/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-06-25T18:26:36+08:00</updated>
+  <updated>2014-07-01T17:39:23+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -14,73 +14,565 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Swift语法糖]]></title>
+    <title type="html"><![CDATA[Swift的问题]]></title>
+    <link href="http://erikge.com/articles/SwiftTroubles"/>
+    <updated>2014-06-27T23:37:20+08:00</updated>
+    <id>http://erikge.com/articles/SwiftTroubles</id>
+    <content type="html"><![CDATA[<p>一种技术的出现解决了一些问题，同时也会带来更多的问题。正因为Swift的高级特性，也由此带来了一些复杂性和一些潜在的问题。</p>
+
+<!--more-->
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift的语法细节]]></title>
     <link href="http://erikge.com/articles/SwiftSyntax"/>
-    <updated>2014-06-20T17:34:28+08:00</updated>
+    <updated>2014-06-26T14:09:50+08:00</updated>
     <id>http://erikge.com/articles/SwiftSyntax</id>
-    <content type="html"><![CDATA[<p>Swift中引入了很多高级语言的特性，如闭包、命名空间、泛型、强类型（同时拒绝阴式类型转换）、多个返回值（元组）等等，这些高级的语法糖用好了可以极大提升工作效率，用不好也是语法坑。</p>
+    <content type="html"><![CDATA[<p>Swift类似脚本语言的高级语法特性，让Swift语言使用起来很直观，很符合人的直觉，整体感觉很简洁很舒服。使用不同编程语言的程序员都能找到熟悉的感觉，这种亲切感必将吸引更多的开发者。<br>
+除去那些显而易见的语法，本文总结一些略显奇怪的语法，作为开发中的参考。</p>
+
+<!--more-->
+
+<h2 id="变量名和常量名">变量名和常量名</h2>
+
+<p>变量名、常量名可以使用Unicode字符，但不能包含连线符、制表符、数学符号、箭头和一些保留字符。
+如果非要使用保留字符（如关键字）作为变量名，通过反引号（`）将字符包围（如`class`）。</p>
+
+<h2 id="注释">注释</h2>
+
+<p>注释可以嵌套，这样注释大段代码就方便了，只管开头结尾就好，不用担心里面的注释结束符捣乱了。</p>
+<div class="highlight"><pre><code class="python"><span class="o">/*</span> <span class="err">这是第一个多行注释的开头</span>
+<span class="n">code</span> <span class="n">here</span>
+<span class="o">/*</span> <span class="err">这是第二个被嵌套的多行注释</span> <span class="o">*/</span>
+<span class="n">more</span> <span class="n">code</span> <span class="n">here</span>
+<span class="err">这是第一个多行注释的结尾</span> <span class="o">*/</span>
+</code></pre></div>
+<h2 id="有关数值的操作">有关数值的操作</h2>
+
+<p>整数字面量可以是十进制、二进制、八进制、十六进制
+<code>python
+let decimalInteger = 17
+let binaryInteger = 0b10001     // 二进制的 17
+let octalInteger = 0o21         // 八进制的17
+let hexadecimalInteger = 0x11   // 十六进制的 17
+</code></p>
+
+<p>浮点字面量可以是十进制、十六进制。小数点两边必须有至少一个数字。有可选的指数，十进制为e、十六进制为p。
+<code>python
+let decimalDouble = 12.1875
+let exponentDouble = 1.21875e1  // 十进制指数的12.1875
+let hexadecimalDouble = 0xC.3p0 // 十六进制指数的12.1875
+</code></p>
+
+<p>可以添加下划线提高可读性，不影响字面量的值。
+<code>python
+let paddedDouble = 000123.456
+let oneMillion = 1_000_000
+let justOverOneMillion = 1_000_000.000_000_1
+</code></p>
+
+<p>可以通过typealias给类型起个更喜欢的别名，如<code>typealias AudioSample = UInt16</code>，这时AudioSample等价于UInt16。</p>
+
+<p>\% 为 求余运算符 或 取模运算符，可以对负数和浮点数操作。被求余数的符号被忽略。
+<code>python
+9 % 4 // 等于1
+9 % -4 // 和 9 % 4 等价，等于1
+-8 % 2.5 // 等于-0.5
+</code></p>
+
+<p>区间运算符，<code>a...b</code>表示从a到b(包括 a 和 b)的所有值的闭区间；<code>a..b</code>表示包括a不包括b的前闭后开区间。</p>
+
+<h2 id="字符和字符串">字符和字符串</h2>
+
+<p>字符串字面量可以包含一下特殊字符：</p>
+
+<ol>
+<li>转义特殊字符 <code>\0 (空字符)、\\(反斜线)、\t (水平制表符)、\n (换行符)、\r (回车符)、\&quot; (双
+引号)、\&#39; (单引号)</code>。
+2.单字节 Unicode 标量，写成<code>\xnn</code>,其中 nn 为两位十六进制数。
+3.双字节 Unicode 标量，写成<code>\unnnn</code>,其中 nnnn 为四位十六进制数。
+4.四字节 Unicode 标量，写成<code>\Unnnnnnnn</code>,其中 nnnnnnnn 为八位十六进制数。</li>
+</ol>
+
+<p>空字符串定义，二者等价
+<code>python
+var empty1 = &quot;&quot;
+var empty2 = String()
+</code></p>
+
+<p>字符串可以通过“＋”拼接，两个Character可以相加得到String。
+字符串String可以作为字符Character的集合，可以对其用for-in操作，如 <code>for character in &quot;Dog!???&quot;</code>。</p>
+
+<p>计算字符串中字符的数量，通过全局countElements函数实现。<br>
+计算字符串的字节数，可以考虑 utf16count * 2 得到。</p>
+
+<p>字符串比较。可以通过<code>==</code>判断两个字符串包含的字符是否完全相同，通过hasPrefix/hasSuffix判断前缀/后缀是否相等。</p>
+
+<p>可以通过uppercaseString/lowercaseString获得大写/小写版本。<br>
+可以通过utf8获得UTF-8单元集合。<br>
+可以通过utf16获得UTF-16单元集合。<br>
+可以通过unicodeScalars获得21位的标量值集合。</p>
+
+<h2 id="集合类型">集合类型</h2>
+
+<p>Swift提供了数组和字典两种集合类型。</p>
+
+<h3 id="数组">数组</h3>
+
+<p>数组是类型安全的，要求有明确的类型，其中包含的元素的类型必须统一。</p>
+
+<p>数组的定义
+<code>python
+var arrSimple: String[] = [&quot;one&quot;, &quot;two&quot;]
+var arrComp: Array&lt;String&gt; = [&quot;one&quot;, &quot;two&quot;]
+var arr = [&quot;one&quot;, &quot;two&quot;] // 依赖类型推断
+// 定义空数组
+var emptySimple: String[] = String[]()
+var emptyComp: Array&lt;String&gt; = Array&lt;String&gt;()
+var emptyNotOK = [] // 未说明类型，后续无法使用
+emptySimple = [] // 类型已知的情况下，可以用于变为空数组
+// 用重复的值初始化数组
+var threeDoubles = Double[](count: 3, repeatedValue:0.0)
+var anotherThreeDoubles = Array(count: 3, repeatedValue: 2.5) // 不指定类型，依赖类型推断
+// copy创建
+var arr_new = Array(arr_old)
+</code></p>
+
+<p>数组的使用
+<code>python 
+var arr = String[]()
+arr.count // 内部元素数量
+arr.isEmpty
+// 最后添加元素
+arr.append(&quot;newValue&quot;)
+arr += [&quot;newValue1&quot;, &quot;newValue2&quot;]
+// 将数组中的一段替换为新值，被替换的部分的长度和新值的长度可以不一致
+arr[1...2] = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot;]
+// 添加、删除
+arr.insert(&quot;insertValue&quot;, atIndex: 0)
+arr.removeAtIndex(0)
+arr.removeLast()
+// 带数组的索引遍历
+for (index, value) in enumerate(shoppingList) {
+println(&quot;Item \(index + 1): \(value)&quot;)
+// 数组可以相加来合并
+var arr = arr1 + arr2
+}
+</code></p>
+
+<p>当数组分配给常量时，数组的长度不能改变，但其中的值还可以改变。</p>
+
+<h3 id="字典">字典</h3>
+
+<p>Swift 的字典使用 Dictionary<KeyType, ValueType>定义,其中KeyType要求是可哈希的。</p>
+
+<p>字典的定义
+<code>python
+var airports: Dictionary&lt;String, String&gt; = [&quot;TYO&quot;: &quot;Tokyo&quot;, &quot;DUB&quot;: &quot;Dublin&quot;]
+var airports = [&quot;TYO&quot;: &quot;Tokyo&quot;, &quot;DUB&quot;: &quot;Dublin&quot;] // 依赖类型推断
+</code></p>
+
+<p>字典的使用
+<code>python
+// 添加
+airports[&quot;LHR&quot;] = &quot;London&quot;
+// 更新
+airports[&quot;LHR&quot;] = &quot;London Heathrow&quot;
+airports.updateValue(&quot;London Heathrow&quot;, forKey:&quot;LHR&quot;)
+// 遍历
+for (airportCode, airportName) in airports {
+    println(&quot;\(airportCode): \(airportName)&quot;)
+}
+</code></p>
+
+<p>当字典分配给常量时，大小和其中的键值对都不能更改。</p>
+
+<h2 id="值类型和引用类型">值类型和引用类型</h2>
+
+<p>Swift中的类型可以分为值类型和引用类型。<br>
+值类型赋值给变量、常量，或传递给函数参数，或函数返回值时，得到的是新创建的一份拷贝。这样两个变量的后续操作相互独立，不相互影响。<br>
+引用类型在代码中传递时，得到的是同一个实例。两个变量的后续操作实际是对同一实例的操作。<br>
+引用类似C中的指针、Java中的类对象引用。Swift中也是没有指针、地址等概念的。</p>
+
+<p><strong>值类型：</strong></p>
+
+<ul>
+<li>所有的基本类型。整数(Integer)、浮点数(floating-point)、布尔值(Booleans)、字符串(string)、数组(array)和字典(dictionaries)。并且都是以结构体的形式在后台实现。</li>
+<li>结构体、枚举。其中包含的任何值类型，在代码中传递时都会被复制。</li>
+</ul>
+
+<p><strong>引用类型：</strong></p>
+
+<ul>
+<li>类</li>
+<li>闭包。闭包包括函数。</li>
+</ul>
+
+<p>恒等运算符，判断两个变量、常量是否引用同一个实例的方法。<br>
+恒等<code>===</code><br>
+不恒等<code>!==</code><br>
+在实际开发中，并没有必要因为值拷贝的原因减少赋值等传递。因为在实际编译时，编译器会保证复制只发生在绝对必要的情况下以提高性能</p>
+
+<p>集合类型的传递和拷贝行为略有些复杂。集合类型在传递时，先不做拷贝，只有当值发生变化时才执行拷贝。字典在其中的键－值对改变或size改变时，都认为是发生变化，触发拷贝；但数组在修改其中元素时不认为是发生变化，只有在长度改变时才认为是发生变化，才触发拷贝。
+数组长度改变的情况包括附加(appending),插入(inserting),删除(removing)或者使用范围下标(ranged subscript)去替换这一范围内的元素。</p>
+
+<p>集合类型在拷贝时执行的都是浅拷贝。当其中的元素时引用类型时，拷贝的是引用。
+<code>python
+var a = [1, 2, 3], b = a
+a[0] = 10
+a == b              // true，没copy，a修改不认为是变化
+a === b             // false，值类型，返回false符合语法
+a[1...2] = [5, 6]
+a == b              // false，发生copy，a变化了
+</code>
+触发copy的方法
+<code>python
+var a = [1, 2, 3], b = a
+a[0] = 10
+b.unshare()     // 触发b的copy
+a[1] = 11       // a[10,11,3], b[10,2,3]
+// or
+var a = [1, 2, 3]
+var b = a.copy()
+a[0] = 10
+a[1] = 11       // a[10,11,3], b[1,2,3]
+</code></p>
+
+<h2 id="函数">函数</h2>
+
+<p>多返回值。<br>
+函数可以返回多个值，以元组的形式实现。
+<code>python
+func getPoint() -&gt; (x: Int, y: Int) {
+    var a = 8, b = 7
+    return (a, b)
+}
+var ret = getPoint()
+ret.x
+ret.y
+func getInfo() -&gt; (Int, String) {
+    return (9, &quot;Not Found&quot;)
+}
+var info = getInfo()
+info.0
+info.1
+</code></p>
+
+<p>外部形参名。<br>
+函数形参名分为本地形参名和外部形参名。本地形参名只在函数内部有效，外部形参名用于外部调用时声明。
+<code>python
+func join(string s1: String, toString s2: String, withJoiner joiner: String) -&gt; String {
+    return s1 + joiner + s2
+}
+// usage
+join(string: &quot;Hello&quot;, toString: &quot;world&quot;, withJoiner: &quot;, &quot;)
+</code>
+外部形参和本地形参同名。
+<code>python
+func join(#string: String, #toString: String, #withJoiner: String) -&gt; String {
+    return string + withJoiner + toString
+}
+join(string: &quot;Hello&quot;, toString: &quot;world&quot;, withJoiner: &quot;, &quot;)
+</code></p>
+
+<p>默认值。<br>
+函数形参可以带有默认值，虽然默认值形参可以在任何位置，但是建议放在形参列表的末尾。
+<code>python
+func join(s1: String, s2: String = &quot;world&quot;, jo: String) -&gt; String {
+    return s1 + jo + s2
+}
+join(&quot;Hello&quot;, &quot;, &quot;) // 输出 &quot;Hello, world&quot;
+</code></p>
+
+<p>可变形参。<br>
+传递至可变形参的值在函数主体内是以适当类型的数组存在的。
+<code>python
+func arithmeticMean(numbers: Double...) -&gt; Double {
+    for number in numbers {
+        // todo
+    }
+}
+</code></p>
+
+<p>变量形参。<br>
+函数的形参默认是常量。试图在函数体内改变函数形参的值会引发一个编译时错误。
+可以通过使用变量形参，在函数内得到一个有形参值的变量副本。
+<code>python 
+func add(var a: Int, b: Int) -&gt; Int{
+    a = a + b
+    return a
+}
+</code></p>
+
+<p>In-Out形参。<br>
+只能传递一个变量作为 in-out 形参对应的实参，变量前加&amp;号。
+不能传递一个常量或者字面量作为实参,因为常量和字面量不能被修改。
+<code>python
+func swap(inout a:Int, inout b:Int) {
+    let temp = a
+    a = b
+    b = temp
+}
+// usage
+var x = 5, y = 9
+swap(&amp;x, &amp;y)
+x // 9
+y // 5
+</code></p>
+
+<p>嵌套函数。<br>
+除了在全局作用域中定义的全局函数外，还可以在函数体内部定义嵌套函数。
+&ldquo;` python
+func chooseStepFunction(backwards: Bool) -&gt; (Int) -&gt; Int {
+    func stepForward(input: Int) -&gt; Int { return input + 1 }
+    func stepBackward(input: Int) -&gt; Int { return input - 1 }</p>
+<div class="highlight"><pre><code class="text">return backwards ? stepBackward : stepForward
+</code></pre></div>
+<p>}
+&rdquo;`</p>
+
+<h2 id="类和结构体">类和结构体</h2>
+
+<p>类和结构体有很多共同点：</p>
+
+<ul>
+<li>定义属性用于储存值</li>
+<li>定义方法用于提供功能</li>
+<li>定义下标用于通过下标语法访问值</li>
+<li>定义初始化器用于生成初始化值</li>
+<li>通过扩展以增加默认实现的功能</li>
+<li>符合协议以对某类提供标准功能</li>
+</ul>
+
+<p>与结构体相比,类还有如下的附加功能：</p>
+
+<ul>
+<li>继承允许一个类继承另一个类的特征</li>
+<li>类型转换允许在运行时检查和解释一个类实例的类型</li>
+<li>取消初始化器允许一个类实例释放任何其所被分配的资源</li>
+<li>引用计数允许对一个类的多次引用</li>
+</ul>
+
+<p>定义：
+<code>python
+class SomeClass {
+    // class definition goes here
+}
+struct SomeStructure {
+    // structure definition goes here
+}
+</code></p>
+
+<h3 id="结构体">结构体</h3>
+
+<p>结构体有一个自动生成的成员逐一初始化器，用于初始化新结构体实例中的所有成员属性。
+<code>python
+struct Resolution {
+    var width = 0
+    var heigth = 0
+}
+let vga = Resolution(width:640, heigth: 480)
+</code></p>
+
+<p>类的示例代码如下，比较值得注意的是：
+1. 重载父类方法要用override显示声明
+2. 可以在通过willSet、didSet在修改变量值前后获得通知
+3. 可以通过get、set给变量设置一个别名，并做一些运算。真心觉得这个应该配上访问权限来使用
+&ldquo;` python
+class Shape {
+    init() { // 等价构造函数
+        num = 1
+        println(&rdquo;<Shape> init: (num)&ldquo;)
+    }
+    deinit { // 等价析构函数
+        num = 0
+        println(&rdquo;<Shape> deinit: (num)&ldquo;)
+    }</p>
+<div class="highlight"><pre><code class="text">var num = 0
+func add(a:Int, b:Int)-&gt; Int {
+    println(&quot;&lt;Shape&gt; add&quot;)
+    return a + b;
+}
+</code></pre></div>
+<p>}</p>
+
+<p>class SonShape : Shape {
+    init() {
+        super.init()
+        num = 2
+        println(&rdquo;[Son] init: (num)&ldquo;)
+    }
+    init(value:Int){
+        super.init()
+        num = value
+        println(&rdquo;[Son] init with value: (num)&ldquo;)
+    }
+    deinit {
+        num = -1
+        println(&rdquo;[Son] deinit: (num)&ldquo;)
+    }</p>
+<div class="highlight"><pre><code class="text">func minus(a:Int, b:Int)-&gt; Int {
+    println(&quot;[Son] minus: \(num)&quot;)
+    return a - b;
+}
+</code></pre></div>
+<p>// 重载父类中的函数
+    override func add(a:Int, b:Int)-&gt; Int {
+        println(&rdquo;[Son] add&quot;)
+        return super.add(a, b: b);
+    }
+// willSet、ditSet只是值设置前的前后处理，preAfter和num一样是正常变量，所以可以附值
+    var preAfter:Int = 0 {
+        willSet {
+            println(&ldquo;will set (newValue)&rdquo;)
+        }
+        didSet {
+            println(&ldquo;did set&rdquo;)
+        }
+    }
+// get、set类似wrapper或别名，triple并不是实际存在的变量，所以不能附值
+    var triple:Double {
+        get {
+            return Double(num)* 3
+        }
+        set {
+             num = Int(newValue / 3)
+        }
+    }
+}
+// usage
+                   var s = Shape();
+s.num = s.add(3, b: 8)</p>
+
+<p>var son = SonShape(value: 4)
+son.add(7, b: 9)
+son.triple
+son.triple = 99
+son.preAfter
+son.preAfter = 10</p>
+<div class="highlight"><pre><code class="text">## 编程小技巧
+
+1. 断言带可选的说明信息`assert(age &gt;= 0, &quot;A person&#39;s age cannot be less than zero&quot;)`
+</code></pre></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift语法糖]]></title>
+    <link href="http://erikge.com/articles/SwiftCandy"/>
+    <updated>2014-06-20T17:34:28+08:00</updated>
+    <id>http://erikge.com/articles/SwiftCandy</id>
+    <content type="html"><![CDATA[<p>Swift中引入了很多高级语言的特性，如闭包、命名空间、泛型、强类型（同时拒绝阴式类型转换）、多个返回值（元组）等等，这些高级的语法糖用好了可以极大提升工作效率，用不好也是语法坑。<br>
+我们先体验一下Swift的糖衣炮弹。</p>
 
 <!--more-->
 
 <h2 id="闭包">闭包</h2>
 
-<p>暂时可以把闭包理解为是函数，包括匿名函数。函数在Swift里变身一等公民，这样就有了很多好玩的特性。</p>
+<p>闭包是功能性自包含模块，可以在代码中被传递和使用。<br>
+闭包可以*捕获*和存储其所在上下文中任意常量和变量的引用，这就是所谓的闭合并包裹着这些常量和变量,俗称闭包。Swift会管理在捕获过程中涉及到的内存操作。</p>
+
+<p>全局和嵌套函数实际上也是特殊的闭包，闭包采取如下三种形式之 一：</p>
 
 <ol>
-<li><p>函数可以嵌套，内部函数可以访问外部函数的变量
-&ldquo;` python
-func sum(num:Float&hellip;) -&gt; Float {
-var sum:Float = 0;</p>
-
-<p>func add(v:Float){
-    sum += v
-}</p>
-
-<p>for n in num {
-    add(n)
-}
-return sum
-}</p></li>
+<li>全局函数是一个有名字但不会捕获任何值的闭包</li>
+<li>嵌套函数是一个有名字并可以捕获其封闭函数域内值的闭包</li>
+<li>闭包表达式是一个利用轻量级语法所写的可以捕获其上下文中变量或常量值的没有名字的闭包</li>
 </ol>
 
-<p>sum()
-sum(12, 13, 14)
-sum(1, 32,13,3)
-<code>
-2. 函数可以传递，可以作为参数或返回值
-</code> python
-func add(a:Int,b:Int) -&gt; Int {
-    return a+b;
-}</p>
+<p>闭包表达式比较像其他一些编程语言中的lambdas，拥有一些简洁的语法风格：</p>
 
-<p>func copy(x:Int, y:Int, method:(Int,Int)-&gt;Int) -&gt; Int{
-    var ret = 0
-    ret = method(x,y)
-    return ret
-}</p>
+<ul>
+<li>利用上下文推断参数和返回值类型</li>
+<li>单表达式(single-expression)闭包可以省略 return 关键字</li>
+<li>参数名称简写</li>
+<li>Trailing 闭包语法</li>
+</ul>
 
-<p>copy(3,4,add)
-<code>
-3. 函数可以匿名，变身匿名闭包，这时可以通过位置访问参数，或者通过in给参数个名字
-</code> python
-copy(7,2){return $0+$1}</p>
-
-<p>copy(3,9,{
-    (a:Int,b:Int)-&gt;Int in
-    return a+b
+<p>闭包表达式语法：
+<code>python
+{ (parameters) -&gt; returnType in
+    statements
+}
+</code>
+闭包表达式语法可以使用常量、变量和 inout 类型作为参数，但不提供默认值。也可以在参数列表的最后使用可变参数。元组也可以作为参数和返回值。<br>
+举个栗子。
+<code>python
+reversed = sort(names, { (s1: String, s2: String) -&gt; Bool in
+    return s1 &gt; s2
 })
-&rdquo;`</p>
+</code>
+因为排序闭包时作为函数参数进行传入的，函数参数的类型是确定的，即(String, String) -&gt; Bool的闭包。所以，闭包的类型可以被自动推断。
+<code>python
+reversed = sort(names, { s1, s2 in
+    return s1 &gt; s2
+} )
+// 可以写在同一行，更加简洁
+reversed = sort(names, { s1, s2 in return s1 &gt; s2 } )
+</code>
+单表达式闭包可以省略 return 关键字
+<code>python
+reversed = sort(names, { s1, s2 in s1 &gt; s2 } )
+</code>
+参数名简写，可以通过$0,$1,$2等位置引用参数，从0开始
+<code>python
+reversed = sort(names, { $0 &gt; $1 } )
+</code>
+运算符函数，大于号（&gt;）函数的类型正好和sort参数的类型一致，所以可以直接传入&gt;
+<code>python
+reversed = sort(names, &gt;)
+</code>
+Trailing 闭包 的写法。当函数只需要闭包一个参数时，甚至可以省略括号
+<code>python
+reversed = sort(names) { $0 &gt; $1 }
+</code></p>
 
+<p>捕获的常量和变量在超出原作用域之后仍然可以使用。而且不同的闭包捕获后存储的变量和常量是相互独立的。
+<code>python
+func makeIncrease(increaseStep: Int) -&gt; () -&gt; Int {
+    var total = 0
+    func increase() -&gt; Int {
+        total += increaseStep
+        return total
+    }
+    return increase
+}
+// usage
+let increaseTen = makeIncrease(10)
+increaseTen()   // 10
+increaseTen()   // 20
+let increaseSeven = makeIncrease(7)
+increaseSeven() // 7
+increaseTen()   // 30
+</code></p>
+
+<h2 id="元组">元组</h2>
+
+<p>把多个值用()组合在一起就成了元组，元组内的值可以是任意类型，并且不要求是相同类型。<br>
+元组比较适合临时组织值，不适合创建复杂的数据结构。</p>
+<div class="highlight"><pre><code class="python"><span class="n">let</span> <span class="n">http404Error</span> <span class="o">=</span> <span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s">&quot;Not Found&quot;</span><span class="p">)</span> <span class="o">//</span> <span class="err">类型是</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="err">获取其中的值</span>
+<span class="n">let</span> <span class="p">(</span><span class="n">statusCode</span><span class="p">,</span> <span class="n">statusMessage</span><span class="p">)</span> <span class="o">=</span> <span class="n">http404Error</span>
+<span class="n">println</span><span class="p">(</span><span class="s">&quot;The status code is \(statusCode), message is \(statusMessage)&quot;</span><span class="p">)</span>
+<span class="o">//</span> <span class="err">只获取关心的值</span>
+<span class="n">let</span> <span class="p">(</span><span class="n">justTheStatusCode</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">http404Error</span>
+<span class="o">//</span> <span class="err">通过下标获取对应的值，从零开始</span>
+<span class="n">println</span><span class="p">(</span><span class="s">&quot;The status code is \(http404Error.0), message is \(http404Error.1)&quot;</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="err">元组定义时可以给其中的元素命名</span>
+<span class="n">let</span> <span class="n">http200Status</span> <span class="o">=</span> <span class="p">(</span><span class="n">statusCode</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="s">&quot;OK&quot;</span><span class="p">)</span>
+<span class="o">//</span> <span class="err">有名字后可以通过名字访问</span>
+<span class="n">println</span><span class="p">(</span><span class="s">&quot;The status code is \(http200Status.statusCode), message is \(http200Status.description)&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="枚举">枚举</h2>
 
-<p>语法示例如下，当类型已知时，可以直接通过.Apple这种方式来使用；类型未知时，通过全名Fruit.Apple来使用。
-另外，如果frowRaw()的值为声明，不想C++一样可以继续使用，而是返回nil。Swift里要明确声明，减少潜规则，鼓掌<sup>_^</sup></p>
-
-<p>这里给枚举附的值叫做原始值，原始值对所有的实例都是相同的。原始值工作的像C++、Java等语言的枚举值一样。后面我们会看到一个好玩的。
+<p>Swift中，枚举是一等（first-class）类型，不同于C语言中枚举是一组整型值。所以Fruit.Apple并不对应任何值。<br>
+使用枚举时，如果类型已知，可以直接通过.Apple这种方式来使用；如果类型未知，通过全名Fruit.Apple来使用。
 &ldquo;` python
-enum Fruit:Double {
-    case Apple = 7
-    case Orange, Banana, Peach</p>
+enum Fruit {
+    case Apple, Banana
+    case Orange</p>
 <div class="highlight"><pre><code class="text">func toString() -&gt; String {
     switch (self) {
         case .Apple:
@@ -89,46 +581,80 @@ enum Fruit:Double {
             return &quot;Orange&quot;
         case .Banana:
             return &quot;Banana&quot;
-        case .Peach:
-            return &quot;Peach&quot;
         default:
-            return String(self.toRaw())
+            return &quot;Unkown&quot;
     }
 }
 </code></pre></div>
-<p>}</p>
+<p>}
+// usage
+var something = Fruit.Apple
+something = .Banana
+&rdquo;`</p>
+
+<p>枚举的特点在于可以关联原始值或实例值。不关联、原始值、实例值只能取其一，即关联了原始值就不能再关联实例值。</p>
+
+<p>原始值对所有枚举的实例都是相同的。原始值工作的像C++、Java等语言的枚举值一样。
+原始值可以是字符串，字符，或者任何整型值或浮点型值。每个原始值在它的枚举声明中必须是唯一的。
+关联原始值后，枚举可以通过toRaw()得到原始值，通过frowRaw()创建枚举值。如果传给frowRaw()的值未在枚举中定义，会返回nil。
+&ldquo;` python
+enum Fruit:Double {
+    case Apple = 7
+    case Orange, Banana, Peach
+}</p>
 
 <p>var value = Fruit.Orange
-var valueWithType:Fruit  = .Peach
-valueWithType.toRaw()
+value.toRaw()                       // 8.0
 var outOfRange = Fruit.fromRaw(3.0) // 返回值为nil
-outOfRange?.toString() // 返回值为nil
-<code>
-枚举除了有原始值之外，还可以有实例值。可以将枚举想象为一个容器，里面可以装一个或多个值，这些值是在创建实例时放进去的，不同的实例放的值不同。
-不过，貌似使用了实例值就不能用原始值了，即不能再指定Double这种类型，不能附原始值，不能使用toRaw、fromRaw方法。
-</code> python
+outOfRange?.toRaw()                 // 返回值为nil</p>
+<div class="highlight"><pre><code class="text">枚举关联实例值时，可以将枚举想象为一个容器，里面可以装一个或多个值，这些值是在创建实例时放进去的，不同的实例放的值不同。
+``` python
 enum Fruit {
     case Apple(String, String)
     case Orange(String), Banana(Int), Peach
-}</p>
+}
 
-<p>let apple = Fruit.Apple(&quot;Price:32&rdquo;,&ldquo;Size:4&rdquo;)
+let apple = Fruit.Apple(&quot;Price:32&quot;,&quot;Size:4&quot;)
 switch(apple) {
     case let .Apple(price, size):
-        println(&ldquo;Info: (price), (size)&rdquo;)
+        println(&quot;Info: \(price), \(size)&quot;)
     case .Orange:
-        println(&ldquo;orange&rdquo;)
+        println(&quot;orange&quot;)
     default:
-        println(&ldquo;default&rdquo;)
+        println(&quot;default&quot;)
 }
-&ldquo;`</p>
+</code></pre></div>
+<h2 id="泛型">泛型</h2>
+
+<p>泛型可用于函数、类、枚举和结构体。
+<code>python
+func repeat&lt;ItemType&gt;(item: ItemType, times: Int) -&gt; ItemType[] {
+    var result = ItemType[]()
+    for i in 0..times {
+        result += item 
+    }
+    return result
+}
+// usage
+repeat(&quot;knock&quot;, 4)
+</code>
+可以在类型后面使用where来指定一个需求列表
+<code>python
+class SomeClass &lt;T, U where T: Sequence, U: Sequence,
+                    T.GeneratorType.Element: Equatable,
+                    T.GeneratorType.Element == U.GeneratorType.Element&gt; {
+    // more def here
+}
+</code></p>
+
+<p>在限制条件比较简单的情况下，可以不用where，如<code>&lt;T:Equatable&gt;</code>和<code>&lt;T where T:Equatable&gt;</code>等价。</p>
 
 <h2 id="optional值">Optional值</h2>
 
 <p>Swift中常量（let）定义时必须赋初始值，变量（var）可以不赋值，但需要显示指定类型，如<code>var value : Int</code>。
 Swift不自动给变量赋初始值，变量使用前必须初始化。</p>
 
-<p>如果使用时还无法确定初始值，那就需要用到Optional值了。Optional可以通过?来使用。
+<p>如果使用时还无法确定初始值，那就需要用到Optional值了，一个未赋值的Optional值会被自动设置为nil。Optional可以通过?来使用。
 <code>python
 // 声明Optional值变量
 var shape:Shape? = nil
@@ -161,7 +687,7 @@ func getMirror() -&gt; Mirror
 那除了后面加?之外，还有没有别的拆包方法呢？有的，有两种：</p>
 
 <ol>
-<li>Optional Binding
+<li>Optional Binding，可以用在if和while语句中
 <code>python
 var value : String?
 if let tmp = value {
@@ -193,93 +719,61 @@ if optval! == false     { println(&quot;6&quot;) }
 </code></li>
 </ol>
 
-<h2 id="类">类</h2>
+<h2 id="流控制">流控制</h2>
 
-<p>类目前还没有public、private等权限控制，这个社区呼声最高，相信以后会有的。</p>
+<p>switch case的语法特别丰富。一个case可以匹配多个模式，用逗号分开；也可以匹配范围。
+<code>python
+switch count {
+    case 0:
+        str = &quot;no&quot;
+    case 1, 2, 3:
+        str = &quot;a few&quot;
+    case 4...100:
+        str = &quot;a lot of&quot;
+    default:
+        str = &quot;too many&quot;
+}
+</code></p>
 
-<p>类的示例代码如下，比较值得注意的是：
-1. 重载父类方法要用override显示声明
-2. 可以在通过willSet、didSet在修改变量值前后获得通知
-3. 可以通过get、set给变量设置一个别名，并做一些运算。真心觉得这个应该配上访问权限来使用
+<p>switch也可以匹配元组；可以值绑定（Value Bindings）；可以通过where添加额外判断条件。
 &rdquo;` python
-class Shape {
-    init() { // 等价构造函数
-        num = 1
-        println(&ldquo;<Shape> init: (num)&rdquo;)
+let somePoint = (1, 1)
+switch somePoint {
+    case (0, 0):
+        str = &ldquo;at the origin&rdquo;
+    case (_, 0):
+        str = &ldquo;on the x-axis&rdquo;
+    case (-2&hellip;2, -2&hellip;2):
+        str = &ldquo;inside the box&rdquo;
+    case (0, let y):
+        str = &ldquo;on the y-axis, and y = (y)&rdquo;
+    case var (x, y) where x == y:
+        str = &ldquo;on the line at ((x), (y))&rdquo;
+    default:
+        str = &ldquo;nowhere&rdquo;
+}</p>
+
+<p>switch不需要break，执行完一个case后推出整个switch。如果需要C语言中执行完一个case落入下一个case中的情况，需要用到 <strong>fallthrough</strong>。</p>
+
+<p>当多个流控制代码块相互套嵌时，可以通过标签来明确跳出位置。
+<code>python
+gameLoop: while square != finalSquare {
+    if some {
+        value = 3
+    } else if some == 7 {
+        break gameLoop
     }
-    deinit { // 等价析构函数
-        num = 0
-        println(&ldquo;<Shape> deinit: (num)&rdquo;)
-    }</p>
-<div class="highlight"><pre><code class="text">var num = 0
-func add(a:Int, b:Int) -&gt; Int {
-    println(&quot;&lt;Shape&gt; add&quot;)
-    return a + b;
 }
+</code></p>
+<div class="highlight"><pre><code class="python"><span class="o">//</span> <span class="err">不需要用到循环的值</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="mf">1.</span><span class="o">..</span><span class="n">power</span> <span class="p">{</span>
+<span class="n">answer</span> <span class="o">*=</span> <span class="n">base</span>
+<span class="p">}</span>
+<span class="o">//</span> <span class="n">C</span><span class="err">样式的</span><span class="k">for</span><span class="err">循环</span>
+<span class="k">for</span> <span class="n">var</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">{</span>
+<span class="o">//</span> <span class="n">todo</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>}</p>
-
-<p>class SonShape:Shape {
-    init() {
-        super.init()
-        num = 2
-        println(&ldquo;[Son] init: (num)&rdquo;)
-    }
-    init(value:Int) {
-        super.init()
-        num = value
-        println(&ldquo;[Son] init with value: (num)&rdquo;)
-    }
-    deinit {
-        num = -1
-        println(&ldquo;[Son] deinit: (num)&rdquo;)
-    }</p>
-<div class="highlight"><pre><code class="text">func minus(a:Int, b:Int) -&gt; Int {
-    println(&quot;[Son] minus: \(num)&quot;)
-    return a - b;
-}
-// 重载父类中的函数
-override func add(a:Int, b:Int) -&gt; Int {
-    println(&quot;[Son] add&quot;)
-    return super.add(a, b: b);
-}
-// willSet、ditSet只是值设置前的前后处理，preAfter和num一样是正常变量，所以可以附值
-var preAfter:Int = 0 {
-    willSet {
-        println(&quot;will set \(newValue)&quot;)
-    }
-    didSet {
-        println(&quot;did set&quot;)
-    }
-}
-// get、set类似wrapper或别名，triple并不是实际存在的变量，所以不能附值
-var triple:Double {
-    get {
-        return Double(num) * 3
-    }
-    set {
-        num = Int(newValue / 3)
-    }
-}
-</code></pre></div>
-<p>}
-// usage
-var s = Shape();
-s.num = s.add(3, b: 8)</p>
-
-<p>var son = SonShape(value: 4)
-son.add(7, b: 9)
-son.triple
-son.triple = 99
-son.preAfter
-son.preAfter = 10
-&ldquo;`</p>
-
-<h2 id="struct">struct</h2>
-
-<p>struct和class的主要区别在于，
-<strong>结构体是按值传递,类是按引用传递</strong>。</p>
-
 <h2 id="接口和扩展">接口和扩展</h2>
 
 <p>接口定义如下，
@@ -329,7 +823,7 @@ extension Double:Speak {
 <h2 id="教程">教程</h2>
 
 <ul>
-<li><a href="http://vdisk.weibo.com/s/EhsPPzRRQ5CZ/1402621206">The Swift Programming Language中文完整版（CocoaChina精校</a></li>
+<li><a href="http://kc.cc/VWs5">The Swift Programming Language中文完整版（CocoaChina精校）</a></li>
 <li><a href="http://numbbbbb.gitbooks.io/-the-swift-programming-language-/">github上的翻译项目，网友力量的再一次体现</a>，离线<a href="https://www.gitbook.io/download/pdf/book/numbbbbb/-the-swift-programming-language-?lang=">pdf版</a></li>
 </ul>
 
@@ -337,6 +831,7 @@ extension Double:Speak {
 
 <ul>
 <li><a href="http://swiftist.org/">http://swiftist.org/</a></li>
+<li><a href="http://www.cocoachina.com/bbs/thread.php?fid=57">CocoaChina交流区</a></li>
 </ul>
 ]]></content>
   </entry>

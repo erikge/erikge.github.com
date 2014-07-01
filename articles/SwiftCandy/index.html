@@ -1,0 +1,828 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Swift语法糖 - 时光 &#149 印记</title>
+  <meta name="author" content="erik ge">
+
+  
+  <meta name="description" content="Swift中引入了很多高级语言的特性，如闭包、命名空间、泛型、强类型（同时拒绝阴式类型转换）、多个返回值（元组）等等，这些高级的语法糖用好了可以极大提升工作效率，用不好也是语法坑。
+我们先体验一下Swift的糖衣炮弹。 闭包 闭包是功能性自包含模块，可以在代码中被传递和使用。
+闭包可以*捕获* &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://erikge.com/articles/SwiftCandy">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="时光 &#149 印记" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"-->
+    
+<link rel="stylesheet" href="/assets/foundation-icons.css" />
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50514628-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:erikge.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            时光 &#149 印记
+        </span>
+       
+           <span class="blue_dark">
+             by erik
+           </span>
+       
+    </a></li>
+  <li><a href="/iOS.html">iOS开发</a></li>
+  <li><a href="/archives.html">所有文章</a></li>
+  <li><a href="/about.html">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Swift语法糖</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-20T17:34:28+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+    
+    <span><font size=".9em" color="#aaa"> <i class="fi-clock"></i> about 24  minutes</font></span>
+    
+  </header>
+
+
+<div class="entry-content"><p>Swift中引入了很多高级语言的特性，如闭包、命名空间、泛型、强类型（同时拒绝阴式类型转换）、多个返回值（元组）等等，这些高级的语法糖用好了可以极大提升工作效率，用不好也是语法坑。<br>
+我们先体验一下Swift的糖衣炮弹。</p>
+
+<!--more-->
+
+<h2 id="闭包">闭包</h2>
+
+<p>闭包是功能性自包含模块，可以在代码中被传递和使用。<br>
+闭包可以*捕获*和存储其所在上下文中任意常量和变量的引用，这就是所谓的闭合并包裹着这些常量和变量,俗称闭包。Swift会管理在捕获过程中涉及到的内存操作。</p>
+
+<p>全局和嵌套函数实际上也是特殊的闭包，闭包采取如下三种形式之 一：</p>
+
+<ol>
+<li>全局函数是一个有名字但不会捕获任何值的闭包</li>
+<li>嵌套函数是一个有名字并可以捕获其封闭函数域内值的闭包</li>
+<li>闭包表达式是一个利用轻量级语法所写的可以捕获其上下文中变量或常量值的没有名字的闭包</li>
+</ol>
+
+<p>闭包表达式比较像其他一些编程语言中的lambdas，拥有一些简洁的语法风格：</p>
+
+<ul>
+<li>利用上下文推断参数和返回值类型</li>
+<li>单表达式(single-expression)闭包可以省略 return 关键字</li>
+<li>参数名称简写</li>
+<li>Trailing 闭包语法</li>
+</ul>
+
+<p>闭包表达式语法：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span> <span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">returnType</span> <span class="ow">in</span>
+</span><span class='line'>    <span class="n">statements</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+闭包表达式语法可以使用常量、变量和 inout 类型作为参数，但不提供默认值。也可以在参数列表的最后使用可变参数。元组也可以作为参数和返回值。<br>
+举个栗子。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span> <span class="p">(</span><span class="n">s1</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">s2</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Bool</span> <span class="ow">in</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+因为排序闭包时作为函数参数进行传入的，函数参数的类型是确定的，即(String, String) -&gt; Bool的闭包。所以，闭包的类型可以被自动推断。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="ow">in</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span>
+</span><span class='line'><span class="p">}</span> <span class="p">)</span>
+</span><span class='line'><span class="o">//</span> <span class="err">可以写在同一行，更加简洁</span>
+</span><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="ow">in</span> <span class="k">return</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span> <span class="p">}</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+单表达式闭包可以省略 return 关键字
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="ow">in</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span> <span class="p">}</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+参数名简写，可以通过$0,$1,$2等位置引用参数，从0开始
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span> <span class="err">$</span><span class="mi">0</span> <span class="o">&gt;</span> <span class="err">$</span><span class="mi">1</span> <span class="p">}</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+运算符函数，大于号（&gt;）函数的类型正好和sort参数的类型一致，所以可以直接传入&gt;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="o">&gt;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+Trailing 闭包 的写法。当函数只需要闭包一个参数时，甚至可以省略括号
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">reversed</span> <span class="o">=</span> <span class="n">sort</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="p">{</span> <span class="err">$</span><span class="mi">0</span> <span class="o">&gt;</span> <span class="err">$</span><span class="mi">1</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>捕获的常量和变量在超出原作用域之后仍然可以使用。而且不同的闭包捕获后存储的变量和常量是相互独立的。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">func</span> <span class="n">makeIncrease</span><span class="p">(</span><span class="n">increaseStep</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Int</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="n">func</span> <span class="n">increase</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Int</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">total</span> <span class="o">+=</span> <span class="n">increaseStep</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">total</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">increase</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">usage</span>
+</span><span class='line'><span class="n">let</span> <span class="n">increaseTen</span> <span class="o">=</span> <span class="n">makeIncrease</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="n">increaseTen</span><span class="p">()</span>   <span class="o">//</span> <span class="mi">10</span>
+</span><span class='line'><span class="n">increaseTen</span><span class="p">()</span>   <span class="o">//</span> <span class="mi">20</span>
+</span><span class='line'><span class="n">let</span> <span class="n">increaseSeven</span> <span class="o">=</span> <span class="n">makeIncrease</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</span><span class='line'><span class="n">increaseSeven</span><span class="p">()</span> <span class="o">//</span> <span class="mi">7</span>
+</span><span class='line'><span class="n">increaseTen</span><span class="p">()</span>   <span class="o">//</span> <span class="mi">30</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="元组">元组</h2>
+
+<p>把多个值用()组合在一起就成了元组，元组内的值可以是任意类型，并且不要求是相同类型。<br>
+元组比较适合临时组织值，不适合创建复杂的数据结构。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">let</span> <span class="n">http404Error</span> <span class="o">=</span> <span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s">&quot;Not Found&quot;</span><span class="p">)</span> <span class="o">//</span> <span class="err">类型是</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">//</span> <span class="err">获取其中的值</span>
+</span><span class='line'><span class="n">let</span> <span class="p">(</span><span class="n">statusCode</span><span class="p">,</span> <span class="n">statusMessage</span><span class="p">)</span> <span class="o">=</span> <span class="n">http404Error</span>
+</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;The status code is \(statusCode), message is \(statusMessage)&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">//</span> <span class="err">只获取关心的值</span>
+</span><span class='line'><span class="n">let</span> <span class="p">(</span><span class="n">justTheStatusCode</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">http404Error</span>
+</span><span class='line'><span class="o">//</span> <span class="err">通过下标获取对应的值，从零开始</span>
+</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;The status code is \(http404Error.0), message is \(http404Error.1)&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">//</span> <span class="err">元组定义时可以给其中的元素命名</span>
+</span><span class='line'><span class="n">let</span> <span class="n">http200Status</span> <span class="o">=</span> <span class="p">(</span><span class="n">statusCode</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="s">&quot;OK&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">//</span> <span class="err">有名字后可以通过名字访问</span>
+</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;The status code is \(http200Status.statusCode), message is \(http200Status.description)&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h2 id="枚举">枚举</h2>
+
+<p>Swift中，枚举是一等（first-class）类型，不同于C语言中枚举是一组整型值。所以Fruit.Apple并不对应任何值。<br>
+使用枚举时，如果类型已知，可以直接通过.Apple这种方式来使用；如果类型未知，通过全名Fruit.Apple来使用。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">enum</span> <span class="n">Fruit</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Apple</span><span class="p">,</span> <span class="n">Banana</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Orange</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">func</span> <span class="n">toString</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">switch</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">case</span> <span class="o">.</span><span class="n">Apple</span><span class="p">:</span>
+</span><span class='line'>                <span class="k">return</span> <span class="s">&quot;Apple&quot;</span>
+</span><span class='line'>            <span class="n">case</span> <span class="o">.</span><span class="n">Orange</span><span class="p">:</span>
+</span><span class='line'>                <span class="k">return</span> <span class="s">&quot;Orange&quot;</span>
+</span><span class='line'>            <span class="n">case</span> <span class="o">.</span><span class="n">Banana</span><span class="p">:</span>
+</span><span class='line'>                <span class="k">return</span> <span class="s">&quot;Banana&quot;</span>
+</span><span class='line'>            <span class="n">default</span><span class="p">:</span>
+</span><span class='line'>                <span class="k">return</span> <span class="s">&quot;Unkown&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">usage</span>
+</span><span class='line'><span class="n">var</span> <span class="n">something</span> <span class="o">=</span> <span class="n">Fruit</span><span class="o">.</span><span class="n">Apple</span>
+</span><span class='line'><span class="n">something</span> <span class="o">=</span> <span class="o">.</span><span class="n">Banana</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>枚举的特点在于可以关联原始值或实例值。不关联、原始值、实例值只能取其一，即关联了原始值就不能再关联实例值。</p>
+
+<p>原始值对所有枚举的实例都是相同的。原始值工作的像C++、Java等语言的枚举值一样。
+原始值可以是字符串，字符，或者任何整型值或浮点型值。每个原始值在它的枚举声明中必须是唯一的。
+关联原始值后，枚举可以通过toRaw()得到原始值，通过frowRaw()创建枚举值。如果传给frowRaw()的值未在枚举中定义，会返回nil。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">enum</span> <span class="n">Fruit</span><span class="p">:</span><span class="n">Double</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Apple</span> <span class="o">=</span> <span class="mi">7</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Orange</span><span class="p">,</span> <span class="n">Banana</span><span class="p">,</span> <span class="n">Peach</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="n">Fruit</span><span class="o">.</span><span class="n">Orange</span>
+</span><span class='line'><span class="n">value</span><span class="o">.</span><span class="n">toRaw</span><span class="p">()</span>                       <span class="o">//</span> <span class="mf">8.0</span>
+</span><span class='line'><span class="n">var</span> <span class="n">outOfRange</span> <span class="o">=</span> <span class="n">Fruit</span><span class="o">.</span><span class="n">fromRaw</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span> <span class="o">//</span> <span class="err">返回值为</span><span class="n">nil</span>
+</span><span class='line'><span class="n">outOfRange</span><span class="err">?</span><span class="o">.</span><span class="n">toRaw</span><span class="p">()</span>                 <span class="o">//</span> <span class="err">返回值为</span><span class="n">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+枚举关联实例值时，可以将枚举想象为一个容器，里面可以装一个或多个值，这些值是在创建实例时放进去的，不同的实例放的值不同。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">enum</span> <span class="n">Fruit</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Apple</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Orange</span><span class="p">(</span><span class="n">String</span><span class="p">),</span> <span class="n">Banana</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">Peach</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">let</span> <span class="n">apple</span> <span class="o">=</span> <span class="n">Fruit</span><span class="o">.</span><span class="n">Apple</span><span class="p">(</span><span class="s">&quot;Price:32&quot;</span><span class="p">,</span><span class="s">&quot;Size:4&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">switch</span><span class="p">(</span><span class="n">apple</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">let</span> <span class="o">.</span><span class="n">Apple</span><span class="p">(</span><span class="n">price</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;Info: (price), (size)&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">case</span> <span class="o">.</span><span class="n">Orange</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;orange&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">default</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="泛型">泛型</h2>
+
+<p>泛型可用于函数、类、枚举和结构体。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">func</span> <span class="n">repeat</span><span class="o">&lt;</span><span class="n">ItemType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">ItemType</span><span class="p">,</span> <span class="n">times</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemType</span><span class="p">[]</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">ItemType</span><span class="p"><a href=""></a></span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="mf">0.</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">result</span> <span class="o">+=</span> <span class="n">item</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">usage</span>
+</span><span class='line'><span class="n">repeat</span><span class="p">(</span><span class="s">&quot;knock&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+可以在类型后面使用where来指定一个需求列表
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">SomeClass</span> <span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span> <span class="n">where</span> <span class="n">T</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">T</span><span class="o">.</span><span class="n">GeneratorType</span><span class="o">.</span><span class="n">Element</span><span class="p">:</span> <span class="n">Equatable</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">T</span><span class="o">.</span><span class="n">GeneratorType</span><span class="o">.</span><span class="n">Element</span> <span class="o">==</span> <span class="n">U</span><span class="o">.</span><span class="n">GeneratorType</span><span class="o">.</span><span class="n">Element</span><span class="o">&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">more</span> <span class="k">def</span> <span class="nf">here</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>在限制条件比较简单的情况下，可以不用where，如<code>&lt;T:Equatable&gt;</code>和<code>&lt;T where T:Equatable&gt;</code>等价。</p>
+
+<h2 id="optional值">Optional值</h2>
+
+<p>Swift中常量（let）定义时必须赋初始值，变量（var）可以不赋值，但需要显示指定类型，如<code>var value : Int</code>。
+Swift不自动给变量赋初始值，变量使用前必须初始化。</p>
+
+<p>如果使用时还无法确定初始值，那就需要用到Optional值了，一个未赋值的Optional值会被自动设置为nil。Optional可以通过?来使用。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">//</span> <span class="err">声明</span><span class="n">Optional</span><span class="err">值变量</span>
+</span><span class='line'><span class="n">var</span> <span class="n">shape</span><span class="p">:</span><span class="n">Shape</span><span class="err">?</span> <span class="o">=</span> <span class="n">nil</span>
+</span><span class='line'><span class="o">//</span> <span class="err">对</span><span class="n">Optional</span><span class="err">值操作时，需要做空值判断，判断是否能响应后面的操作。</span>
+</span><span class='line'><span class="o">//</span> <span class="err">如果</span><span class="n">shape</span><span class="err">为</span><span class="n">nil</span><span class="err">，则?之后的被忽略，返回</span><span class="n">nil</span><span class="err">；否则执行?后的代码</span>
+</span><span class='line'><span class="n">let</span> <span class="n">value</span> <span class="o">=</span> <span class="n">shape</span><span class="err">?</span><span class="o">.</span><span class="n">num</span>
+</span></code></pre></td></tr></table></div></figure>
+函数的返回值也可以是Optional值，即可能返回nil
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">func</span> <span class="n">getSomeValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Int</span><span class="err">?</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+实际上，Optional是个enum，其中定义了None和Some两种类型。nil就等价于Optional.None。所以在使用Optional值时，如调用方法、属性、下标索引等，必须在Optional值后面加?来使用，不然会有语法错误。?是Optional定义的一种快捷的拆包方式。Optional的定义如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">enum</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="n">LogicValue</span><span class="p">,</span> <span class="n">Reflectable</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="bp">None</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">Some</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">init</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">init</span><span class="p">(</span><span class="n">_</span> <span class="n">some</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">///</span> <span class="n">Allow</span> <span class="n">use</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">Boolean</span> <span class="n">context</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">func</span> <span class="n">getLogicValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Bool</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">///</span> <span class="n">Haskell</span><span class="s">&#39;s fmap, which was mis-named </span>
+</span><span class='line'>    <span class="n">func</span> <span class="nb">map</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="err">?</span>
+</span><span class='line'>    <span class="n">func</span> <span class="n">getMirror</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Mirror</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+那除了后面加?之外，还有没有别的拆包方法呢？有的，有两种：</p>
+
+<ol>
+<li>Optional Binding，可以用在if和while语句中
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="p">:</span> <span class="n">String</span><span class="err">?</span>
+</span><span class='line'><span class="k">if</span> <span class="n">let</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">value</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">hashStr</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">hashValue</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
+<li>后面加!号，表示确定非nil，强制拆包。当然，如果是nil的话会crash
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="p">:</span> <span class="n">String</span><span class="err">?</span>
+</span><span class='line'><span class="n">value</span><span class="err">!</span><span class="o">.</span><span class="n">hashValue</span>
+</span></code></pre></td></tr></table></div></figure>
+哇！还有一个!号，对，!号还有一个用法，就是用来声明隐式拆包的Optional
+（Implicitly Unwrapped Optionals），这样对变量操作时，会自动补上一个!进行拆包。当然，自己补上!?也是可以的。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="p">:</span> <span class="n">String</span><span class="err">!</span>
+</span><span class='line'><span class="n">value</span><span class="o">.</span><span class="n">hashValue</span> <span class="o">//</span> <span class="err">语法</span><span class="n">OK</span><span class="err">，但是会</span><span class="n">crash</span>
+</span><span class='line'><span class="n">value</span><span class="err">!</span><span class="o">.</span><span class="n">hashValue</span> <span class="o">//</span> <span class="err">语法</span><span class="n">OK</span><span class="err">，但是会</span><span class="n">crash</span>
+</span><span class='line'><span class="n">value</span><span class="err">?</span><span class="o">.</span><span class="n">hashValue</span> <span class="o">//</span> <span class="err">语法</span><span class="n">OK</span><span class="err">，不会</span><span class="n">crash</span>
+</span></code></pre></td></tr></table></div></figure>
+Optional是够复杂的，把整个Swift语法简洁漂亮的美好形象都打破了，有没有？好吧，我保证这绝对是本文里面语法最复杂的部分了，后面不再会超出你的想像了。来个测试试试看，下面这段代码会打印出啥？答案在<a href="#answer">最下方</a>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">let</span> <span class="n">optval</span><span class="p">:</span> <span class="n">Bool</span><span class="err">?</span> <span class="o">=</span> <span class="n">false</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span>               <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span><span class="err">!</span>              <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span> <span class="o">==</span> <span class="n">true</span>       <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;3&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span><span class="err">!</span> <span class="o">==</span> <span class="n">true</span>      <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;4&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span> <span class="o">==</span> <span class="n">false</span>      <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;5&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">optval</span><span class="err">!</span> <span class="o">==</span> <span class="n">false</span>     <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="s">&quot;6&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
+</ol>
+
+<h2 id="流控制">流控制</h2>
+
+<p>switch case的语法特别丰富。一个case可以匹配多个模式，用逗号分开；也可以匹配范围。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">switch</span> <span class="n">count</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="mi">0</span><span class="p">:</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;no&quot;</span>
+</span><span class='line'>    <span class="n">case</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;a few&quot;</span>
+</span><span class='line'>    <span class="n">case</span> <span class="mf">4.</span><span class="o">..</span><span class="mi">100</span><span class="p">:</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;a lot of&quot;</span>
+</span><span class='line'>    <span class="n">default</span><span class="p">:</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;too many&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>switch也可以匹配元组；可以值绑定（Value Bindings）；可以通过where添加额外判断条件。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">let</span> <span class="n">somePoint</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="n">switch</span> <span class="n">somePoint</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">case</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;at the origin&quot;</span>
+</span><span class='line'>    <span class="n">case</span> <span class="p">(</span><span class="n"><em></span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;on the x-axis&quot;</span>
+</span><span class='line'>    <span class="n">case</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.</span><span class="o">..</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="o">..</span><span class="mi">2</span><span class="p">):</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;inside the box&quot;</span>
+</span><span class='line'>    <span class="n">case</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">let</span> <span class="n">y</span><span class="p">):</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;on the y-axis, and y = (y)&quot;</span>
+</span><span class='line'>    <span class="n">case</span> <span class="n">var</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="n">where</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span><span class="p">:</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;on the line at ((x), (y))&quot;</span>
+</span><span class='line'>    <span class="n">default</span><span class="p">:</span>
+</span><span class='line'>        <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;nowhere&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">switch</span><span class="err">不需要</span><span class="k">break</span><span class="err">，执行完一个</span><span class="n">case</span><span class="err">后推出整个</span><span class="n">switch</span><span class="err">。如果需要</span><span class="n">C</span><span class="err">语言中执行完一个</span><span class="n">case</span><span class="err">落入下一个</span><span class="n">case</span><span class="err">中的情况，需要用到</span> <span class="o"><strong></span><span class="n">fallthrough</span><span class="o"></strong></span><span class="err">。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">当多个流控制代码块相互套嵌时，可以通过标签来明确跳出位置。</span>
+</span></code></pre></td></tr></table></div></figure> python
+gameLoop: while square != finalSquare {
+    if some {
+        value = 3
+    } else if some == 7 {
+        break gameLoop
+    }
+}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="sb">`<code>&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;</code></span> <span class="n">python</span>
+</span><span class='line'><span class="o">//</span> <span class="err">不需要用到循环的值</span>
+</span><span class='line'><span class="k">for</span> <span class="n"></em></span> <span class="ow">in</span> <span class="mf">1.</span><span class="o">..</span><span class="n">power</span> <span class="p">{</span>
+</span><span class='line'><span class="n">answer</span> <span class="o">*=</span> <span class="n">base</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">C</span><span class="err">样式的</span><span class="k">for</span><span class="err">循环</span>
+</span><span class='line'><span class="k">for</span> <span class="n">var</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">{</span>
+</span><span class='line'><span class="o">//</span> <span class="n">todo</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="接口和扩展">接口和扩展</h2>
+
+<p>接口定义如下，
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">protocol</span> <span class="n">Speak</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">des</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span><span class="n">get</span><span class="p">}</span>
+</span><span class='line'>    <span class="n">mutating</span> <span class="n">func</span> <span class="n">say</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">usage</span>
+</span><span class='line'><span class="n">var</span> <span class="n">man</span> <span class="p">:</span> <span class="n">Speak</span><span class="err">?</span> <span class="o">=</span> <span class="n">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+其中，get用于控制访问权限，表明只能获取不能设置；mutating表示say函数可以修改内部内容，
+class默认可以修改类，无需声明，struct需要通过mutating声明会修改结构体内容。</p>
+
+<p>类、结构体、枚举都可以实现接口。</p>
+
+<p>可以使用extension让任何现有的类型实现新的protocol，例如让Double类型实现Speak接口。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">extension</span> <span class="n">Double</span><span class="p">:</span><span class="n">Speak</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">des</span> <span class="p">:</span> <span class="n">String</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s">&quot;Double value&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">func</span> <span class="n">say</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;(self.des): (self)&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">usage</span>
+</span><span class='line'><span class="mf">3.2</span><span class="o">.</span><span class="n">say</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="答案">答案</h2>
+
+<p><a name="answer">答案</a>是会打印出 1 5 6 。可以copy到playground里试试看 ^_^</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">erik ge</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-20T17:34:28+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    <p class="meta">
+        版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">BY-NC-ND 3.0</a>
+    </p>
+    <div class="sharing">
+    <style>
+        .flash-video{display:none;}
+    </style>
+  
+  
+  
+  
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_weixin">微信</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_douban">豆瓣</a>
+	<a class="jiathis_button_xqw">雪球</a>
+	<a href="http://www.jiathis.com/share?uid=1923944" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+    var jiathis_config = {data_track_clickback:'true'};
+    </script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394075736790327" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+</div>
+
+    <br />
+    
+
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1923944"></script>
+<!-- UY END -->
+
+
+
+    <!-- UJian Button BEGIN -->
+<div class="ujian-hook"></div>
+<script type="text/javascript">var ujian_config = {num:12,picSize:84,textHeight:45};</script>
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=1923944"></script>
+<a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+<!-- UJian Button END -->
+
+
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/articles/SwiftResSummary" title="Previous Post: Swift资源汇总">&laquo; Swift资源汇总</a>
+      
+      
+        <a class="basic-alignment right" href="/articles/SwiftSyntax" title="Next Post: Swift的语法细节">Swift的语法细节 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section id="menuIndex">
+    <h1>Contents</h1>
+    <script src="/javascripts/article_outline.js" type="text/javascript"></script>
+</section>
+
+
+
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/articles/SwiftTroubles">Swift的问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/SwiftSyntax">Swift的语法细节</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/SwiftCandy">Swift语法糖</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/SwiftResSummary">Swift资源汇总</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/DoubangoGettingStarted">Doubango Getting Started</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+    <h1>Categories</h1>
+    <ul>
+        
+        
+        <li><a class='category' href='/categories/web/'>web (4)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/life/'>life (1)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/ios/'>iOS (5)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/build/'>build (3)</a></li>
+        
+        
+        
+        <li><a class='category' href='/categories/webrtc/'>webrtc (1)</a></li>
+        
+        
+    </ul>
+</section>
+
+
+
+
+
+
+<section>
+    <!--a data-type="3" data-tmpl="200x200" data-tmplid="197" data-rd="2" data-style="2" data-border="1" href="#"></a-->
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - erik ge -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  <!-- Included file 'disqus.html' not found in _includes directory
+Included file 'facebook_like.html' not found in _includes directory
+Included file 'google_plus_one.html' not found in _includes directory
+Included file 'twitter_sharing.html' not found in _includes directory -->
+
+
+
+</body>
+</html>
