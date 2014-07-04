@@ -9,7 +9,7 @@
   <meta name="author" content="erik ge">
 
   
-  <meta name="description" content="一种技术的出现解决了一些问题，同时也会带来更多的问题。正因为Swift的高级特性，也由此带来了一些复杂性和一些潜在的问题。 ">
+  <meta name="description" content="一种技术的出现解决了一些问题，同时也会带来更多的问题。正因为Swift的高级特性，也由此带来了一些复杂性和一些潜在的问题。 内存管理 Swift 使用自动引用计数(ARC)来自动管理内存。大部分情况下无需考虑内存的分配和释放，但要注意某些可能会导致内存问题的使用方法。 ARC工作原理 强引用( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -107,7 +107,7 @@
       </p>
     
     
-    <span><font size=".9em" color="#aaa"> <i class="fi-clock"></i> less than 1 minute</font></span>
+    <span><font size=".9em" color="#aaa"> <i class="fi-clock"></i> about 9  minutes</font></span>
     
   </header>
 
@@ -115,6 +115,239 @@
 <div class="entry-content"><p>一种技术的出现解决了一些问题，同时也会带来更多的问题。正因为Swift的高级特性，也由此带来了一些复杂性和一些潜在的问题。</p>
 
 <!--more-->
+
+<h2 id="内存管理">内存管理</h2>
+
+<p>Swift 使用自动引用计数(ARC)来自动管理内存。大部分情况下无需考虑内存的分配和释放，但要注意某些可能会导致内存问题的使用方法。</p>
+
+<h3 id="arc工作原理">ARC工作原理</h3>
+
+<p>强引用(strong reference)：将一个类的实例赋值给一个属性或者常量或者变量，这个属性、常量或者变量就是这个实例的强引用。<br>
+弱引用(weak reference)：弱引用不会增加实例的引用计数，因此不会阻止 ARC 销毁被引用的实例。弱引用只能声明为可选类型(optional type)的变量。<br>
+无主引用(unowned reference)：无主引用也不强持有实例，但无主引用默认始终有值。无主引用只能定义为非可选类型(non-optional type)。</p>
+
+<p>强引用还存在时，ARC不会释放这个实例。</p>
+
+<h3 id="类实例间的强引用环">类实例间的强引用环</h3>
+
+<p>两个实例相互引用对方作为自己的属性，彼此保持对方的强引用，这样就产生了强引用环，导致这两个实例永远不被释放。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">apartment</span><span class="p">:</span> <span class="n">Apartment</span><span class="err">?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">deinit</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Person&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Apartment</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">tenant</span><span class="p">:</span> <span class="n">Person</span><span class="err">?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">deinit</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Apartment&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">//</span> <span class="err">产生强引用环的情况</span>
+</span><span class='line'><span class="n">var</span> <span class="n">foo</span><span class="p">:</span> <span class="n">Person</span><span class="err">?</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+</span><span class='line'><span class="n">var</span> <span class="n">house</span><span class="p">:</span> <span class="n">Apartment</span><span class="err">?</span> <span class="o">=</span> <span class="n">Apartment</span><span class="p">()</span>
+</span><span class='line'><span class="k">if</span> <span class="n">let</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">foo</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tmp</span><span class="o">.</span><span class="n">apartment</span> <span class="o">=</span> <span class="n">house</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">house</span><span class="err">!</span><span class="o">.</span><span class="n">tenant</span> <span class="o">=</span> <span class="n">foo</span>
+</span><span class='line'><span class="o">//</span> <span class="err">即便都置为</span><span class="n">nil</span><span class="err">也无法释放资源</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="n">nil</span>
+</span><span class='line'><span class="n">house</span> <span class="o">=</span> <span class="n">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+通过弱引用或无主引用来解决这个问题。如果生命周期中，引用（上例中的属性）有时有值，有时为nil，使用弱引用；如果始终有值，使用无主引用。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">//</span> <span class="err">通过弱引用解决</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Apartment</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">weak</span> <span class="n">var</span> <span class="n">tenant</span><span class="p">:</span> <span class="n">Person</span><span class="err">?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">deinit</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Apartment&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">//</span> <span class="err">通过无主引用解决，如果</span><span class="n">house</span><span class="err">必须有主人的话</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">apartment</span><span class="p">:</span> <span class="n">Apartment</span><span class="err">?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">deinit</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Person&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Apartment</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">unowned</span> <span class="n">var</span> <span class="n">tenant</span><span class="p">:</span> <span class="n">Person</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">init</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">Person</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">tenant</span> <span class="o">=</span> <span class="n">person</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">deinit</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Apartment&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">var</span> <span class="n">foo</span><span class="p">:</span> <span class="n">Person</span><span class="err">?</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+</span><span class='line'><span class="n">var</span> <span class="n">house</span><span class="p">:</span> <span class="n">Apartment</span><span class="err">?</span> <span class="o">=</span> <span class="n">Apartment</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">foo</span><span class="err">!</span><span class="p">)</span>
+</span><span class='line'><span class="o">//</span> <span class="err">相互引用</span>
+</span><span class='line'><span class="k">if</span> <span class="n">let</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">foo</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tmp</span><span class="o">.</span><span class="n">apartment</span> <span class="o">=</span> <span class="n">house</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">house</span><span class="err">!</span><span class="o">.</span><span class="n">tenant</span> <span class="o">=</span> <span class="n">foo</span><span class="err">!</span>
+</span><span class='line'><span class="o">//</span> <span class="err">可以正常释放资源</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="n">nil</span>
+</span><span class='line'><span class="n">house</span> <span class="o">=</span> <span class="n">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>如果无主引用的例子中，Person也一直有Apartment的话，Person中的apartment属性可以使用隐式展开的可选属性。</p>
+
+<h3 id="闭包产生的强引用环">闭包产生的强引用环</h3>
+
+<p>将一个闭包赋值给类实例的某个属性，并且这个闭包使用了实例（访问了实例的某个属性，或调用了实例的某个方法。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">HTMLElement</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">name</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">text</span><span class="p">:</span> <span class="n">String</span><span class="err">?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">//</span> <span class="nd">@lazy</span><span class="err">保证初始化完成以及</span> <span class="bp">self</span> <span class="err">确实存在后</span><span class="p">,</span><span class="err">才能访问</span> <span class="n">lazy</span> <span class="err">属性</span>
+</span><span class='line'>    <span class="nd">@lazy</span> <span class="n">var</span> <span class="n">asHTML</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">let</span> <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s">&quot;&lt;(self.name)&gt;(text)&lt;/(self.name)&gt;&quot;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s">&quot;&lt;(self.name) /&gt;&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">init</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">String</span><span class="err">?</span> <span class="o">=</span> <span class="n">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">deinit</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~(name) deinit&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">var</span> <span class="n">html</span><span class="p">:</span> <span class="n">HTMLElement</span><span class="err">?</span> <span class="o">=</span> <span class="n">HTMLElement</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&quot;head&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">html</span><span class="err">?</span><span class="o">.</span><span class="n">asHTML</span><span class="p">()</span> <span class="o">//</span> <span class="err">使用闭包后产生了强引用环</span>
+</span><span class='line'><span class="n">html</span> <span class="o">=</span> <span class="n">nil</span> <span class="o">//</span> <span class="n">HTMLElement</span><span class="err">实例和它的闭包都不会被销毁</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>可以通过闭包占用列表(closuer capture list)解决这个问题。Swift有如下约束：只要在闭包内使用 self 的成员,就要用 self.someProperty 或者
+self.someMethod（而非只是 someProperty 或 someMethod）。这可以提醒你可能会不小心就占有了 self，导致强引用环。<br>
+占有列表放置在闭包参数列表和返回类型之前。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nd">@lazy</span> <span class="n">var</span> <span class="n">someClosure</span><span class="p">:</span> <span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">unowned</span> <span class="bp">self</span><span class="p">]</span> <span class="p">(</span><span class="n">index</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">stringToProcess</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="ow">in</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">closure</span> <span class="n">body</span> <span class="n">goes</span> <span class="n">here</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nd">@lazy</span> <span class="n">var</span> <span class="n">someClosure</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weak</span> <span class="bp">self</span><span class="p">]</span> <span class="ow">in</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">closure</span> <span class="n">body</span> <span class="n">goes</span> <span class="n">here</span>
+</span><span class='line'>    <span class="bp">self</span><span class="err">?</span><span class="o">.</span><span class="n">someProperty</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="构造器">构造器</h2>
+
+<p>构造器的部分也挺复杂的，类有一套构造器的规矩，扩展还可以添加新的构造器。其中有哪些问题需要注意？后续补充。</p>
 </div>
 
 

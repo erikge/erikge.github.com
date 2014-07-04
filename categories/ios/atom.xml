@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/ios/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-07-01T17:39:23+08:00</updated>
+  <updated>2014-07-04T16:23:22+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -21,6 +21,143 @@
     <content type="html"><![CDATA[<p>一种技术的出现解决了一些问题，同时也会带来更多的问题。正因为Swift的高级特性，也由此带来了一些复杂性和一些潜在的问题。</p>
 
 <!--more-->
+
+<h2 id="内存管理">内存管理</h2>
+
+<p>Swift 使用自动引用计数(ARC)来自动管理内存。大部分情况下无需考虑内存的分配和释放，但要注意某些可能会导致内存问题的使用方法。</p>
+
+<h3 id="arc工作原理">ARC工作原理</h3>
+
+<p>强引用(strong reference)：将一个类的实例赋值给一个属性或者常量或者变量，这个属性、常量或者变量就是这个实例的强引用。<br>
+弱引用(weak reference)：弱引用不会增加实例的引用计数，因此不会阻止 ARC 销毁被引用的实例。弱引用只能声明为可选类型(optional type)的变量。<br>
+无主引用(unowned reference)：无主引用也不强持有实例，但无主引用默认始终有值。无主引用只能定义为非可选类型(non-optional type)。</p>
+
+<p>强引用还存在时，ARC不会释放这个实例。</p>
+
+<h3 id="类实例间的强引用环">类实例间的强引用环</h3>
+
+<p>两个实例相互引用对方作为自己的属性，彼此保持对方的强引用，这样就产生了强引用环，导致这两个实例永远不被释放。
+&ldquo;` python
+class Person {
+    var apartment: Apartment?</p>
+<div class="highlight"><pre><code class="text">deinit {
+    println(&quot;~~deinit Person&quot;)
+}
+</code></pre></div>
+<p>}
+class Apartment {
+    var tenant: Person?</p>
+<div class="highlight"><pre><code class="text">deinit {
+    println(&quot;~~deinit Apartment&quot;)
+}
+</code></pre></div>
+<p>}</p>
+
+<p>// 产生强引用环的情况
+var foo: Person? = Person()
+var house: Apartment? = Apartment()
+if let tmp = foo {
+    tmp.apartment = house
+}
+house!.tenant = foo
+// 即便都置为nil也无法释放资源
+foo = nil
+house = nil
+<code>
+通过弱引用或无主引用来解决这个问题。如果生命周期中，引用（上例中的属性）有时有值，有时为nil，使用弱引用；如果始终有值，使用无主引用。
+</code> python
+// 通过弱引用解决
+class Apartment {
+    weak var tenant: Person?</p>
+<div class="highlight"><pre><code class="text">deinit {
+    println(&quot;~~deinit Apartment&quot;)
+}
+</code></pre></div>
+<p>}
+&rdquo;`</p>
+<div class="highlight"><pre><code class="python"><span class="o">//</span> <span class="err">通过无主引用解决，如果</span><span class="n">house</span><span class="err">必须有主人的话</span>
+<span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span>
+    <span class="n">var</span> <span class="n">apartment</span><span class="p">:</span> <span class="n">Apartment</span><span class="err">?</span>
+
+    <span class="n">deinit</span> <span class="p">{</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Person&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">class</span> <span class="nc">Apartment</span> <span class="p">{</span>
+    <span class="n">unowned</span> <span class="n">var</span> <span class="n">tenant</span><span class="p">:</span> <span class="n">Person</span>
+
+    <span class="n">init</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">Person</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tenant</span> <span class="o">=</span> <span class="n">person</span>
+    <span class="p">}</span>
+
+    <span class="n">deinit</span> <span class="p">{</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;~~deinit Apartment&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">var</span> <span class="n">foo</span><span class="p">:</span> <span class="n">Person</span><span class="err">?</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+<span class="n">var</span> <span class="n">house</span><span class="p">:</span> <span class="n">Apartment</span><span class="err">?</span> <span class="o">=</span> <span class="n">Apartment</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">foo</span><span class="err">!</span><span class="p">)</span>
+<span class="o">//</span> <span class="err">相互引用</span>
+<span class="k">if</span> <span class="n">let</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">foo</span> <span class="p">{</span>
+    <span class="n">tmp</span><span class="o">.</span><span class="n">apartment</span> <span class="o">=</span> <span class="n">house</span>
+<span class="p">}</span>
+<span class="n">house</span><span class="err">!</span><span class="o">.</span><span class="n">tenant</span> <span class="o">=</span> <span class="n">foo</span><span class="err">!</span>
+<span class="o">//</span> <span class="err">可以正常释放资源</span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">nil</span>
+<span class="n">house</span> <span class="o">=</span> <span class="n">nil</span>
+</code></pre></div>
+<p>如果无主引用的例子中，Person也一直有Apartment的话，Person中的apartment属性可以使用隐式展开的可选属性。</p>
+
+<h3 id="闭包产生的强引用环">闭包产生的强引用环</h3>
+
+<p>将一个闭包赋值给类实例的某个属性，并且这个闭包使用了实例（访问了实例的某个属性，或调用了实例的某个方法。
+&ldquo;` python
+class HTMLElement {
+    let name: String
+    let text: String?</p>
+<div class="highlight"><pre><code class="text">// @lazy保证初始化完成以及 self 确实存在后,才能访问 lazy 属性
+@lazy var asHTML: () -&gt; String = {
+    if let text = self.text {
+        return &quot;&lt;\(self.name)&gt;\(text)&lt;/\(self.name)&gt;&quot;
+    } else {
+        return &quot;&lt;\(self.name) /&gt;&quot;
+    }
+}
+
+init(name: String, text: String? = nil) {
+    self.name = name
+    self.text = text
+}
+
+deinit {
+    println(&quot;~~\(name) deinit&quot;)
+}
+</code></pre></div>
+<p>}</p>
+
+<p>var html: HTMLElement? = HTMLElement(name: &quot;head&rdquo;)
+html?.asHTML() // 使用闭包后产生了强引用环
+html = nil // HTMLElement实例和它的闭包都不会被销毁
+&ldquo;`</p>
+
+<p>可以通过闭包占用列表(closuer capture list)解决这个问题。Swift有如下约束：只要在闭包内使用 self 的成员,就要用 self.someProperty 或者
+self.someMethod（而非只是 someProperty 或 someMethod）。这可以提醒你可能会不小心就占有了 self，导致强引用环。<br>
+占有列表放置在闭包参数列表和返回类型之前。
+<code>python
+@lazy var someClosure: (Int, String) -&gt; String = {
+    [unowned self] (index: Int, stringToProcess: String) -&gt; String in
+    // closure body goes here
+}
+@lazy var someClosure: () -&gt; String = {
+    [weak self] in
+    // closure body goes here
+    self?.someProperty
+}
+</code></p>
+
+<h2 id="构造器">构造器</h2>
+
+<p>构造器的部分也挺复杂的，类有一套构造器的规矩，扩展还可以添加新的构造器。其中有哪些问题需要注意？后续补充。</p>
 ]]></content>
   </entry>
   
@@ -30,7 +167,7 @@
     <updated>2014-06-26T14:09:50+08:00</updated>
     <id>http://erikge.com/articles/SwiftSyntax</id>
     <content type="html"><![CDATA[<p>Swift类似脚本语言的高级语法特性，让Swift语言使用起来很直观，很符合人的直觉，整体感觉很简洁很舒服。使用不同编程语言的程序员都能找到熟悉的感觉，这种亲切感必将吸引更多的开发者。<br>
-除去那些显而易见的语法，本文总结一些略显奇怪的语法，作为开发中的参考。</p>
+本文总结Swift中需要注意的语法细节，完整的语法说明参考苹果的官方文档<a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/">The Swift Programming Language</a>。</p>
 
 <!--more-->
 
@@ -48,7 +185,9 @@
 <span class="n">more</span> <span class="n">code</span> <span class="n">here</span>
 <span class="err">这是第一个多行注释的结尾</span> <span class="o">*/</span>
 </code></pre></div>
-<h2 id="有关数值的操作">有关数值的操作</h2>
+<h2 id="数学相关的操作">数学相关的操作</h2>
+
+<h3 id="数值字面量">数值字面量</h3>
 
 <p>整数字面量可以是十进制、二进制、八进制、十六进制
 <code>python
@@ -74,25 +213,91 @@ let justOverOneMillion = 1_000_000.000_000_1
 
 <p>可以通过typealias给类型起个更喜欢的别名，如<code>typealias AudioSample = UInt16</code>，这时AudioSample等价于UInt16。</p>
 
-<p>\% 为 求余运算符 或 取模运算符，可以对负数和浮点数操作。被求余数的符号被忽略。
+<h3 id="运算符">运算符</h3>
+
+<p>求余运算符。<br>
+% 为 求余运算符 或 取模运算符，可以对负数和浮点数操作。被求余数的符号被忽略。
 <code>python
 9 % 4 // 等于1
 9 % -4 // 和 9 % 4 等价，等于1
 -8 % 2.5 // 等于-0.5
 </code></p>
 
-<p>区间运算符，<code>a...b</code>表示从a到b(包括 a 和 b)的所有值的闭区间；<code>a..b</code>表示包括a不包括b的前闭后开区间。</p>
+<p>区间运算符。<br>
+<code>a...b</code>表示从a到b(包括 a 和 b)的所有值的闭区间；<code>a..b</code>表示包括a不包括b的前闭后开区间。</p>
+
+<p>溢出运算符。<br>
+Swift的数值计算默认是不可溢出的，溢出行为会被捕获并报error。Swift提供了一套以&amp;开头的溢出运算符，包括<code>&amp;+</code>, <code>&amp;-</code>, <code>&amp;*</code>, <code>&amp;/</code>, <code>&amp;%</code>。
+<code>python
+var byte_min = Int8.max &amp;+ 1 // -128
+var byte_max = Int8.min &amp;- 1 // 127
+</code></p>
+
+<p>位运算符。<br>
+<code>python
+let invert: UInt8 = ~0b11       // 按位取反
+let and: UInt8 = 0xF &amp; 0xF0     // 按位与
+let or: UInt8 = 0xF | 0xF0      // 按位或
+let diff: UInt8 = 0xF ^ 0xF0    // 按位异或
+let left: UInt8 = 0xFF &lt;&lt; 1     // 按位左移
+let right: UInt8 = 1 &gt;&gt; 1       // 按位右移
+</code></p>
+
+<p>运算符函数。<br>
+让已有的运算符也可以对自定义的类和结构进行运算，这称为运算符重载。<br>
+@infix表示中置运算符，如a + b；<br>
+@prefix表示前置运算符，如-a；<br>
+@postfix表示后置运算符，如i++；<br>
+@assignment表示组合赋值运算符，还需要把左参数设置成 inout，如a += 3；
+<code>python
+struct Point {
+    var x = 0.0, y = 0.0
+}
+@infix func + (left: Point, right: Point) -&gt; Point {
+    return Point(x: left.x + right.x, y: left.y + right.y)
+}
+@prefix func - (p: Point) -&gt; Point {
+    return Point(x: -p.x, y: -p.y)
+}
+@assignment func += (inout l: Point, r: Point) {
+    l = l + r
+}
+@prefix @assignment func ++ (inout p: Point) -&gt; Point {
+    p += Point(x: 1.0, y: 1.0)
+    return p
+}
+@postfix func ++ (inout p: Point) -&gt; Point {
+    var ret = p
+    ++p
+    return ret
+}
+</code></p>
+
+<p>自定义运算符。<br>
+自定义的运算符只能从<code>/ = - + * % &lt; &gt; ! &amp; | ^ ~</code>中选择。
+&ldquo;` python
+operator prefix &lt;+&gt; {} // 先声明为运算符
+@prefix @assignment func &lt;+&gt; (inout p: Point) -&gt; Point {
+    p += p
+    return p
+}
+var p = Point(x: 3, y: 4)
+&lt;+&gt;p</p>
+
+<p>// 自定义中置运算符可以定义优先级（默认为100）和结合性（默认为none）
+operator infix +- { associativity left precedence 140 }
+&rdquo;`
+更完整的运算符的优先级和结合性参考<a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Expressions.html#//apple_ref/doc/uid/TP40014097-CH32-XID_655">官方文档</a></p>
 
 <h2 id="字符和字符串">字符和字符串</h2>
 
 <p>字符串字面量可以包含一下特殊字符：</p>
 
 <ol>
-<li>转义特殊字符 <code>\0 (空字符)、\\(反斜线)、\t (水平制表符)、\n (换行符)、\r (回车符)、\&quot; (双
-引号)、\&#39; (单引号)</code>。
-2.单字节 Unicode 标量，写成<code>\xnn</code>,其中 nn 为两位十六进制数。
-3.双字节 Unicode 标量，写成<code>\unnnn</code>,其中 nnnn 为四位十六进制数。
-4.四字节 Unicode 标量，写成<code>\Unnnnnnnn</code>,其中 nnnnnnnn 为八位十六进制数。</li>
+<li>转义特殊字符 <code>\0 (空字符)、\\(反斜线)、\t (水平制表符)、\n (换行符)、\r (回车符)、\&quot; (双引号)、\&#39; (单引号)</code>。</li>
+<li>单字节 Unicode 标量，写成<code>\xnn</code>,其中 nn 为两位十六进制数。</li>
+<li>双字节 Unicode 标量，写成<code>\unnnn</code>,其中 nnnn 为四位十六进制数。</li>
+<li>四字节 Unicode 标量，写成<code>\Unnnnnnnn</code>,其中 nnnnnnnn 为八位十六进制数。</li>
 </ol>
 
 <p>空字符串定义，二者等价
@@ -128,7 +333,7 @@ var arrSimple: String[] = [&quot;one&quot;, &quot;two&quot;]
 var arrComp: Array&lt;String&gt; = [&quot;one&quot;, &quot;two&quot;]
 var arr = [&quot;one&quot;, &quot;two&quot;] // 依赖类型推断
 // 定义空数组
-var emptySimple: String[] = String[]()
+var emptySimple: String[] = String[] ()
 var emptyComp: Array&lt;String&gt; = Array&lt;String&gt;()
 var emptyNotOK = [] // 未说明类型，后续无法使用
 emptySimple = [] // 类型已知的情况下，可以用于变为空数组
@@ -209,13 +414,12 @@ for (airportCode, airportName) in airports {
 <li>闭包。闭包包括函数。</li>
 </ul>
 
-<p>恒等运算符，判断两个变量、常量是否引用同一个实例的方法。<br>
-恒等<code>===</code><br>
-不恒等<code>!==</code><br>
-在实际开发中，并没有必要因为值拷贝的原因减少赋值等传递。因为在实际编译时，编译器会保证复制只发生在绝对必要的情况下以提高性能</p>
+<p>恒等运算符（恒等<code>===</code>、不恒等<code>!==</code>），判断两个变量、常量是否引用同一个实例的方法。</p>
+
+<p>在实际开发中，并没有必要因为值拷贝的原因减少赋值等传递。因为在实际编译时，编译器会保证复制只发生在绝对必要的情况下以提高性能</p>
 
 <p>集合类型的传递和拷贝行为略有些复杂。集合类型在传递时，先不做拷贝，只有当值发生变化时才执行拷贝。字典在其中的键－值对改变或size改变时，都认为是发生变化，触发拷贝；但数组在修改其中元素时不认为是发生变化，只有在长度改变时才认为是发生变化，才触发拷贝。
-数组长度改变的情况包括附加(appending),插入(inserting),删除(removing)或者使用范围下标(ranged subscript)去替换这一范围内的元素。</p>
+数组长度改变的情况包括附加(appending)，插入(inserting)，删除(removing)或者使用范围下标(ranged subscript)去替换这一范围内的元素。</p>
 
 <p>集合类型在拷贝时执行的都是浅拷贝。当其中的元素时引用类型时，拷贝的是引用。
 <code>python
@@ -277,13 +481,20 @@ join(string: &quot;Hello&quot;, toString: &quot;world&quot;, withJoiner: &quot;,
 </code></p>
 
 <p>默认值。<br>
-函数形参可以带有默认值，虽然默认值形参可以在任何位置，但是建议放在形参列表的末尾。
-<code>python
-func join(s1: String, s2: String = &quot;world&quot;, jo: String) -&gt; String {
+函数形参可以带有默认值，虽然默认值形参可以在任何位置，但是建议放在形参列表的末尾。<br>
+Swift为带默认值的形参自动提供了外部形参名，可以通过&quot;_&ldquo;来关闭这种行为
+&rdquo;` python
+func join(s1: String, s2: String = &ldquo;world&rdquo;, jo: String) -&gt; String {
     return s1 + jo + s2
 }
-join(&quot;Hello&quot;, &quot;, &quot;) // 输出 &quot;Hello, world&quot;
-</code></p>
+join(&ldquo;Hello&rdquo;, &ldquo;, &rdquo;) // 输出 &ldquo;Hello, world&rdquo;
+join(&ldquo;Hello&rdquo;, s2: &ldquo;Amy&rdquo;, &ldquo;, &rdquo;) // 不使用默认值</p>
+
+<p>func join2(s1: String, _ s2: String = &ldquo;world&rdquo;, jo: String) -&gt; String {
+    return s1 + jo + s2
+}
+join2(&ldquo;Hello&rdquo;, &ldquo;Foo&rdquo;, &ldquo;, &rdquo;)
+&ldquo;`</p>
 
 <p>可变形参。<br>
 传递至可变形参的值在函数主体内是以适当类型的数组存在的。
@@ -323,14 +534,14 @@ y // 5
 
 <p>嵌套函数。<br>
 除了在全局作用域中定义的全局函数外，还可以在函数体内部定义嵌套函数。
-&ldquo;` python
+&rdquo;` python
 func chooseStepFunction(backwards: Bool) -&gt; (Int) -&gt; Int {
     func stepForward(input: Int) -&gt; Int { return input + 1 }
     func stepBackward(input: Int) -&gt; Int { return input - 1 }</p>
 <div class="highlight"><pre><code class="text">return backwards ? stepBackward : stepForward
 </code></pre></div>
 <p>}
-&rdquo;`</p>
+&ldquo;`</p>
 
 <h2 id="类和结构体">类和结构体</h2>
 
@@ -364,6 +575,138 @@ struct SomeStructure {
 }
 </code></p>
 
+<h3 id="属性">属性</h3>
+
+<p>属性部分包含：</p>
+
+<ol>
+<li>存储属性。存储常量、变量，可用于类和结构体</li>
+<li>计算属性。计算值，可用于类、结构体和枚举</li>
+<li>属性监视器。监控属性值的变化</li>
+</ol>
+
+<p>存储属性。<br>
+@lazy标示的为延迟存储属性，创建时为nil，在第一次被调用时才初始化。
+<code>python
+class Lazy {
+    let left: Int = 5
+    @lazy var top: Int = 3
+}
+</code></p>
+
+<p>计算属性。<br>
+计算属性不直接存储值，提供一个get来获取值，一个可选的set来设置值。只实现get，不实现set时，为只读属性。计算属性只能通过var来定义。
+&rdquo;` python
+struct Range {
+    var normal: String {
+        get {
+            return &ldquo;Getter&rdquo;
+        }
+        set (new_str) {
+            println(new_str)
+        }
+    }
+    var quick: Double {
+        get {
+            return 1.0
+        }
+        set { // 默认参数名为 newValue
+            println(newValue)
+        }
+    }
+    var quickReadOnly: Int {
+        return 1 + 1
+    }</p>
+
+<p>}
+var ran = Range()
+ran.normal
+ran.normal = &ldquo;aabbcc&rdquo;
+ran.quickReadOnly
+&ldquo;`</p>
+
+<p>属性监视器。<br>
+可以为除了延迟存储属性之外的其他存储属性添加属性监视器，也可以通过重载属性的方式为继承的属性(包括存储属性和计算属性)添加属性监视器。<br>
+willSet 在设置新的值之前调用，将新的值作为参数传入，默认名称为newValue。didSet 在新的值被设置之后立即调用，将旧的属性值作为参数传入，默认名称为oldValue。<br>
+willSet 和 didSet 监视器在属性初始化过程中不会被调用，他们只会当属性的值在初始化之外的地方被设置时被调用。</p>
+
+<p>计算属性和存储型属性监视器所描述的模式也可以用于全局变量和局部变量，即可定义计算型变量和为存储型变量定义监视器。</p>
+
+<p>类型属性。<br>
+上述的属性在实例之间相互独立，属于实例属性。也可以为类型定义类型属性，不管有多少实例，这些属性都只有一份。<br>
+对于值类型(指结构体和枚举)可以定义存储型和计算型类型属性，对于类(class)则只能 定义计算型类型属性。
+&rdquo;` python
+struct SomeStruct {
+    static let property = &ldquo;structure&rdquo;
+    static var type: Int {
+        return 0
+    }
+}
+enum SomeEnum {
+    static let property = &ldquo;enumeration&rdquo;
+    static var type: Int {
+        return 1
+    }
+}
+class SomeClass {
+    class var type: Int {
+        return 2
+    }</p>
+
+<p>}
+// usage
+SomeStruct.type
+&ldquo;`</p>
+
+<h3 id="方法">方法</h3>
+
+<p>类、结构体、枚举都可以定义实例方法或类型方法。方法自动为第二个参数和后续所有参数提供同名外部参数名称，可以自己指定外部参数名，或通过&rdquo;_&ldquo;关闭默认行为。</p>
+<div class="highlight"><pre><code class="python"><span class="k">class</span> <span class="nc">Counter</span> <span class="p">{</span>
+    <span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">func</span> <span class="n">increase</span><span class="p">(</span><span class="n">amout</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">times</span> <span class="p">:</span><span class="n">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Int</span><span class="p">{</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="n">amout</span> <span class="o">*</span> <span class="n">times</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="p">}</span>
+    <span class="n">func</span> <span class="n">increase</span><span class="p">(</span><span class="n">amout</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">numberOfTimes</span> <span class="n">times</span> <span class="p">:</span><span class="n">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Int</span><span class="p">{</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="n">amout</span> <span class="o">*</span> <span class="n">times</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="p">}</span>
+    <span class="n">func</span> <span class="n">increase</span><span class="p">(</span><span class="n">amout</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">_</span> <span class="n">times</span> <span class="p">:</span><span class="n">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Int</span><span class="p">{</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="n">amout</span> <span class="o">*</span> <span class="n">times</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="o">//</span> <span class="n">usage</span>
+<span class="n">var</span> <span class="n">ins</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="n">ins</span><span class="o">.</span><span class="n">increase</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">times</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">ins</span><span class="o">.</span><span class="n">increase</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">numberOfTimes</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ins</span><span class="o">.</span><span class="n">increase</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<p>另外一个值得注意的问题是，结构体和枚举是值类型。一般情况下，值类型的属性不能在它的实例方法中被修改。如果方法需要修改结构体内容，需要用mutating显式声明。
+&rdquo;` python
+enum TriState {
+    case Off, Low, High</p>
+<div class="highlight"><pre><code class="text">mutating func next() {
+    switch self {
+        case .Off:
+            self = .Low
+        case Low:
+            self = High
+        case High:
+            self = Off
+    }
+}
+</code></pre></div>
+<p>}
+var light = TriState.High
+light.next()
+light == .Off // true
+&ldquo;`</p>
+
+<p>类型方法，被类型本身调用的方法。<br>
+声明类的类型方法，在方法的 func 关键字之前加上关键字 class；声明结构体和枚举的类型方法，在方法的 func 关键字之前加上关键字 static。</p>
+
 <h3 id="结构体">结构体</h3>
 
 <p>结构体有一个自动生成的成员逐一初始化器，用于初始化新结构体实例中的所有成员属性。
@@ -375,86 +718,170 @@ struct Resolution {
 let vga = Resolution(width:640, heigth: 480)
 </code></p>
 
-<p>类的示例代码如下，比较值得注意的是：
-1. 重载父类方法要用override显示声明
-2. 可以在通过willSet、didSet在修改变量值前后获得通知
-3. 可以通过get、set给变量设置一个别名，并做一些运算。真心觉得这个应该配上访问权限来使用
-&ldquo;` python
-class Shape {
-    init() { // 等价构造函数
-        num = 1
-        println(&rdquo;<Shape> init: (num)&ldquo;)
-    }
-    deinit { // 等价析构函数
-        num = 0
-        println(&rdquo;<Shape> deinit: (num)&ldquo;)
+<h3 id="附属脚本">附属脚本</h3>
+
+<p>附属脚本附属脚本可以定义在类(Class)、结构体(structure)和枚举(enumeration)这些目标中，允许你通过在实例后面的方括号中传入一个或者多个的索引值来对实例进行访问和赋值，类似于数组、字典的使用方法。
+&rdquo;` python
+subscript(index: Int) -&gt; Int {
+    get {
+        // 返回与入参匹配的Int类型的值
     }</p>
-<div class="highlight"><pre><code class="text">var num = 0
-func add(a:Int, b:Int)-&gt; Int {
-    println(&quot;&lt;Shape&gt; add&quot;)
-    return a + b;
+<div class="highlight"><pre><code class="text">set(newValue) {
+    // 执行赋值操作
 }
 </code></pre></div>
-<p>}</p>
+<p>}
+&ldquo;`</p>
 
-<p>class SonShape : Shape {
-    init() {
-        super.init()
-        num = 2
-        println(&rdquo;[Son] init: (num)&ldquo;)
-    }
-    init(value:Int){
-        super.init()
-        num = value
-        println(&rdquo;[Son] init with value: (num)&ldquo;)
-    }
-    deinit {
-        num = -1
-        println(&rdquo;[Son] deinit: (num)&ldquo;)
-    }</p>
-<div class="highlight"><pre><code class="text">func minus(a:Int, b:Int)-&gt; Int {
-    println(&quot;[Son] minus: \(num)&quot;)
-    return a - b;
-}
+<h3 id="类">类</h3>
+
+<h4 id="继承">继承</h4>
+
+<p>子类可以调用、访问、重写（override）超类的方法（实例方法和类方法），属性（实例属性和类属性）和附属脚本。</p>
+<div class="highlight"><pre><code class="python"><span class="k">class</span> <span class="nc">Vehicle</span> <span class="p">{</span>
+    <span class="n">var</span> <span class="n">wheels</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">var</span> <span class="n">passengers</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">init</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">wheels</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">passengers</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">}</span>
+
+    <span class="n">deinit</span> <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">func</span> <span class="n">description</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">&quot;This is a Vehicle&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">var</span> <span class="n">name</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span>
+        <span class="n">get</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s">&quot;Vehicle&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">class</span> <span class="nc">Bicycle</span> <span class="p">:</span> <span class="n">Vehicle</span> <span class="p">{</span>
+    <span class="n">init</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nb">super</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">wheels</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="p">}</span>
+
+    <span class="n">override</span> <span class="n">func</span> <span class="n">description</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">&quot;This is a Bicycle&quot;</span>
+    <span class="p">}</span>
+
+    <span class="n">override</span> <span class="n">var</span> <span class="n">passengers</span><span class="p">:</span> <span class="n">Int</span> <span class="p">{</span>
+    <span class="n">get</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="o">.</span><span class="n">passengers</span>
+    <span class="p">}</span>
+    <span class="nb">set</span> <span class="p">{</span>
+        <span class="nb">super</span><span class="o">.</span><span class="n">passengers</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">newValue</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">override</span> <span class="k">class</span> <span class="nc">var</span> <span class="n">name</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span>
+    <span class="n">get</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">&quot;Bicycle&quot;</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">Vehicle</span><span class="o">.</span><span class="n">name</span>
+<span class="n">Bicycle</span><span class="o">.</span><span class="n">name</span>
+<span class="n">var</span> <span class="n">bi</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">()</span>
+<span class="n">bi</span><span class="o">.</span><span class="n">passengers</span> <span class="o">=</span> <span class="mi">7</span>
 </code></pre></div>
-<p>// 重载父类中的函数
-    override func add(a:Int, b:Int)-&gt; Int {
-        println(&rdquo;[Son] add&quot;)
-        return super.add(a, b: b);
-    }
-// willSet、ditSet只是值设置前的前后处理，preAfter和num一样是正常变量，所以可以附值
-    var preAfter:Int = 0 {
-        willSet {
-            println(&ldquo;will set (newValue)&rdquo;)
-        }
-        didSet {
-            println(&ldquo;did set&rdquo;)
-        }
-    }
-// get、set类似wrapper或别名，triple并不是实际存在的变量，所以不能附值
-    var triple:Double {
-        get {
-            return Double(num)* 3
-        }
-        set {
-             num = Int(newValue / 3)
-        }
+<p>初始化器默认是不继承的，所以子类中调用super.init()保证使用父类的属性前已经初始化完成。<br>
+通过super来访问父类。<br>
+通过override显式声明重载。<br></p>
+
+<p>@final可以防止override。
+<code>@final var</code>，<code>@final func</code>，<code>@final class func</code>，以及<code>@final subscript</code>不能被重写。
+<code>@final class</code>的类不可被继承。</p>
+
+<h4 id="属性观察器（property-observer）-willset/didset">属性观察器（property observer） willSet/didSet</h4>
+
+<p>可以为继承来的存储型或计算型属性、自己创建的存储型属性添加属性观察器；
+不可以为常量存储型属性、只读计算型属性添加属性观察器，因为不会用到；
+不可以同时提供set和属性观察器，因为set中就可以得到属性的变化。</p>
+
+<h2 id="类型转换">类型转换</h2>
+
+<p>类型转换在Swift中使用 is 和 as 操作符实现。这两个操作符提供了一种简单达意的方式去检查值的类型和转换它的类型。
+&rdquo;` python
+class Media {
+    var name: String
+    init(name: String) {
+        self.name = name
     }
 }
-// usage
-                   var s = Shape();
-s.num = s.add(3, b: 8)</p>
+class Movie: Media {}
+class Song: Media {}</p>
 
-<p>var son = SonShape(value: 4)
-son.add(7, b: 9)
-son.triple
-son.triple = 99
-son.preAfter
-son.preAfter = 10</p>
-<div class="highlight"><pre><code class="text">## 编程小技巧
+<p>let library = [
+    Movie(name: &ldquo;Matrix&rdquo;),
+    Song(name: &ldquo;only&rdquo;),
+    Movie(name: &ldquo;Hi&rdquo;),
+]
+// 类型检查：is
+var isMovie = false
+if library[0] is Movie {
+    isMovie = true
+}
+&ldquo;`</p>
 
-1. 断言带可选的说明信息`assert(age &gt;= 0, &quot;A person&#39;s age cannot be less than zero&quot;)`
-</code></pre></div>]]></content>
+<p>类型转换as有两种不同的形式。可选形式as?返回一个Optional值；强制形式as转型后强制解包。
+&rdquo;` python
+var unknownType = library[1]
+if let movie = unknownType as? Movie {
+    movie.name
+}</p>
+
+<p>if unknownType is Movie {
+    let movie = unknownType as Movie
+} else if unknownType is Song{
+    let song = unknownType as Song
+}
+&ldquo;`</p>
+
+<p>Swift为不确定类型提供了两种特殊类型别名:</p>
+
+<ol>
+<li>AnyObject 可以代表任何 class 类型的实例。</li>
+<li>Any 可以表示任何类型，除了方法类型(function types)。</li>
+</ol>
+<div class="highlight"><pre><code class="python"><span class="n">var</span> <span class="n">things</span> <span class="o">=</span> <span class="n">Any</span><span class="p">[]()</span>
+<span class="n">things</span> <span class="o">+=</span> <span class="mi">0</span>
+<span class="n">things</span> <span class="o">+=</span> <span class="mf">0.0</span>
+<span class="n">things</span> <span class="o">+=</span> <span class="mi">42</span>
+<span class="n">things</span> <span class="o">+=</span> <span class="mf">3.14159</span>
+<span class="n">things</span> <span class="o">+=</span> <span class="s">&quot;hello&quot;</span>
+<span class="n">things</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">things</span> <span class="p">{</span>
+    <span class="n">switch</span> <span class="n">thing</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="mi">0</span> <span class="k">as</span> <span class="n">Int</span><span class="p">:</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;0 as an Int&quot;</span><span class="p">)</span>
+    <span class="n">case</span> <span class="mi">0</span> <span class="k">as</span> <span class="n">Double</span><span class="p">:</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;0 as a Double&quot;</span><span class="p">)</span>
+    <span class="n">case</span> <span class="n">let</span> <span class="n">someInt</span> <span class="k">as</span> <span class="n">Int</span><span class="p">:</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;Int: \(someInt)&quot;</span><span class="p">)</span>
+    <span class="n">case</span> <span class="n">let</span> <span class="n">someDouble</span> <span class="k">as</span> <span class="n">Double</span> <span class="n">where</span> <span class="n">someDouble</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;Positive double: \(someDouble)&quot;</span><span class="p">)</span>
+    <span class="n">case</span> <span class="ow">is</span> <span class="n">Double</span><span class="p">:</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;other Double&quot;</span><span class="p">)</span>
+    <span class="n">case</span> <span class="n">let</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">Double</span><span class="p">,</span> <span class="n">Double</span><span class="p">):</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;Point: \(x), \(y)&quot;</span><span class="p">)</span>
+    <span class="n">default</span><span class="p">:</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;something else&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="编程小技巧">编程小技巧</h2>
+
+<ol>
+<li>断言带可选的说明信息<code>assert(age &gt;= 0, &quot;A person&#39;s age cannot be less than zero&quot;)</code></li>
+</ol>
+]]></content>
   </entry>
   
   <entry>
@@ -470,7 +897,7 @@ son.preAfter = 10</p>
 <h2 id="闭包">闭包</h2>
 
 <p>闭包是功能性自包含模块，可以在代码中被传递和使用。<br>
-闭包可以*捕获*和存储其所在上下文中任意常量和变量的引用，这就是所谓的闭合并包裹着这些常量和变量,俗称闭包。Swift会管理在捕获过程中涉及到的内存操作。</p>
+闭包可以 <strong>捕获</strong> 和存储其所在上下文中任意常量和变量的引用，这就是所谓的闭合并包裹着这些常量和变量，俗称闭包。Swift会管理在捕获过程中涉及到的内存操作。</p>
 
 <p>全局和嵌套函数实际上也是特殊的闭包，闭包采取如下三种形式之 一：</p>
 
@@ -774,21 +1201,103 @@ gameLoop: while square != finalSquare {
 <span class="o">//</span> <span class="n">todo</span>
 <span class="p">}</span>
 </code></pre></div>
-<h2 id="接口和扩展">接口和扩展</h2>
+<h2 id="协议和扩展">协议和扩展</h2>
 
-<p>接口定义如下，
+<h3 id="协议/接口">协议/接口</h3>
+
+<p>协议的例子如下，
 <code>python
 protocol Speak {
     var des: String {get}
+    var num: Int {get set}
     mutating func say()
 }
 // usage
 var man : Speak? = nil
 </code>
-其中，get用于控制访问权限，表明只能获取不能设置；mutating表示say函数可以修改内部内容，
-class默认可以修改类，无需声明，struct需要通过mutating声明会修改结构体内容。</p>
+其中，get用于控制访问权限，表明只能获取不能设置；mutating表示say方法可以修改内部内容，
+class默认可以修改类，无需声明，struct需要通过mutating声明会修改结构体内容。
+协议方法的声明与普通方法声明相似，支持变长参数(variadic parameter)，但不支持默认参数(default parameter)。</p>
 
 <p>类、结构体、枚举都可以实现接口。</p>
+
+<p>协议继承。<br>
+能够继承一个或多个其他协议。
+<code>python
+protocol InheritingProtocol: SomeProtocol, AnotherProtocol {
+    // 协议定义
+}
+</code></p>
+
+<p>协议合成。<br>
+多个协议可以通过<code>protocol&lt;SomeProtocol, AnotherProtocol&gt;</code>合成一个临时协议。协议合成可以用于要求变量、参数遵循合成的协议中的所有协议。
+&ldquo;` python
+protocol Named {
+    var name: String {get}
+}
+protocol Aged {
+    var age: Int {get}
+}</p>
+
+<p>func hello(someone:protocol<Named, Aged>) {
+    var str = &quot;hello, (someone.name) (someone.age)&rdquo;
+    println(str)
+}
+struct Person {
+    var id: protocol<Named, Aged>?
+}
+&ldquo;`</p>
+
+<p>可选协议。<br>
+用@objc前缀来表示协议是可选的，协议中用@optional前缀来定义可选成员。
+可选成员只能在@objc前缀的可选协议中生效，且可选协议只能被类（class）遵循。
+<code>python
+@objc protocol Named {
+    var name: String {get}
+    @optional var desp: String {get}
+}
+class Person: Named {
+    var name:String = &quot;hello&quot;
+}
+// usage
+var p:Named = Person()
+p.name // return &quot;hello&quot;
+p.desp // return nil
+</code></p>
+
+<h3 id="扩展">扩展</h3>
+
+<p>扩展可以向已有类型添加新功能。可以添加属性、方法、构造器、下标、嵌套类型、实现新接口。
+添加扩展后，新功能对已有类型的所有实例都是可用的，包括在这个扩展前定义的。
+但是，￼扩展可以添加新的计算属性，不可以添加存储属性，也不可以向已有属性添加属性观测器(property observers)。
+扩展的语法如下：
+&rdquo;` python
+extension SomeType {
+    // new functionality
+}</p>
+
+<p>extension SomeType: SomeProtocol, AnotherProctocol {
+    // new protocol implementation
+}
+&ldquo;`</p>
+
+<p>扩展Double的例子
+&rdquo;` python
+extension Double {
+    var km: Double { return self * 1_000.0 }
+    var m : Double { return self }
+    var cm: Double { return self / 100.0 }
+    var mm: Double { return self / 1_000.0 }
+    var ft: Double { return self / 3.28084 }
+    // 添加修改实例本身的方法需要标注为mutating
+    mutating func square() {
+        self = self * self
+    }
+}</p>
+
+<p>let oneInch = 25.4.mm
+let threeFeet = 3.ft
+&ldquo;`</p>
 
 <p>可以使用extension让任何现有的类型实现新的protocol，例如让Double类型实现Speak接口。
 <code>python

@@ -11,7 +11,7 @@
   
   <meta name="description" content="Swift中引入了很多高级语言的特性，如闭包、命名空间、泛型、强类型（同时拒绝阴式类型转换）、多个返回值（元组）等等，这些高级的语法糖用好了可以极大提升工作效率，用不好也是语法坑。
 我们先体验一下Swift的糖衣炮弹。 闭包 闭包是功能性自包含模块，可以在代码中被传递和使用。
-闭包可以*捕获* &hellip;">
+闭包可以 捕获 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,7 +109,7 @@
       </p>
     
     
-    <span><font size=".9em" color="#aaa"> <i class="fi-clock"></i> about 24  minutes</font></span>
+    <span><font size=".9em" color="#aaa"> <i class="fi-clock"></i> about 29  minutes</font></span>
     
   </header>
 
@@ -122,7 +122,7 @@
 <h2 id="闭包">闭包</h2>
 
 <p>闭包是功能性自包含模块，可以在代码中被传递和使用。<br>
-闭包可以*捕获*和存储其所在上下文中任意常量和变量的引用，这就是所谓的闭合并包裹着这些常量和变量,俗称闭包。Swift会管理在捕获过程中涉及到的内存操作。</p>
+闭包可以 <strong>捕获</strong> 和存储其所在上下文中任意常量和变量的引用，这就是所谓的闭合并包裹着这些常量和变量，俗称闭包。Swift会管理在捕获过程中涉及到的内存操作。</p>
 
 <p>全局和嵌套函数实际上也是特殊的闭包，闭包采取如下三种形式之 一：</p>
 
@@ -586,26 +586,153 @@ gameLoop: while square != finalSquare {
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
-<h2 id="接口和扩展">接口和扩展</h2>
+<h2 id="协议和扩展">协议和扩展</h2>
 
-<p>接口定义如下，
+<h3 id="协议/接口">协议/接口</h3>
+
+<p>协议的例子如下，
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
+<span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">protocol</span> <span class="n">Speak</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">var</span> <span class="n">des</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span><span class="n">get</span><span class="p">}</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">num</span><span class="p">:</span> <span class="n">Int</span> <span class="p">{</span><span class="n">get</span> <span class="nb">set</span><span class="p">}</span>
 </span><span class='line'>    <span class="n">mutating</span> <span class="n">func</span> <span class="n">say</span><span class="p">()</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="o">//</span> <span class="n">usage</span>
 </span><span class='line'><span class="n">var</span> <span class="n">man</span> <span class="p">:</span> <span class="n">Speak</span><span class="err">?</span> <span class="o">=</span> <span class="n">nil</span>
 </span></code></pre></td></tr></table></div></figure>
-其中，get用于控制访问权限，表明只能获取不能设置；mutating表示say函数可以修改内部内容，
-class默认可以修改类，无需声明，struct需要通过mutating声明会修改结构体内容。</p>
+其中，get用于控制访问权限，表明只能获取不能设置；mutating表示say方法可以修改内部内容，
+class默认可以修改类，无需声明，struct需要通过mutating声明会修改结构体内容。
+协议方法的声明与普通方法声明相似，支持变长参数(variadic parameter)，但不支持默认参数(default parameter)。</p>
 
 <p>类、结构体、枚举都可以实现接口。</p>
+
+<p>协议继承。<br>
+能够继承一个或多个其他协议。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">protocol</span> <span class="n">InheritingProtocol</span><span class="p">:</span> <span class="n">SomeProtocol</span><span class="p">,</span> <span class="n">AnotherProtocol</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">//</span> <span class="err">协议定义</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>协议合成。<br>
+多个协议可以通过<code>protocol&lt;SomeProtocol, AnotherProtocol&gt;</code>合成一个临时协议。协议合成可以用于要求变量、参数遵循合成的协议中的所有协议。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">protocol</span> <span class="n">Named</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">name</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span><span class="n">get</span><span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">protocol</span> <span class="n">Aged</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">age</span><span class="p">:</span> <span class="n">Int</span> <span class="p">{</span><span class="n">get</span><span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">func</span> <span class="n">hello</span><span class="p">(</span><span class="n">someone</span><span class="p">:</span><span class="n">protocol</span><span class="o">&lt;</span><span class="n">Named</span><span class="p">,</span> <span class="n">Aged</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">&quot;hello, (someone.name) (someone.age)&quot;</span>
+</span><span class='line'>    <span class="n">println</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">struct</span> <span class="n">Person</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="nb">id</span><span class="p">:</span> <span class="n">protocol</span><span class="o">&lt;</span><span class="n">Named</span><span class="p">,</span> <span class="n">Aged</span><span class="o">&gt;</span><span class="err">?</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>可选协议。<br>
+用@objc前缀来表示协议是可选的，协议中用@optional前缀来定义可选成员。
+可选成员只能在@objc前缀的可选协议中生效，且可选协议只能被类（class）遵循。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nd">@objc</span> <span class="n">protocol</span> <span class="n">Named</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">name</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span><span class="n">get</span><span class="p">}</span>
+</span><span class='line'>    <span class="nd">@optional</span> <span class="n">var</span> <span class="n">desp</span><span class="p">:</span> <span class="n">String</span> <span class="p">{</span><span class="n">get</span><span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Person</span><span class="p">:</span> <span class="n">Named</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">name</span><span class="p">:</span><span class="n">String</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">//</span> <span class="n">usage</span>
+</span><span class='line'><span class="n">var</span> <span class="n">p</span><span class="p">:</span><span class="n">Named</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+</span><span class='line'><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">//</span> <span class="k">return</span> <span class="s">&quot;hello&quot;</span>
+</span><span class='line'><span class="n">p</span><span class="o">.</span><span class="n">desp</span> <span class="o">//</span> <span class="k">return</span> <span class="n">nil</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3 id="扩展">扩展</h3>
+
+<p>扩展可以向已有类型添加新功能。可以添加属性、方法、构造器、下标、嵌套类型、实现新接口。
+添加扩展后，新功能对已有类型的所有实例都是可用的，包括在这个扩展前定义的。
+但是，￼扩展可以添加新的计算属性，不可以添加存储属性，也不可以向已有属性添加属性观测器(property observers)。
+扩展的语法如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">extension</span> <span class="n">SomeType</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">new</span> <span class="n">functionality</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">extension</span> <span class="n">SomeType</span><span class="p">:</span> <span class="n">SomeProtocol</span><span class="p">,</span> <span class="n">AnotherProctocol</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">new</span> <span class="n">protocol</span> <span class="n">implementation</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>扩展Double的例子
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">extension</span> <span class="n">Double</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">km</span><span class="p">:</span> <span class="n">Double</span> <span class="p">{</span> <span class="k">return</span> <span class="bp">self</span> <span class="o"><em></span> <span class="mi">1</span><span class="n"><em>000</span><span class="o">.</span><span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">m</span> <span class="p">:</span> <span class="n">Double</span> <span class="p">{</span> <span class="k">return</span> <span class="bp">self</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">cm</span><span class="p">:</span> <span class="n">Double</span> <span class="p">{</span> <span class="k">return</span> <span class="bp">self</span> <span class="o">/</span> <span class="mf">100.0</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">mm</span><span class="p">:</span> <span class="n">Double</span> <span class="p">{</span> <span class="k">return</span> <span class="bp">self</span> <span class="o">/</span> <span class="mi">1</span><span class="n"></em>000</span><span class="o">.</span><span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">ft</span><span class="p">:</span> <span class="n">Double</span> <span class="p">{</span> <span class="k">return</span> <span class="bp">self</span> <span class="o">/</span> <span class="mf">3.28084</span> <span class="p">}</span>
+</span><span class='line'>    <span class="o">//</span> <span class="err">添加修改实例本身的方法需要标注为</span><span class="n">mutating</span>
+</span><span class='line'>    <span class="n">mutating</span> <span class="n">func</span> <span class="n">square</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span> <span class="o"></em></span> <span class="bp">self</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">let</span> <span class="n">oneInch</span> <span class="o">=</span> <span class="mf">25.4</span><span class="o">.</span><span class="n">mm</span>
+</span><span class='line'><span class="n">let</span> <span class="n">threeFeet</span> <span class="o">=</span> <span class="mf">3.</span><span class="n">ft</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>可以使用extension让任何现有的类型实现新的protocol，例如让Double类型实现Speak接口。
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
