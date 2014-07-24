@@ -4,7 +4,7 @@
   <title><![CDATA[时光 &#149 印记]]></title>
   <link href="http://erikge.com/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-07-05T22:52:22+08:00</updated>
+  <updated>2014-07-24T17:21:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -2093,84 +2093,39 @@ class默认可以修改类，无需声明，struct需要通过mutating声明会�
     <link href="http://erikge.com/articles/HelloWebrtc"/>
     <updated>2014-05-17T13:44:24+08:00</updated>
     <id>http://erikge.com/articles/HelloWebrtc</id>
-    <content type="html"><![CDATA[<p>开始搭建个可以看代码的环境。</p>
+    <content type="html"><![CDATA[<p>开始搭建个可以看代码的环境。因为墙的原因和Webrtc用到了Chromium的toolchain的原因，获取代码和搭建环境变的异常复杂。前后折腾了一周的时间，整理一下，节省你宝贵的生命。</p>
 
 <!--more-->
+
+<h2 id="前提条件">前提条件</h2>
+
+<p>WebRTC复用了很多Chromiun项目的工具，首先需要的就是<a href="https://sites.google.com/a/chromium.org/dev/developers/how-tos/depottools">depot_tools</a>。安装方式如下，</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+</span><span class='line'><span class="c"># 备份地址，上一个不可用时尝试这个</span>
+</span><span class='line'>git clone https://git.chromium.org/git/chromium/tools/depot_tools.git
+</span><span class='line'><span class="c">## Add depot_tools to your PATH</span>
+</span></code></pre></td></tr></table></div></figure>
 
 <h2 id="获取代码">获取代码</h2>
 
 <p>官方推荐步骤：
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git clone <a href="https://chromium.googlesource.com/chromium/tools/depot_tools.git">https://chromium.googlesource.com/chromium/tools/depot_tools.git</a>
-</span><span class='line'><span class="c">## Add depot_tools to your PATH</span>
-</span><span class='line'><span class="nv">$ </span>gclient config <a href="http://webrtc.googlecode.com/svn/trunk">http://webrtc.googlecode.com/svn/trunk</a>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gclient config <a href="http://webrtc.googlecode.com/svn/trunk">http://webrtc.googlecode.com/svn/trunk</a>
 </span><span class='line'><span class="nv">$ </span>gclient sync --force
 </span></code></pre></td></tr></table></div></figure></p>
 
-<p><code>gclient sync</code>需要下载太多第三方库，很容易失败，搞了很多次都没成功。其实也没有必要都拉全，只获取webrtc自身的代码就可以。用git维护方便看代码时修改，可以只获取最近的代码
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>svn info <a href="http://webrtc.googlecode.com/svn/">http://webrtc.googlecode.com/svn/</a>
-</span><span class='line'>git svn clone -s --prefix<span class="o">=</span>svn/ -r <span class="o">[</span>latest-10-version<span class="o">]</span>:HEAD <a href="http://webrtc.googlecode.com/svn/">http://webrtc.googlecode.com/svn/</a>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>但是由于墙的存在，这种方法几乎无法成功。可以尝试vpn、git、修改依赖库地址、多次尝试下载等各种方法，然后祈祷代码可以下载完整。在折腾一周之后，最终还是在VPN的帮助下把代码拉全的，这里顺便推荐一下我用的VPN吧，<a href="http://www.share-nydus.com/s/Dguqbtqa">Nydus</a>，最大优势在于免费试用时可以尝试所有收费VIP线路。</p>
 
-<h2 id="构建过程">构建过程</h2>
+<p>gclient在更新代码时，会读取trunk下的DEPS文件，根据文件中配置的路径和版本号更新代码。trunk下的DEPS文件在查找某些库时，依赖chromium_deps目录下的DEPS文件来获取路径。gclient会先执行sync，再执行hooks，这两个阶段都需要联网下载相关资源。所以仅仅是sync完成不一定下载完了所有工具链，gyp生成工程文件后，也有可能缺少编译、运行需要的资源，只有在运行起来后才能保证相关平台的代码和工具链都下载完了。</p>
 
-<p>官方推荐的构建过程，默认生成对应PC平台的工程文件
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gclient runhooks --force
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>trunk
-</span><span class='line'><span class="c">## Debug:</span>
-</span><span class='line'><span class="nv">$ </span>ninja -C out/Debug
-</span><span class='line'><span class="c">## Release:</span>
-</span><span class='line'><span class="nv">$ </span>ninja -C out/Release
-</span></code></pre></td></tr></table></div></figure></p>
+<p>如果下面的脚步执行成功，很大概率能把代码都下载完。</p>
 
-<p>可以控制生成不同平台的工程文件，以Android为例
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;android&#39;, &#39;unix&#39;]&quot;</span> &gt;&gt; .gclient
-</span><span class='line'><span class="nv">$ </span>gclient sync --nohooks
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>trunk
-</span><span class='line'><span class="nv">$ </span><span class="nb">source</span> ./build/android/envsetup.sh
-</span><span class='line'><span class="nv">$ GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android&quot;</span>
-</span><span class='line'><span class="nv">$ JAVA_HOME</span><span class="o">=</span>&lt;location of Java SE 6 - JDK&gt;
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>也可以通过修改GYP_GENERATORS，生成Ninja以外的工程文件</p>
-
-<ul>
-<li>make for Makefiles</li>
-<li>msvs for Visual Studio</li>
-<li>msvs-ninja for Visual Studio project building with ninja</li>
-<li>xcode for Xcode</li>
-</ul>
-
-<h2 id="在ios上运行的步骤">在iOS上运行的步骤</h2>
-
-<p>感谢<a href="http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/">这篇文章</a>，确实节省了我们宝贵的生命。总结主要的步骤如下。</p>
-
-<h3 id="模拟器">模拟器</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>touch makeall-iossim.sh
-</span><span class='line'>chmod +x makeall-iossim.sh
-</span></code></pre></td></tr></table></div></figure>
-
-<p>makeall-iossim.sh脚本的内容为
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -2227,86 +2182,358 @@ class默认可以修改类，无需声明，struct需要通过mutating声明会�
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>fetch<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- fetching webrtc&quot;</span>
-</span><span class='line'>gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#export http_proxy=http://127.0.0.1:8087/</span>
+</span><span class='line'><span class="c">#export https_proxy=$http_proxy</span>
+</span><span class='line'><span class="c">#export HTTP_PROXY=$http_proxy</span>
+</span><span class='line'><span class="c">#export HTTPS_PROXY=$HTTP_PROXY</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># fix problem:</span>
+</span><span class='line'><span class="c"># clang: error: invalid deployment target for -stdlib=libc++ (requires OS X 10.7 or later)</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">MACOSX_DEPLOYMENT_TARGET</span><span class="o">=</span>10.7
+</span><span class='line'><span class="c"># readlink: illegal option -- f</span>
+</span><span class='line'><span class="c"># usage: readlink [-n] [file ...]</span>
+</span><span class='line'><span class="c"># Warning: Current directory is out of CHROME_SRC, it may not be   the one you want.</span>
+</span><span class='line'><span class="nb">shopt</span> -s  expand_aliases
+</span><span class='line'><span class="nb">shopt </span>expand_aliases
+</span><span class='line'><span class="nb">alias </span><span class="nv">readlink</span><span class="o">=</span>greadlink
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>mkdir -p code
+</span><span class='line'>mkdir -p code_back
+</span><span class='line'><span class="nb">cd </span>code
+</span><span class='line'>
+</span><span class='line'><span class="c"># svn方式，不好使</span>
+</span><span class='line'><span class="c"># gclient config http://webrtc.googlecode.com/svn/trunk</span>
+</span><span class='line'><span class="c"># git方式，可用概率高。git的地址有两个，</span>
+</span><span class='line'><span class="c"># https://chromium.googlesource.com/external/webrtc 和</span>
+</span><span class='line'><span class="c"># https://git.chromium.org/git/external/webrtc.git</span>
+</span><span class='line'>gclient config --name trunk <span class="s1">&#39;git+https://git.chromium.org/git/external/webrtc.git&#39;</span>
+</span><span class='line'>cp .gclient ../code_back
+</span><span class='line'>
+</span><span class='line'><span class="c"># aquire win</span>
+</span><span class='line'>cp ../code_back/.gclient ./
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;win&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+</span><span class='line'>gclient sync -j200 --force
+</span><span class='line'>
+</span><span class='line'><span class="c">#aquire mac</span>
+</span><span class='line'>cp ../code_back/.gclient ./
 </span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
-</span><span class='line'>gclient sync
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+</span><span class='line'>gclient sync -j200 --force
 </span><span class='line'>
-</span><span class='line'>sed -i <span class="s2">&quot;&quot;</span> <span class="s1">&#39;$d&#39;</span> .gclient
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;ios&#39;, &#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
-</span><span class='line'>gclient sync
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully fetched&quot;</span>
+</span><span class='line'><span class="c">#aquire ios</span>
+</span><span class='line'>mv trunk/testing/iossim/third_party/class-dump trunk/testing/iossim/third_party/class-dump_mac
+</span><span class='line'>cp ../code_back/.gclient ./
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;ios&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+</span><span class='line'>gclient sync -j200 --force
 </span><span class='line'>
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="c">#aquire android</span>
+</span><span class='line'>cp ../code_back/.gclient ./
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;android&#39;, &#39;unix&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'>gclient sync -j200 --nohooks
+</span><span class='line'><span class="nb">cd </span>trunk
+</span><span class='line'><span class="c"># 设置环境变量，会冲掉之前设置的 Env vars</span>
+</span><span class='line'><span class="nb">source</span> ./build/android/envsetup.sh
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>wrbase<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;build_with_libjingle=1 build_with_chromium=0 libjingle_objc=1&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span><span class="s2">&quot;ninja&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>wrsim<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>wrbase
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=ios target_arch=ia32&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_sim&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>wrmac<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>wrbase
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=mac target_arch=x64&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_mac&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>build<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- building webrtc&quot;</span>
-</span><span class='line'><span class="nb">pushd </span>trunk
-</span><span class='line'>gclient runhooks
-</span><span class='line'>ninja -C out_sim/Debug iossim AppRTCDemo
-</span><span class='line'><span class="nb">popd</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully built&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>run<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- running webrtc appdemo&quot;</span>
-</span><span class='line'><span class="nb">pushd </span>trunk
-</span><span class='line'>./out_sim/Debug/iossim out_sim/Debug/AppRTCDemo.app
-</span><span class='line'><span class="nb">popd</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>fail<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;*** webrtc build failed&quot;</span>
-</span><span class='line'><span class="nb">exit </span>1
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>fetch <span class="o">||</span> fail
-</span><span class='line'>wrsim <span class="o">||</span> fail
-</span><span class='line'>build <span class="o">||</span> fail
-</span><span class='line'>run <span class="o">||</span> fail
+</span><span class='line'><span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span>/usr/bin/
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+</span><span class='line'>gclient runhooks --force
 </span></code></pre></td></tr></table></div></figure>
-然后执行该脚本就可以编译、运行。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>./makeall-iossim.sh
-</span></code></pre></td></tr></table></div></figure>
-接下来如何玩呢？正常情况下，iOS的模拟器已经自动弹出，并启动了测试程序，然后可以按以下步骤体验下视频通话：
-1. 打开PC或者android上的Chrome浏览器
-2. 访问<a href="http://apprtc.appspot.com%E3%80%82%E5%8F%AF%E6%83%9C%E8%A2%AB%E5%A2%99%E4%BA%86%EF%BC%8C%E6%83%B3%E5%8A%9E%E6%B3%95%E7%BF%BB%E5%A2%99%E5%90%A7%EF%BC%8Csign%E3%80%82%E3%80%82%E3%80%82">http://apprtc.appspot.com。可惜被墙了，想办法翻墙吧，sign。。。</a>
-3. 浏览器里的地址发生变化时，获得房间号成功。这时URL类似<a href="http://apprtc.appspot.com?r=34576398%EF%BC%8C%E8%BF%99%E9%87%8C34576398%E4%B8%BA%E6%88%BF%E9%97%B4%E5%8F%B7">http://apprtc.appspot.com?r=34576398，这里34576398为房间号</a>
-4. 在iOS模拟器上运行的测试程序中，输入上一步获得的房间号（34576398），便可以体验了</p>
 
-<h3 id="真机">真机</h3>
+<p>代理部分可以根据需要打开，有vpn会方便很多。这个脚本同时解决了我在Mac上遇到的两个问题：</p>
 
-<p>将生成的app安装到真机上时，需要用到<a href="https://github.com/libimobiledevice/ideviceinstaller">ideviceinstaller</a>。可以通过<a href="http://brew.sh/">HomeBrew</a>安装。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>brew install ideviceinstaller --HEAD
-</span></code></pre></td></tr></table></div></figure>
-其他的和模拟器类似：
+<ol>
+<li>编译LLVM时遇到invalid deployment target的问题，所以显示声明了MACOSX_DEPLOYMENT_TARGET。</li>
+<li>在目录检查时用到了readlink，而Mac上没有这个命令，需要安装gnu的greadlink作为替代。安装方式为：<code>brew install coreutils</code>。shopt用于打开非交互模式下shell的alias功能。</li>
+</ol>
+
+<h2 id="编译运行">编译运行</h2>
+
+<p>官方推荐的构建过程，默认生成对应本地电脑平台的工程文件。
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>touch makeall-iosdevice.sh
-</span><span class='line'>chmod +x makeall-iosdevice.sh
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gclient runhooks --force
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>trunk
+</span><span class='line'><span class="c">## Debug:</span>
+</span><span class='line'><span class="nv">$ </span>ninja -C out/Debug
+</span><span class='line'><span class="c">## Release:</span>
+</span><span class='line'><span class="nv">$ </span>ninja -C out/Release
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>可以控制生成不同平台的工程文件，以Android为例
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;android&#39;, &#39;unix&#39;]&quot;</span> &gt;&gt; .gclient
+</span><span class='line'><span class="nv">$ </span>gclient sync --nohooks
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>trunk
+</span><span class='line'><span class="nv">$ </span><span class="nb">source</span> ./build/android/envsetup.sh
+</span><span class='line'><span class="nv">$ GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android&quot;</span>
+</span><span class='line'><span class="nv">$ JAVA_HOME</span><span class="o">=</span>&lt;location of Java SE 6 - JDK&gt;
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>gclient runhooks --force
+</span><span class='line'><span class="c"># 或者通过下面的方法仅执行gyp命令</span>
+</span><span class='line'><span class="nv">$ </span>./webrtc/build/gyp_webrtc.py
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="play-with-webrtc">Play with WebRTC</h2>
+
+<p>接下来如何玩呢？</p>
+
+<h3 id="apprtcdemo">AppRTCDemo</h3>
+
+<p>如果是Mac、iOS、Android工程，可以生成AppRTCDemo项目，可以按以下步骤体验下视频通话：</p>
+
+<ol>
+<li>打开PC或者android上的Chrome浏览器</li>
+<li>访问<a href="http://apprtc.appspot.com%E3%80%82%E5%8F%AF%E6%83%9C%E8%A2%AB%E5%A2%99%E4%BA%86%EF%BC%8C%E6%83%B3%E5%8A%9E%E6%B3%95%E7%BF%BB%E5%A2%99%E5%90%A7%EF%BC%8Csign%E3%80%82%E3%80%82%E3%80%82">http://apprtc.appspot.com。可惜被墙了，想办法翻墙吧，sign。。。</a></li>
+<li>浏览器里的地址发生变化时，获得房间号成功。这时URL类似<a href="http://apprtc.appspot.com?r=56828685%EF%BC%8C%E8%BF%99%E9%87%8C56828685%E4%B8%BA%E6%88%BF%E9%97%B4%E5%8F%B7">http://apprtc.appspot.com?r=56828685，这里56828685为房间号</a></li>
+<li>启动AppRTCDemo程序，输入上一步获得的房间号（56828685），便可以体验了</li>
+</ol>
+
+<h3 id="peerconnection">Peerconnection</h3>
+
+<p>如果是在Windows平台上，可以通过 Peerconnection（包括peerconnection_client和peerconnection_server）来体验视频。</p>
+
+<h2 id="可能遇到的各种问题">可能遇到的各种问题</h2>
+
+<p>如果你按照上述步骤没有遇到任何问题，那恭喜你，你很幸运，可以直接跳过这个章节。否则，恐怕这也是大多数的情况，咱们继续来填坑。</p>
+
+<h3 id="download_from_google_storage的任务无法完成">download_from_google_storage的任务无法完成</h3>
+
+<p>一直没成功的下载完过download_from_google_storage的任务。这些是定义在trunk下DEPS文件中hook部分的任务，尝试先将其注释掉，再运行 <code>gclient runhooks --force</code>。不过这样会导致gyp中定义的部分target无法生成。</p>
+
+<h3 id="编译ios">编译iOS</h3>
+
+<p>将生成的app安装到真机上时，需要用到<a href="https://github.com/libimobiledevice/ideviceinstaller">ideviceinstaller</a>。可以通过<a href="http://brew.sh/">HomeBrew</a>安装。</p>
+
+<h4 id="codesigning">Codesigning</h4>
+
+<p>签名时，webrtc脚本（gyp）会查找本机钥匙串，寻找和“iPhone developer”相符的证书。如果没有证书或者有多个证书都会出现异常。
+如果没有证书，需要向Apple申请一个。
+当有多个证书时，可以通过<code>security find-identity</code>查看所有匹配的证书，然后选择一个合适的，在trunk/build/common.gypi的‘CODE_SIGN_IDENTITY’中修改。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># iOS SDK wants everything for device signed</span>
+</span><span class='line'>‘CODE_SIGN_IDENTITY<span class="o">[</span><span class="nv">sdk</span><span class="o">=</span>iphoneos*<span class="o">]</span>‘: ‘iPhone Developer’ <span class="c"># 修改前</span>
+</span><span class='line'>‘CODE_SIGN_IDENTITY<span class="o">[</span><span class="nv">sdk</span><span class="o">=</span>iphoneos*<span class="o">]</span>‘: ‘iPhone Developer: Jason Adams <span class="o">(</span>SZ2V5SDF5DF<span class="o">)</span>’ <span class="c"># 修改后</span>
 </span></code></pre></td></tr></table></div></figure>
-makeall-iosdevice.sh脚本的内容为
+测试工程的默认bound ID是com.google.AppRTCDemo，可以通过修改trunk/talk/examples/objc/AppRTCDemo/ios/Info.plist文件，改成正确的。<br>
+如果还有错误，可以看看证书和provisioning profile文件是否匹配。</p>
+
+<h3 id="编译android">编译Android</h3>
+
+<p>编译Android最好还是在Linux的机器上，我在Mac上遇到了好多好多问题。</p>
+
+<h4 id="文件系统需要区分大小写">文件系统需要区分大小写</h4>
+
+<p>如果需要编译Android的话，需要依赖android_tools这个库，这个库中的一些文件名是大小写敏感的，即存在xt_connmark.h和xt_CONNMARK.h这两个完全不同的文件。这完全是不让Windows玩啊，Windows这类不区分大小写的文件系统，会被认为是有本地修改未提交而停止继续下载。</p>
+
+<p>解决方法：换到Linux或Mac下。Mac下的分区默认也是不区分大小写的，需要创建一个区分大小写的分区（区分大小写，日志式），大小20G以上应该就够用了。</p>
+
+<h4 id="无法下载android_tools或其他库">无法下载android_tools或其他库</h4>
+
+<p>如果你没有遇到上一个问题，有可能是压根就没下载下来android_tools库。下载过程中，很有可能因为墙的原因导致某一个库下载不下来。</p>
+
+<p>解决方法：修改chromium_deps目录下的DEPS文件，将android_tools对应的地址改为&quot;<a href="https://git.chromium.org/git/android_tools.git%22%E3%80%82%E5%A6%82%E8%BF%87%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A1%8C%EF%BC%8C%E5%B0%9D%E8%AF%95%E8%87%AA%E5%B7%B1">https://git.chromium.org/git/android_tools.git&quot;。如过还是不行，尝试自己</a> <code>git clone https://git.chromium.org/git/android_tools.git</code> ，然后将下载好的库copy到相关目录下，trunk/third_party/android_tools。</p>
+
+<h4 id="ndk的prebuilt版本是linux版">ndk的prebuilt版本是Linux版</h4>
+
+<p>如果遇到类似这样的错误，是因为android_tools中带的ndk的prebuilt是Linux版本的。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>/bin/sh: trunk/third_party/android_tools/ndk//toolchains/arm-linux-androideabi-4.8/prebuilt/mac-x86_64/bin/*-gcc: No such file or directory
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>解决方法：一般Mac上的Android开发者都下载了官方提供的NDK，从NDK目录下拷贝类似 android-ndk-r9c/toolchains/arm-linux-androideabi-4.8/prebuilt/darwin-x86_64 的文件夹到 trunk/third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.8/prebuilt 目录下，并将darwin-x86_64改名为mac-x86_64。</p>
+
+<h4 id="混进来的clang">混进来的clang</h4>
+
+<p>生成工程文件时还可能遇到如下错误。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>clang: error: unsupported argument <span class="s1">&#39;--version&#39;</span> to option <span class="s1">&#39;Xassembler&#39;</span>
+</span><span class='line'>compiler_version.py failed to execute: c++ -Xassembler --version -x assembler -c /dev/null
+</span><span class='line'>Command <span class="s1">&#39;c++ -Xassembler --version -x assembler -c /dev/null&#39;</span> returned non-zero <span class="nb">exit </span>status 1
+</span><span class='line'>Exception: Failed to extract compiler version <span class="k">for </span>args: <span class="o">[</span><span class="s1">&#39;target&#39;</span>, <span class="s1">&#39;assembler&#39;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>解决方法：打开common.gypi文件，大概1463行开始
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># compiler_version doesn&#39;t work with clang</span>
+</span><span class='line'><span class="c"># TODO(mithro): Land <a href="https://codereview.chromium.org/199793014/">https://codereview.chromium.org/199793014/</a> so</span>
+</span><span class='line'><span class="c"># compiler_version works with clang.</span>
+</span><span class='line'><span class="c"># TODO(glider): set clang to 1 earlier for ASan and TSan builds so</span>
+</span><span class='line'><span class="c"># that it takes effect here.</span>
+</span><span class='line'><span class="p">[</span><span class="s">&#39;clang==0 and asan==0 and lsan==0 and tsan==0 and msan==0 and ubsan==0 and ubsan_vptr==0&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s">&#39;binutils_version%&#39;</span><span class="p">:</span> <span class="s">&#39;&lt;!pymod_do_main(compiler_version target assembler)&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}],</span>
+</span></code></pre></td></tr></table></div></figure>
+这里已经说了compiler_version和clang不能一起工作，但是Mac上已经干掉g++，默认clang了，所以这个方法最终用到的还是clang。直接改为48算了，如下
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">[</span><span class="s">&#39;clang==0 and asan==0 and lsan==0 and tsan==0 and msan==0 and ubsan==0 and ubsan_vptr==0&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s">&#39;binutils_version%&#39;</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span>
+</span><span class='line'><span class="p">}],</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4 id="编译不过">编译不过</h4>
+
+<p>生成工程文件终于没有问题了，但是还可能编译不过，目前遇到如下问题，尚未解决T_T
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>arm-linux-androideabi-gcc: error: x86_64: No such file or directory
+</span><span class='line'>arm-linux-androideabi-gcc: error: unrecognized <span class="nb">command </span>line option <span class="s1">&#39;-fasm-blocks&#39;</span>
+</span><span class='line'>arm-linux-androideabi-gcc: error: unrecognized <span class="nb">command </span>line option <span class="s1">&#39;-mpascal-strings&#39;</span>
+</span><span class='line'>arm-linux-androideabi-gcc: error: unrecognized <span class="nb">command </span>line option <span class="s1">&#39;-arch&#39;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2 id="参考资料">参考资料</h2>
+
+<p><a href="http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/">webrtc on ios</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello GYP]]></title>
+    <link href="http://erikge.com/articles/HelloGyp"/>
+    <updated>2014-05-17T13:43:55+08:00</updated>
+    <id>http://erikge.com/articles/HelloGyp</id>
+    <content type="html"><![CDATA[<p>GYP，<a href="https://code.google.com/p/gyp/">Generate Your Projects</a>，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如<a href="https://code.google.com/p/v8/">V8</a>和<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。</p>
+
+<!--more-->
+
+<h2 id="特别之处">特别之处</h2>
+
+<p>在已经有很多的构建系统的情况下，gyp诞生的哲学或者说优点如下：</p>
+
+<ol>
+<li>各平台使用各自主流的构建系统。
+
+<ul>
+<li>程序员更熟悉自己的平台，减少学习成本。</li>
+<li>构建速度快。自己平台的主流构建系统的速度是各平台优化过的。</li>
+</ul></li>
+<li>在一个平台上可以生成所有支持的平台的工程文件。
+
+<ul>
+<li>如在mac上也可以生成Visual Studio工程，windows上也可以生成Xcode工程。</li>
+</ul></li>
+<li>生成的工程文件和手工创建的工程文件没有区别
+
+<ul>
+<li>这样，随时可以停止使用gyp。别人可以只使用相关工程文件而不使用gyp</li>
+</ul></li>
+</ol>
+
+<h2 id="安装">安装</h2>
+
+<p>前提条件：本机需要安装python，svn或git。</p>
+
+<p>下载：<br>
+svn方式，<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code><br>
+git方式，<code>git clone http://git.chromium.org/external/gyp.git &lt;gyp-dir&gt;</code>或
+        <code>git clone https://git.chromium.org/git/external/gyp.git &lt;gyp-dir&gt;</code></p>
+
+<p>安装：<br>
+有两种安装方式。</p>
+
+<ol>
+<li>执行安装命令
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> &lt;gyp-dir&gt; <span class="c"># 刚才的下载目录</span>
+</span><span class='line'><span class="o">[</span>sudo<span class="o">]</span> python setup.py install
+</span></code></pre></td></tr></table></div></figure>
+这个命令做的事情主要是安装python的第三方扩展到/Library/Python/2.7/site-packages/gyp-0.1-py2.7.egg，并把gyp的可执行文件copy到/usr/local/bin。</li>
+<li>简易安装，直接将&lt;gyp-dir&gt;加入PATH。</li>
+</ol>
+
+<h2 id="使用">使用</h2>
+
+<ol>
+<li>编写.gyp文件</li>
+<li>运行gyp命令生成makefile、build.ninja文件或xcode、vs等工程</li>
+<li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
+</ol>
+
+<p>举一个最简单的例子，源文件如下：
+<figure class='code'><figcaption><span>main.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+编写.gyp文件如下：
+<figure class='code'><figcaption><span>main.gyp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">&#39;targets&#39;:</span> <span class="err">[</span>
+</span><span class='line'>    <span class="err">{</span>
+</span><span class='line'>      <span class="err">&#39;target_name&#39;:</span> <span class="err">&#39;main&#39;,</span>
+</span><span class='line'>      <span class="err">&#39;type&#39;:</span> <span class="err">&#39;executable&#39;,</span>
+</span><span class='line'>      <span class="err">&#39;sources&#39;:</span> <span class="err">[</span>
+</span><span class='line'>        <span class="err">&#39;main.cpp&#39;,</span>
+</span><span class='line'>      <span class="err">],</span>
+</span><span class='line'>    <span class="p">}</span><span class="err">,</span>
+</span><span class='line'>  <span class="err">],</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>在源文件目录下运行命令<code>gyp --depth=. main.gyp</code>，生成工程文件。打开生成的工程文件编译、运行即可。</p>
+
+<p>更多例子可以参考<a href="https://github.com/erikge/play_gyp.git">play_gyp</a></p>
+
+<h2 id="生成跨平台工程的实践经验">生成跨平台工程的实践经验</h2>
+
+<p>如上个例子中展示的，运行gyp命令的大概方式为<code>gyp --depth=. --generator-output=build -f ninja main.gyp</code>，其中 &ndash;depth指定工程的根目录，&ndash;generator-output指定工程文件的输出目录，默认为当前目录，-f指定生成工程文件的类型，常用的有&#39;make&#39;, &lsquo;ninja&rsquo;, &lsquo;xcode&rsquo;, &lsquo;msvs&rsquo;, &lsquo;scons&#39;。更多的命令行选项可以通过<code>gyp -h</code>查看。</p>
+
+<p>工程实践中还有一种更方便的生成不同平台工程的方法，即使用gyp的全局变量。定义全局变量的好处是可以使用别人封装好的gyp脚本，如Chromium工程中就可以使用gyp_chromium.py了。
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -2355,215 +2582,72 @@ makeall-iosdevice.sh脚本的内容为
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
 <span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>fetch<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- fetching webrtc&quot;</span>
-</span><span class='line'>gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
-</span><span class='line'>gclient sync
-</span><span class='line'>
-</span><span class='line'>sed -i <span class="s2">&quot;&quot;</span> <span class="s1">&#39;$d&#39;</span> .gclient
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;ios&#39;, &#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
-</span><span class='line'>gclient sync
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully fetched&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>wrbase<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;build_with_libjinglth_chromium=0 libjingle_objc=1&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span><span class="s2">&quot;ninja&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>wrios<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>wrbase
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># iOS 真机</span>
 </span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=ios target_arch=armv7&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_ios&quot;</span>
 </span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>xcode
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>wrmac<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>wrbase
+</span><span class='line'><span class="c"># iOS 模拟器</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=ios target_arch=ia32&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>xcode
+</span><span class='line'>
+</span><span class='line'><span class="c"># mac</span>
 </span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=mac target_arch=x64&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_FLAGS</span><span class="o">=</span><span class="s2">&quot;$GYP_GENERATOR_FLAGS output_dir=out_mac&quot;</span>
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>xcode
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>buildios<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- building webrtc ios&quot;</span>
-</span><span class='line'><span class="nb">pushd </span>trunk
-</span><span class='line'>wrios <span class="o">&amp;&amp;</span> gclient runhooks <span class="o">&amp;&amp;</span> ninja -C out_ios/Debug-iphoneos AppRTCDemo
-</span><span class='line'><span class="nb">popd</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- webrtc has been sucessfully built&quot;</span>
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="c"># android arm target</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>launch<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- launching on device&quot;</span>
-</span><span class='line'>ideviceinstaller -i trunk/out_ios/Debug-iphoneos/AppRTCDemo.app
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;-- launch complete&quot;</span>
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="c"># android x86 target</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android target_arch=ia32&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>fail<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;*** webrtc build failed&quot;</span>
-</span><span class='line'><span class="nb">exit </span>1
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="c"># android MIPS target</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android target_arch=mipsel&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_CROSSCOMPILE</span><span class="o">=</span>1
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
 </span><span class='line'>
-</span><span class='line'><span class="c">#fetch || fail</span>
-</span><span class='line'>wrios <span class="o">||</span> fail
-</span><span class='line'>buildios <span class="o">||</span> fail
-</span><span class='line'>launch <span class="o">||</span> fail
+</span><span class='line'><span class="c"># windows</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=win&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span> msvs <span class="c"># or msvs-ninja</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_MSVS_VERSION</span> <span class="o">=</span> 2008
+</span><span class='line'>
+</span><span class='line'><span class="c"># linux</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=linux&quot;</span> <span class="c"># or unix</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATOR_OUTPUT</span><span class="o">=</span>../build
+</span><span class='line'><span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>make
+</span><span class='line'>
+</span><span class='line'><span class="c"># gyp 其他可用的 环境变量</span>
+</span><span class='line'>GYP_GENERATOR_FLAGS
 </span></code></pre></td></tr></table></div></figure></p>
 
-<h3 id="可能会遇到的问题">可能会遇到的问题</h3>
-
-<h4 id="codesigning">Codesigning</h4>
-
-<p>签名时，webrtc脚本（gyp）会查找本机钥匙串，寻找和“iPhone developer”相符的证书。如果没有证书或者有多个证书都会出现异常。
-如果没有证书，需要向Apple申请一个。
-当有多个证书时，可以通过<code>security find-identity</code>查看所有匹配的证书，然后选择一个合适的，在trunk/build/common.gypi的‘CODE_SIGN_IDENTITY’中修改。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># iOS SDK wants everything for device signed</span>
-</span><span class='line'>‘CODE_SIGN_IDENTITY<span class="o">[</span><span class="nv">sdk</span><span class="o">=</span>iphoneos*<span class="o">]</span>‘: ‘iPhone Developer’ <span class="c"># 修改前</span>
-</span><span class='line'>‘CODE_SIGN_IDENTITY<span class="o">[</span><span class="nv">sdk</span><span class="o">=</span>iphoneos*<span class="o">]</span>‘: ‘iPhone Developer: Jason Adams <span class="o">(</span>SZ2V5SDF5DF<span class="o">)</span>’ <span class="c"># 修改后</span>
-</span></code></pre></td></tr></table></div></figure>
-测试工程的默认bound ID是com.google.AppRTCDemo，可以通过修改trunk/talk/examples/objc/AppRTCDemo/ios/Info.plist文件，改成正确的。<br>
-如果还有错误，可以看看证书和provisioning profile文件是否匹配。</p>
-
-<h2 id="todo">TODO</h2>
-
-<p>AppRTCDemo test project - trunk/talk/examples/objc</p>
-
-<p>This is the demo application with the high level communication logic and UI</p>
-
-<p>Objective-C WebRTC libraries – trunk/talk/app/webrtc/objc</p>
-
-<p>These are the Objective-C wrappers to the core communication libraries.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hello GYP]]></title>
-    <link href="http://erikge.com/articles/HelloGyp"/>
-    <updated>2014-05-17T13:43:55+08:00</updated>
-    <id>http://erikge.com/articles/HelloGyp</id>
-    <content type="html"><![CDATA[<p>GYP，<a href="https://code.google.com/p/gyp/">Generate Your Projects</a>，一个google开源的构建系统，最开始用于Chromium项目，现在一些其他的开源项目也开始使用GYP，如<a href="https://code.google.com/p/v8/">V8</a>和<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>。本文是学习使用GYP的笔记，算是一个GYP的简明教程吧。</p>
-
-<!--more-->
-
-<h2 id="特别之处">特别之处</h2>
-
-<p>在已经有很多的构建系统的情况下，gyp诞生的哲学或者说优点如下：</p>
-
-<ol>
-<li>各平台使用各自主流的构建系统。
+<p>也可以通过修改GYP_GENERATORS，生成各种类型的工程文件</p>
 
 <ul>
-<li>程序员更熟悉自己的平台，减少学习成本。</li>
-<li>构建速度快。自己平台的主流构建系统的速度是各平台优化过的。</li>
-</ul></li>
-<li>在一个平台上可以生成所有支持的平台的工程文件。
+<li>ninja for Ninja</li>
+<li>make for Makefiles</li>
+<li>msvs for Visual Studio</li>
+<li>msvs-ninja for Visual Studio project building with ninja</li>
+<li>xcode for Xcode</li>
+</ul>
 
-<ul>
-<li>如在mac上也可以生成Visual Studio工程，windows上也可以生成Xcode工程。</li>
-</ul></li>
-<li>生成的工程文件和手工创建的工程文件没有区别
-
-<ul>
-<li>这样，随时可以停止使用gyp。别人可以只使用相关工程文件而不使用gyp</li>
-</ul></li>
-</ol>
-
-<h2 id="安装">安装</h2>
-
-<p>前提条件：本机需要安装python和svn。</p>
-
-<p>下载：<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code>
-<br>或者通过git仓库：<a href="http://git.chromium.org/external/gyp.git">http://git.chromium.org/external/gyp.git</a></p>
-
-<p>有两种安装方式。第一种安装方法如下：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> &lt;gyp-dir&gt; <span class="c"># 刚才的下载目录</span>
-</span><span class='line'><span class="o">[</span>sudo<span class="o">]</span> python setup.py install
-</span></code></pre></td></tr></table></div></figure>
-这个命令做的事情主要是安装python的第三方扩展到/Library/Python/2.7/site-packages/gyp-0.1-py2.7.egg，并把gyp的可执行文件copy到/usr/local/bin。</p>
-
-<p>第二种安装方式是直接将&lt;gyp-dir&gt;加入PATH。</p>
-
-<h2 id="使用">使用</h2>
-
-<ol>
-<li>编写.gyp文件</li>
-<li>运行gyp命令生成makefile、build.ninja文件或xcode、vs等工程
-
-<ul>
-<li><code>gyp --depth=. main.gyp</code></li>
-<li><code>gyp --depth=. --generator-output=build -f ninja main.gyp</code>
-
-<ul>
-<li>&ndash;depth指定工程的根目录</li>
-<li>&ndash;generator-output指定工程文件的输出目录，默认为当前目录</li>
-<li>-f指定生成工程文件的类型，常用的有&#39;make&#39;, &lsquo;ninja&rsquo;, &lsquo;xcode&rsquo;, &lsquo;msvs&rsquo;, &lsquo;scons&rsquo;</li>
-</ul></li>
-<li><code>gyp -h</code>显示命令行帮助信息</li>
-</ul></li>
-<li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
-</ol>
-
-<p>举一个最简单的例子，源文件如下：
-<figure class='code'><figcaption><span>main.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-编写.gyp文件如下：
-<figure class='code'><figcaption><span>main.gyp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="err">&#39;targets&#39;:</span> <span class="err">[</span>
-</span><span class='line'>    <span class="err">{</span>
-</span><span class='line'>      <span class="err">&#39;target_name&#39;:</span> <span class="err">&#39;main&#39;,</span>
-</span><span class='line'>      <span class="err">&#39;type&#39;:</span> <span class="err">&#39;executable&#39;,</span>
-</span><span class='line'>      <span class="err">&#39;sources&#39;:</span> <span class="err">[</span>
-</span><span class='line'>        <span class="err">&#39;main.cpp&#39;,</span>
-</span><span class='line'>      <span class="err">],</span>
-</span><span class='line'>    <span class="p">}</span><span class="err">,</span>
-</span><span class='line'>  <span class="err">],</span>
-</span><span class='line'><span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>在源文件目录下运行命令<code>gyp --depth=. main.gyp</code>，生成工程文件。打开生成的工程文件编译、运行即可。</p>
-
-<p>更多例子可以参考<a href="https://github.com/examplecode/gypdemo">gypdemo</a></p>
-
-<h2 id="语法">语法</h2>
+<h2 id="gyp文件语法">gyp文件语法</h2>
 
 <p>GYP的输入文件习惯上后缀为.gyp或.gypi。.gypi文件作为.gyp文件的include文件。
 以Visual Studio为例，.gyp文件对应.sln工作空间，.gyp文件中的target对应.vcproj或.vxcproj工程。</p>
 
-<p><em>.gyp文件的顶级元素为&#39;variables&#39;, &lsquo;includes&rsquo;, &lsquo;target_defaults&rsquo;, &lsquo;targets&rsquo;, &lsquo;conditions&#39;。语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
+<p><em>.gyp文件的顶级元素为&#39;variables&rsquo;, &lsquo;includes&rsquo;, &lsquo;target_defaults&rsquo;, &lsquo;targets&rsquo;, &lsquo;conditions&#39;。语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
 
 <h3 id="官方文档">官方文档</h3>
 
@@ -2704,24 +2788,11 @@ ldflags为链接选项，对应类似-pthread；<br></p>
 <li>target的sources项会按照对应平台自动过滤后缀（*_linux.{ext}, *_mac.{ext}, *_posix.{ext} or *_win.{ext}）不符合的源文件。</li>
 </ol>
 
-<h2 id="issues">Issues</h2>
-
-<h3 id="设置visual-studio的版本">设置Visual Studio的版本</h3>
-
-<p>如指定为vs2008</p>
+<h2 id="参考资料">参考资料</h2>
 
 <ol>
-<li>环境变量: <code>GYP_MSVS_VERSION=2008</code></li>
-<li>命令行参数: <code>-G msvs_version=2008</code></li>
-</ol>
-
-<h3 id="参数定义">参数定义</h3>
-
-<p>定义各种编译参数、各种宏</p>
-
-<ol>
-<li>环境变量: <code>GYP_DEFINES=windows_sdk_path=&quot;path to sdk&quot;</code></li>
-<li>命令行参数: <code>-D XXX -D YYY=ZZZ</code></li>
+<li><a href="https://github.com/examplecode/gypdemo">gypDemo</a></li>
+<li><a href="https://github.com/enginetrouble/gyp-getting-started">gypGettingStarted</a></li>
 </ol>
 ]]></content>
   </entry>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: build | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/build/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-07-05T22:52:22+08:00</updated>
+  <updated>2014-07-24T17:21:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -47,37 +47,31 @@
 
 <h2 id="安装">安装</h2>
 
-<p>前提条件：本机需要安装python和svn。</p>
+<p>前提条件：本机需要安装python，svn或git。</p>
 
-<p>下载：<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code>
-<br>或者通过git仓库：<a href="http://git.chromium.org/external/gyp.git">http://git.chromium.org/external/gyp.git</a></p>
+<p>下载：<br>
+svn方式，<code>svn checkout http://gyp.googlecode.com/svn/trunk/ &lt;gyp-dir&gt;</code><br>
+git方式，<code>git clone http://git.chromium.org/external/gyp.git &lt;gyp-dir&gt;</code>或
+        <code>git clone https://git.chromium.org/git/external/gyp.git &lt;gyp-dir&gt;</code></p>
 
-<p>有两种安装方式。第一种安装方法如下：
+<p>安装：<br>
+有两种安装方式。</p>
+
+<ol>
+<li>执行安装命令
 <code>sh
 cd &lt;gyp-dir&gt; # 刚才的下载目录
 [sudo] python setup.py install
 </code>
-这个命令做的事情主要是安装python的第三方扩展到/Library/Python/2.7/site-packages/gyp-0.1-py2.7.egg，并把gyp的可执行文件copy到/usr/local/bin。</p>
-
-<p>第二种安装方式是直接将&lt;gyp-dir&gt;加入PATH。</p>
+这个命令做的事情主要是安装python的第三方扩展到/Library/Python/2.7/site-packages/gyp-0.1-py2.7.egg，并把gyp的可执行文件copy到/usr/local/bin。</li>
+<li>简易安装，直接将&lt;gyp-dir&gt;加入PATH。</li>
+</ol>
 
 <h2 id="使用">使用</h2>
 
 <ol>
 <li>编写.gyp文件</li>
-<li>运行gyp命令生成makefile、build.ninja文件或xcode、vs等工程
-
-<ul>
-<li><code>gyp --depth=. main.gyp</code></li>
-<li><code>gyp --depth=. --generator-output=build -f ninja main.gyp</code>
-
-<ul>
-<li>&ndash;depth指定工程的根目录</li>
-<li>&ndash;generator-output指定工程文件的输出目录，默认为当前目录</li>
-<li>-f指定生成工程文件的类型，常用的有&#39;make&#39;, &lsquo;ninja&rsquo;, &lsquo;xcode&rsquo;, &lsquo;msvs&rsquo;, &lsquo;scons&rsquo;</li>
-</ul></li>
-<li><code>gyp -h</code>显示命令行帮助信息</li>
-</ul></li>
+<li>运行gyp命令生成makefile、build.ninja文件或xcode、vs等工程</li>
 <li>编译。根据第2步的结果，运行make、ninja或者在xcode、vs里编译</li>
 </ol>
 
@@ -108,14 +102,90 @@ cd &lt;gyp-dir&gt; # 刚才的下载目录
 
 <p>在源文件目录下运行命令<code>gyp --depth=. main.gyp</code>，生成工程文件。打开生成的工程文件编译、运行即可。</p>
 
-<p>更多例子可以参考<a href="https://github.com/examplecode/gypdemo">gypdemo</a></p>
+<p>更多例子可以参考<a href="https://github.com/erikge/play_gyp.git">play_gyp</a></p>
 
-<h2 id="语法">语法</h2>
+<h2 id="生成跨平台工程的实践经验">生成跨平台工程的实践经验</h2>
+
+<p>如上个例子中展示的，运行gyp命令的大概方式为<code>gyp --depth=. --generator-output=build -f ninja main.gyp</code>，其中 &ndash;depth指定工程的根目录，&ndash;generator-output指定工程文件的输出目录，默认为当前目录，-f指定生成工程文件的类型，常用的有&#39;make&#39;, &lsquo;ninja&rsquo;, &lsquo;xcode&rsquo;, &lsquo;msvs&rsquo;, &lsquo;scons&#39;。更多的命令行选项可以通过<code>gyp -h</code>查看。</p>
+
+<p>工程实践中还有一种更方便的生成不同平台工程的方法，即使用gyp的全局变量。定义全局变量的好处是可以使用别人封装好的gyp脚本，如Chromium工程中就可以使用gyp_chromium.py了。
+&rdquo;` sh</p>
+
+<h1 id="ios-真机">iOS 真机</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=ios target_arch=armv7&rdquo;
+export GYP_CROSSCOMPILE=1
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=xcode</p>
+
+<h1 id="ios-模拟器">iOS 模拟器</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=ios target_arch=ia32&rdquo;
+export GYP_CROSSCOMPILE=1
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=xcode</p>
+
+<h1 id="mac">mac</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=mac target_arch=x64&rdquo;
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=xcode</p>
+
+<h1 id="android-arm-target">android arm target</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=android&rdquo;
+export GYP_CROSSCOMPILE=1
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=ninja</p>
+
+<h1 id="android-x86-target">android x86 target</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=android target_arch=ia32&rdquo;
+export GYP_CROSSCOMPILE=1
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=ninja</p>
+
+<h1 id="android-mips-target">android MIPS target</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=android target_arch=mipsel&rdquo;
+export GYP_CROSSCOMPILE=1
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=ninja</p>
+
+<h1 id="windows">windows</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=win&rdquo;
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS= msvs # or msvs-ninja
+export GYP_MSVS_VERSION = 2008</p>
+
+<h1 id="linux">linux</h1>
+
+<p>export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=linux&rdquo; # or unix
+export GYP_GENERATOR_OUTPUT=../build
+export GYP_GENERATORS=make</p>
+
+<h1 id="gyp-其他可用的-环境变量">gyp 其他可用的 环境变量</h1>
+
+<p>GYP_GENERATOR_FLAGS
+&ldquo;`</p>
+
+<p>也可以通过修改GYP_GENERATORS，生成各种类型的工程文件</p>
+
+<ul>
+<li>ninja for Ninja</li>
+<li>make for Makefiles</li>
+<li>msvs for Visual Studio</li>
+<li>msvs-ninja for Visual Studio project building with ninja</li>
+<li>xcode for Xcode</li>
+</ul>
+
+<h2 id="gyp文件语法">gyp文件语法</h2>
 
 <p>GYP的输入文件习惯上后缀为.gyp或.gypi。.gypi文件作为.gyp文件的include文件。
 以Visual Studio为例，.gyp文件对应.sln工作空间，.gyp文件中的target对应.vcproj或.vxcproj工程。</p>
 
-<p><em>.gyp文件的顶级元素为&#39;variables&#39;, &lsquo;includes&rsquo;, &lsquo;target_defaults&rsquo;, &lsquo;targets&rsquo;, &lsquo;conditions&#39;。语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
+<p><em>.gyp文件的顶级元素为&#39;variables&rsquo;, &lsquo;includes&rsquo;, &lsquo;target_defaults&rsquo;, &lsquo;targets&rsquo;, &lsquo;conditions&#39;。语法是JSON，或者说是允许trailing comments的python。</em>.gyp文件之间其实可以不用相互引用，gyp会递归的扫描当前目录的所有子目录，处理扫描到的所有*.gyp文件。</p>
 
 <h3 id="官方文档">官方文档</h3>
 
@@ -230,24 +300,11 @@ ldflags为链接选项，对应类似-pthread；<br></p>
 <li>target的sources项会按照对应平台自动过滤后缀（*_linux.{ext}, *_mac.{ext}, *_posix.{ext} or *_win.{ext}）不符合的源文件。</li>
 </ol>
 
-<h2 id="issues">Issues</h2>
-
-<h3 id="设置visual-studio的版本">设置Visual Studio的版本</h3>
-
-<p>如指定为vs2008</p>
+<h2 id="参考资料">参考资料</h2>
 
 <ol>
-<li>环境变量: <code>GYP_MSVS_VERSION=2008</code></li>
-<li>命令行参数: <code>-G msvs_version=2008</code></li>
-</ol>
-
-<h3 id="参数定义">参数定义</h3>
-
-<p>定义各种编译参数、各种宏</p>
-
-<ol>
-<li>环境变量: <code>GYP_DEFINES=windows_sdk_path=&quot;path to sdk&quot;</code></li>
-<li>命令行参数: <code>-D XXX -D YYY=ZZZ</code></li>
+<li><a href="https://github.com/examplecode/gypdemo">gypDemo</a></li>
+<li><a href="https://github.com/enginetrouble/gyp-getting-started">gypGettingStarted</a></li>
 </ol>
 ]]></content>
   </entry>

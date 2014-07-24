@@ -4,7 +4,7 @@
   <title><![CDATA[Category: webrtc | 时光 &#149 印记]]></title>
   <link href="http://erikge.com/categories/webrtc/atom.xml" rel="self"/>
   <link href="http://erikge.com/"/>
-  <updated>2014-07-05T22:52:22+08:00</updated>
+  <updated>2014-07-24T17:21:58+08:00</updated>
   <id>http://erikge.com/</id>
   <author>
     <name><![CDATA[erik ge]]></name>
@@ -18,31 +18,101 @@
     <link href="http://erikge.com/articles/HelloWebrtc"/>
     <updated>2014-05-17T13:44:24+08:00</updated>
     <id>http://erikge.com/articles/HelloWebrtc</id>
-    <content type="html"><![CDATA[<p>开始搭建个可以看代码的环境。</p>
+    <content type="html"><![CDATA[<p>开始搭建个可以看代码的环境。因为墙的原因和Webrtc用到了Chromium的toolchain的原因，获取代码和搭建环境变的异常复杂。前后折腾了一周的时间，整理一下，节省你宝贵的生命。</p>
 
 <!--more-->
 
+<h2 id="前提条件">前提条件</h2>
+
+<p>WebRTC复用了很多Chromiun项目的工具，首先需要的就是<a href="https://sites.google.com/a/chromium.org/dev/developers/how-tos/depottools">depot_tools</a>。安装方式如下，</p>
+<div class="highlight"><pre><code class="sh">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+<span class="c"># 备份地址，上一个不可用时尝试这个</span>
+git clone https://git.chromium.org/git/chromium/tools/depot_tools.git
+<span class="c">## Add depot_tools to your PATH</span>
+</code></pre></div>
 <h2 id="获取代码">获取代码</h2>
 
 <p>官方推荐步骤：
-&ldquo;` sh
-$ git clone <a href="https://chromium.googlesource.com/chromium/tools/depot_tools.git">https://chromium.googlesource.com/chromium/tools/depot_tools.git</a></p>
-
-<h2 id="add-depot_tools-to-your-path">Add depot_tools to your PATH</h2>
-
-<p>$ gclient config <a href="http://webrtc.googlecode.com/svn/trunk">http://webrtc.googlecode.com/svn/trunk</a>
-$ gclient sync &ndash;force
-&rdquo;`</p>
-
-<p><code>gclient sync</code>需要下载太多第三方库，很容易失败，搞了很多次都没成功。其实也没有必要都拉全，只获取webrtc自身的代码就可以。用git维护方便看代码时修改，可以只获取最近的代码
 <code>sh
-svn info http://webrtc.googlecode.com/svn/
-git svn clone -s --prefix=svn/ -r [latest-10-version]:HEAD http://webrtc.googlecode.com/svn/
+$ gclient config http://webrtc.googlecode.com/svn/trunk
+$ gclient sync --force
 </code></p>
 
-<h2 id="构建过程">构建过程</h2>
+<p>但是由于墙的存在，这种方法几乎无法成功。可以尝试vpn、git、修改依赖库地址、多次尝试下载等各种方法，然后祈祷代码可以下载完整。在折腾一周之后，最终还是在VPN的帮助下把代码拉全的，这里顺便推荐一下我用的VPN吧，<a href="http://www.share-nydus.com/s/Dguqbtqa">Nydus</a>，最大优势在于免费试用时可以尝试所有收费VIP线路。</p>
 
-<p>官方推荐的构建过程，默认生成对应PC平台的工程文件
+<p>gclient在更新代码时，会读取trunk下的DEPS文件，根据文件中配置的路径和版本号更新代码。trunk下的DEPS文件在查找某些库时，依赖chromium_deps目录下的DEPS文件来获取路径。gclient会先执行sync，再执行hooks，这两个阶段都需要联网下载相关资源。所以仅仅是sync完成不一定下载完了所有工具链，gyp生成工程文件后，也有可能缺少编译、运行需要的资源，只有在运行起来后才能保证相关平台的代码和工具链都下载完了。</p>
+
+<p>如果下面的脚步执行成功，很大概率能把代码都下载完。</p>
+<div class="highlight"><pre><code class="sh"><span class="c">#export http_proxy=http://127.0.0.1:8087/</span>
+<span class="c">#export https_proxy=$http_proxy</span>
+<span class="c">#export HTTP_PROXY=$http_proxy</span>
+<span class="c">#export HTTPS_PROXY=$HTTP_PROXY</span>
+
+<span class="c"># fix problem:</span>
+<span class="c"># clang: error: invalid deployment target for -stdlib=libc++ (requires OS X 10.7 or later)</span>
+<span class="nb">export </span><span class="nv">MACOSX_DEPLOYMENT_TARGET</span><span class="o">=</span>10.7
+<span class="c"># readlink: illegal option -- f</span>
+<span class="c"># usage: readlink [-n] [file ...]</span>
+<span class="c"># Warning: Current directory is out of CHROME_SRC, it may not be   the one you want.</span>
+<span class="nb">shopt</span> -s  expand_aliases
+<span class="nb">shopt </span>expand_aliases
+<span class="nb">alias </span><span class="nv">readlink</span><span class="o">=</span>greadlink
+
+
+mkdir -p code
+mkdir -p code_back
+<span class="nb">cd </span>code
+
+<span class="c"># svn方式，不好使</span>
+<span class="c"># gclient config http://webrtc.googlecode.com/svn/trunk</span>
+<span class="c"># git方式，可用概率高。git的地址有两个，</span>
+<span class="c"># https://chromium.googlesource.com/external/webrtc 和</span>
+<span class="c"># https://git.chromium.org/git/external/webrtc.git</span>
+gclient config --name trunk <span class="s1">&#39;git+https://git.chromium.org/git/external/webrtc.git&#39;</span>
+cp .gclient ../code_back
+
+<span class="c"># aquire win</span>
+cp ../code_back/.gclient ./
+<span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;win&#39;]&quot;</span> &gt;&gt; .gclient
+<span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+gclient sync -j200 --force
+
+<span class="c">#aquire mac</span>
+cp ../code_back/.gclient ./
+<span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;mac&#39;]&quot;</span> &gt;&gt; .gclient
+<span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+gclient sync -j200 --force
+
+<span class="c">#aquire ios</span>
+mv trunk/testing/iossim/third_party/class-dump trunk/testing/iossim/third_party/class-dump_mac
+cp ../code_back/.gclient ./
+<span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;ios&#39;]&quot;</span> &gt;&gt; .gclient
+<span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+gclient sync -j200 --force
+
+<span class="c">#aquire android</span>
+cp ../code_back/.gclient ./
+<span class="nb">echo</span> <span class="s2">&quot;target_os = [&#39;android&#39;, &#39;unix&#39;]&quot;</span> &gt;&gt; .gclient
+gclient sync -j200 --nohooks
+<span class="nb">cd </span>trunk
+<span class="c"># 设置环境变量，会冲掉之前设置的 Env vars</span>
+<span class="nb">source</span> ./build/android/envsetup.sh
+
+<span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span>/usr/bin/
+<span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;$GYP_DEFINES OS=android&quot;</span>
+<span class="nb">export </span><span class="nv">GYP_GENERATORS</span><span class="o">=</span>ninja
+gclient runhooks --force
+</code></pre></div>
+<p>代理部分可以根据需要打开，有vpn会方便很多。这个脚本同时解决了我在Mac上遇到的两个问题：</p>
+
+<ol>
+<li>编译LLVM时遇到invalid deployment target的问题，所以显示声明了MACOSX_DEPLOYMENT_TARGET。</li>
+<li>在目录检查时用到了readlink，而Mac上没有这个命令，需要安装gnu的greadlink作为替代。安装方式为：<code>brew install coreutils</code>。shopt用于打开非交互模式下shell的alias功能。</li>
+</ol>
+
+<h2 id="编译运行">编译运行</h2>
+
+<p>官方推荐的构建过程，默认生成对应本地电脑平台的工程文件。
 &ldquo;` sh
 $ gclient runhooks &ndash;force
 $ cd trunk</p>
@@ -57,172 +127,51 @@ $ cd trunk</p>
 &rdquo;`</p>
 
 <p>可以控制生成不同平台的工程文件，以Android为例
-<code>sh
-$ echo &quot;target_os = [&#39;android&#39;, &#39;unix&#39;]&quot; &gt;&gt; .gclient
-$ gclient sync --nohooks
+&ldquo;` sh
+$ echo &quot;target_os = [&lsquo;android&rsquo;, &lsquo;unix&rsquo;]&rdquo; &gt;&gt; .gclient
+$ gclient sync &ndash;nohooks
 $ cd trunk
 $ source ./build/android/envsetup.sh
-$ GYP_DEFINES=&quot;$GYP_DEFINES OS=android&quot;
-$ JAVA_HOME=&lt;location of Java SE 6 - JDK&gt;
-</code></p>
+$ GYP_DEFINES=&ldquo;$GYP_DEFINES OS=android&rdquo;
+$ JAVA_HOME=<location of Java SE 6 - JDK></p>
 
-<p>也可以通过修改GYP_GENERATORS，生成Ninja以外的工程文件</p>
+<p>$ gclient runhooks &ndash;force</p>
 
-<ul>
-<li>make for Makefiles</li>
-<li>msvs for Visual Studio</li>
-<li>msvs-ninja for Visual Studio project building with ninja</li>
-<li>xcode for Xcode</li>
-</ul>
+<h1 id="或者通过下面的方法仅执行gyp命令">或者通过下面的方法仅执行gyp命令</h1>
 
-<h2 id="在ios上运行的步骤">在iOS上运行的步骤</h2>
-
-<p>感谢<a href="http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/">这篇文章</a>，确实节省了我们宝贵的生命。总结主要的步骤如下。</p>
-
-<h3 id="模拟器">模拟器</h3>
-<div class="highlight"><pre><code class="sh">touch makeall-iossim.sh
-chmod +x makeall-iossim.sh
-</code></pre></div>
-<p>makeall-iossim.sh脚本的内容为
-&ldquo;`sh
-function fetch() {
-echo &rdquo;&ndash; fetching webrtc&quot;
-gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
-echo &ldquo;target_os = [&lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
-gclient sync</p>
-
-<p>sed -i &ldquo;&rdquo; &lsquo;$d&rsquo; .gclient
-echo &ldquo;target_os = [&lsquo;ios&rsquo;, &lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
-gclient sync
-echo &ldquo;&ndash; webrtc has been sucessfully fetched&rdquo;</p>
-
-<p>}</p>
-
-<p>function wrbase() {
-export GYP_DEFINES=&ldquo;build_with_libjingle=1 build_with_chromium=0 libjingle_objc=1&rdquo;
-export GYP_GENERATORS=&ldquo;ninja&rdquo;
-}</p>
-
-<p>function wrsim() {
-wrbase
-export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=ios target_arch=ia32&rdquo;
-export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_sim&rdquo;
-export GYP_CROSSCOMPILE=1
-}</p>
-
-<p>function wrmac() {
-wrbase
-export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=mac target_arch=x64&rdquo;
-export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_mac&rdquo;
-}</p>
-
-<p>function build() {
-echo &ldquo;&ndash; building webrtc&rdquo;
-pushd trunk
-gclient runhooks
-ninja -C out_sim/Debug iossim AppRTCDemo
-popd
-echo &ldquo;&ndash; webrtc has been sucessfully built&rdquo;
-}</p>
-
-<p>function run() {
-echo &ldquo;&ndash; running webrtc appdemo&rdquo;
-pushd trunk
-./out_sim/Debug/iossim out_sim/Debug/AppRTCDemo.app
-popd
-}</p>
-
-<p>function fail() {
-echo &ldquo;*** webrtc build failed&rdquo;
-exit 1
-}</p>
-
-<p>fetch || fail
-wrsim || fail
-build || fail
-run || fail
-<code>
-然后执行该脚本就可以编译、运行。
-</code>sh
-./makeall-iossim.sh
-&ldquo;`
-接下来如何玩呢？正常情况下，iOS的模拟器已经自动弹出，并启动了测试程序，然后可以按以下步骤体验下视频通话：
-1. 打开PC或者android上的Chrome浏览器
-2. 访问<a href="http://apprtc.appspot.com%E3%80%82%E5%8F%AF%E6%83%9C%E8%A2%AB%E5%A2%99%E4%BA%86%EF%BC%8C%E6%83%B3%E5%8A%9E%E6%B3%95%E7%BF%BB%E5%A2%99%E5%90%A7%EF%BC%8Csign%E3%80%82%E3%80%82%E3%80%82">http://apprtc.appspot.com。可惜被墙了，想办法翻墙吧，sign。。。</a>
-3. 浏览器里的地址发生变化时，获得房间号成功。这时URL类似<a href="http://apprtc.appspot.com?r=34576398%EF%BC%8C%E8%BF%99%E9%87%8C34576398%E4%B8%BA%E6%88%BF%E9%97%B4%E5%8F%B7">http://apprtc.appspot.com?r=34576398，这里34576398为房间号</a>
-4. 在iOS模拟器上运行的测试程序中，输入上一步获得的房间号（34576398），便可以体验了</p>
-
-<h3 id="真机">真机</h3>
-
-<p>将生成的app安装到真机上时，需要用到<a href="https://github.com/libimobiledevice/ideviceinstaller">ideviceinstaller</a>。可以通过<a href="http://brew.sh/">HomeBrew</a>安装。
-<code>sh
-brew install ideviceinstaller --HEAD
-</code>
-其他的和模拟器类似：
-<code>sh
-touch makeall-iosdevice.sh
-chmod +x makeall-iosdevice.sh
-</code>
-makeall-iosdevice.sh脚本的内容为
-&rdquo;`sh
-function fetch() {
-echo &ldquo;&ndash; fetching webrtc&rdquo;
-gclient config <a href="http://webrtc.googlecode.com/svn/trunk/">http://webrtc.googlecode.com/svn/trunk/</a>
-echo &ldquo;target_os = [&lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
-gclient sync</p>
-
-<p>sed -i &ldquo;&rdquo; &lsquo;$d&rsquo; .gclient
-echo &ldquo;target_os = [&lsquo;ios&rsquo;, &lsquo;mac&rsquo;]&rdquo; &gt;&gt; .gclient
-gclient sync
-echo &ldquo;&ndash; webrtc has been sucessfully fetched&rdquo;</p>
-
-<p>}</p>
-
-<p>function wrbase() {
-export GYP_DEFINES=&ldquo;build_with_libjinglth_chromium=0 libjingle_objc=1&rdquo;
-export GYP_GENERATORS=&ldquo;ninja&rdquo;
-}</p>
-
-<p>function wrios() {
-wrbase
-export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=ios target_arch=armv7&rdquo;
-export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_ios&rdquo;
-export GYP_CROSSCOMPILE=1
-}</p>
-
-<p>function wrmac() {
-wrbase
-export GYP_DEFINES=&ldquo;$GYP_DEFINES OS=mac target_arch=x64&rdquo;
-export GYP_GENERATOR_FLAGS=&ldquo;$GYP_GENERATOR_FLAGS output_dir=out_mac&rdquo;
-}</p>
-
-<p>function buildios() {
-echo &ldquo;&ndash; building webrtc ios&rdquo;
-pushd trunk
-wrios &amp;&amp; gclient runhooks &amp;&amp; ninja -C out_ios/Debug-iphoneos AppRTCDemo
-popd
-echo &ldquo;&ndash; webrtc has been sucessfully built&rdquo;
-}</p>
-
-<p>function launch() {
-echo &ldquo;&ndash; launching on device&rdquo;
-ideviceinstaller -i trunk/out_ios/Debug-iphoneos/AppRTCDemo.app
-echo &ldquo;&ndash; launch complete&rdquo;
-}</p>
-
-<p>function fail() {
-echo &ldquo;*** webrtc build failed&rdquo;
-exit 1
-}</p>
-
-<h1 id="fetch-||-fail">fetch || fail</h1>
-
-<p>wrios || fail
-buildios || fail
-launch || fail
+<p>$ ./webrtc/build/gyp_webrtc.py
 &ldquo;`</p>
 
-<h3 id="可能会遇到的问题">可能会遇到的问题</h3>
+<h2 id="play-with-webrtc">Play with WebRTC</h2>
+
+<p>接下来如何玩呢？</p>
+
+<h3 id="apprtcdemo">AppRTCDemo</h3>
+
+<p>如果是Mac、iOS、Android工程，可以生成AppRTCDemo项目，可以按以下步骤体验下视频通话：</p>
+
+<ol>
+<li>打开PC或者android上的Chrome浏览器</li>
+<li>访问<a href="http://apprtc.appspot.com%E3%80%82%E5%8F%AF%E6%83%9C%E8%A2%AB%E5%A2%99%E4%BA%86%EF%BC%8C%E6%83%B3%E5%8A%9E%E6%B3%95%E7%BF%BB%E5%A2%99%E5%90%A7%EF%BC%8Csign%E3%80%82%E3%80%82%E3%80%82">http://apprtc.appspot.com。可惜被墙了，想办法翻墙吧，sign。。。</a></li>
+<li>浏览器里的地址发生变化时，获得房间号成功。这时URL类似<a href="http://apprtc.appspot.com?r=56828685%EF%BC%8C%E8%BF%99%E9%87%8C56828685%E4%B8%BA%E6%88%BF%E9%97%B4%E5%8F%B7">http://apprtc.appspot.com?r=56828685，这里56828685为房间号</a></li>
+<li>启动AppRTCDemo程序，输入上一步获得的房间号（56828685），便可以体验了</li>
+</ol>
+
+<h3 id="peerconnection">Peerconnection</h3>
+
+<p>如果是在Windows平台上，可以通过 Peerconnection（包括peerconnection_client和peerconnection_server）来体验视频。</p>
+
+<h2 id="可能遇到的各种问题">可能遇到的各种问题</h2>
+
+<p>如果你按照上述步骤没有遇到任何问题，那恭喜你，你很幸运，可以直接跳过这个章节。否则，恐怕这也是大多数的情况，咱们继续来填坑。</p>
+
+<h3 id="download_from_google_storage的任务无法完成">download_from_google_storage的任务无法完成</h3>
+
+<p>一直没成功的下载完过download_from_google_storage的任务。这些是定义在trunk下DEPS文件中hook部分的任务，尝试先将其注释掉，再运行 <code>gclient runhooks --force</code>。不过这样会导致gyp中定义的部分target无法生成。</p>
+
+<h3 id="编译ios">编译iOS</h3>
+
+<p>将生成的app安装到真机上时，需要用到<a href="https://github.com/libimobiledevice/ideviceinstaller">ideviceinstaller</a>。可以通过<a href="http://brew.sh/">HomeBrew</a>安装。</p>
 
 <h4 id="codesigning">Codesigning</h4>
 
@@ -239,15 +188,78 @@ launch || fail
 测试工程的默认bound ID是com.google.AppRTCDemo，可以通过修改trunk/talk/examples/objc/AppRTCDemo/ios/Info.plist文件，改成正确的。<br>
 如果还有错误，可以看看证书和provisioning profile文件是否匹配。</p>
 
-<h2 id="todo">TODO</h2>
+<h3 id="编译android">编译Android</h3>
 
-<p>AppRTCDemo test project - trunk/talk/examples/objc</p>
+<p>编译Android最好还是在Linux的机器上，我在Mac上遇到了好多好多问题。</p>
 
-<p>This is the demo application with the high level communication logic and UI</p>
+<h4 id="文件系统需要区分大小写">文件系统需要区分大小写</h4>
 
-<p>Objective-C WebRTC libraries – trunk/talk/app/webrtc/objc</p>
+<p>如果需要编译Android的话，需要依赖android_tools这个库，这个库中的一些文件名是大小写敏感的，即存在xt_connmark.h和xt_CONNMARK.h这两个完全不同的文件。这完全是不让Windows玩啊，Windows这类不区分大小写的文件系统，会被认为是有本地修改未提交而停止继续下载。</p>
 
-<p>These are the Objective-C wrappers to the core communication libraries.</p>
+<p>解决方法：换到Linux或Mac下。Mac下的分区默认也是不区分大小写的，需要创建一个区分大小写的分区（区分大小写，日志式），大小20G以上应该就够用了。</p>
+
+<h4 id="无法下载android_tools或其他库">无法下载android_tools或其他库</h4>
+
+<p>如果你没有遇到上一个问题，有可能是压根就没下载下来android_tools库。下载过程中，很有可能因为墙的原因导致某一个库下载不下来。</p>
+
+<p>解决方法：修改chromium_deps目录下的DEPS文件，将android_tools对应的地址改为&rdquo;<a href="https://git.chromium.org/git/android_tools.git%22%E3%80%82%E5%A6%82%E8%BF%87%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A1%8C%EF%BC%8C%E5%B0%9D%E8%AF%95%E8%87%AA%E5%B7%B1">https://git.chromium.org/git/android_tools.git&quot;。如过还是不行，尝试自己</a> <code>git clone https://git.chromium.org/git/android_tools.git</code> ，然后将下载好的库copy到相关目录下，trunk/third_party/android_tools。</p>
+
+<h4 id="ndk的prebuilt版本是linux版">ndk的prebuilt版本是Linux版</h4>
+
+<p>如果遇到类似这样的错误，是因为android_tools中带的ndk的prebuilt是Linux版本的。
+<code>sh
+/bin/sh: trunk/third_party/android_tools/ndk//toolchains/arm-linux-androideabi-4.8/prebuilt/mac-x86_64/bin/*-gcc: No such file or directory
+</code></p>
+
+<p>解决方法：一般Mac上的Android开发者都下载了官方提供的NDK，从NDK目录下拷贝类似 android-ndk-r9c/toolchains/arm-linux-androideabi-4.8/prebuilt/darwin-x86_64 的文件夹到 trunk/third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.8/prebuilt 目录下，并将darwin-x86_64改名为mac-x86_64。</p>
+
+<h4 id="混进来的clang">混进来的clang</h4>
+
+<p>生成工程文件时还可能遇到如下错误。
+<code>sh 
+clang: error: unsupported argument &#39;--version&#39; to option &#39;Xassembler&#39;
+compiler_version.py failed to execute: c++ -Xassembler --version -x assembler -c /dev/null
+Command &#39;c++ -Xassembler --version -x assembler -c /dev/null&#39; returned non-zero exit status 1
+Exception: Failed to extract compiler version for args: [&#39;target&#39;, &#39;assembler&#39;]
+</code></p>
+
+<p>解决方法：打开common.gypi文件，大概1463行开始
+&ldquo;` python</p>
+
+<h1 id="compiler_version-doesn&#39;t-work-with-clang">compiler_version doesn&rsquo;t work with clang</h1>
+
+<h1 id="todo(mithro):-land-https://codereview.chromium.org/199793014/-so">TODO(mithro): Land <a href="https://codereview.chromium.org/199793014/">https://codereview.chromium.org/199793014/</a> so</h1>
+
+<h1 id="compiler_version-works-with-clang.">compiler_version works with clang.</h1>
+
+<h1 id="todo(glider):-set-clang-to-1-earlier-for-asan-and-tsan-builds-so">TODO(glider): set clang to 1 earlier for ASan and TSan builds so</h1>
+
+<h1 id="that-it-takes-effect-here.">that it takes effect here.</h1>
+
+<p>[&lsquo;clang==0 and asan==0 and lsan==0 and tsan==0 and msan==0 and ubsan==0 and ubsan_vptr==0&rsquo;, {
+    &lsquo;binutils_version%&rsquo;: &lsquo;&lt;!pymod_do_main(compiler_version target assembler)&rsquo;,
+}],
+<code>
+这里已经说了compiler_version和clang不能一起工作，但是Mac上已经干掉g++，默认clang了，所以这个方法最终用到的还是clang。直接改为48算了，如下
+</code> python
+[&lsquo;clang==0 and asan==0 and lsan==0 and tsan==0 and msan==0 and ubsan==0 and ubsan_vptr==0&rsquo;, {
+    &lsquo;binutils_version%&rsquo;: 48,
+}],
+&rdquo;`</p>
+
+<h4 id="编译不过">编译不过</h4>
+
+<p>生成工程文件终于没有问题了，但是还可能编译不过，目前遇到如下问题，尚未解决T_T
+<code>sh
+arm-linux-androideabi-gcc: error: x86_64: No such file or directory
+arm-linux-androideabi-gcc: error: unrecognized command line option &#39;-fasm-blocks&#39;
+arm-linux-androideabi-gcc: error: unrecognized command line option &#39;-mpascal-strings&#39;
+arm-linux-androideabi-gcc: error: unrecognized command line option &#39;-arch&#39;
+</code></p>
+
+<h2 id="参考资料">参考资料</h2>
+
+<p><a href="http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/">webrtc on ios</a></p>
 ]]></content>
   </entry>
   
